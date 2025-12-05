@@ -1,0 +1,329 @@
+
+/* page {
+	-webkit-overflow-scrolling: touch; // 解决ios滑动不流畅
+	height: 100%;
+	width: 100%;
+	word-break: break-all; //英文文本不换行
+	white-space: normal;
+}
+::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+	color: transparent;
+	display: none;
+} */
+
+// flex布局
+// flex-direction
+.x{
+	display:flex;
+}
+.y{
+	display:flex;
+	flex-direction:column;
+}
+.xr{
+	display:flex;
+	flex-direction:row-reverse;
+}
+.yr{
+	display:flex;
+	flex-direction:column-reverse;
+}
+
+// flex-wrap
+.w{
+	flex-wrap:wrap;
+}
+.wr{
+	flex-wrap:wrap-reverse;
+}
+//flex-wrap:nowrap默认值
+/* .nw{
+	flex-wrap:nowrap;
+} */
+
+// justify-content
+//justify-content：flex-start 默认值
+.s{  
+	justify-content: flex-start;
+}
+.e{
+	justify-content: flex-end;
+}
+.c{
+	justify-content: center;
+}
+.sb{
+	justify-content: space-between;
+}
+.a{
+	justify-content: space-around;
+}
+.se{
+	justify-content:space-evenly;
+}
+
+// align-items
+.as{
+	align-items:flex-start;
+}
+.ae{
+	align-items:flex-end;
+}
+.ac{
+	align-items:center;
+}
+.a-baseline{
+	align-items:baseline;
+}
+//align-items:stretch 默认值
+/* .a-stretch{  
+	align-items:stretch;
+} */
+
+// align-content
+.acs{
+	align-content:flex-start;
+}
+.ace{
+	align-content:flex-end;
+}
+.acc{
+	align-content:center;
+}
+.acb{
+	align-content:space-between;
+}
+.aca{
+	align-content:space-around;
+}
+//align-content:stretch 默认值
+/* .ac-stretch{  
+	align-content:stretch;
+} */
+
+
+
+// font-weight
+.bold{
+	font-weight:bold;
+}
+// font-size
+.fs-13{
+	font-size:13px;
+}
+.fs-14{
+	font-size:14px;
+}
+.fs-15{
+	font-size:15px;
+}
+.fs-16{
+	font-size:16px;
+}
+.fs-17{
+	font-size:17px;
+}
+.fs-18{
+	font-size:18px;
+}
+.fs-20{
+	font-size:20px;
+}
+//color
+.c-primary{
+	color:#007aff;
+}
+.c-success{
+	color:#4cd964;
+}
+.c-warning{
+	color:#f0ad4e;
+}
+.c-error{
+	color:#dd524d;
+}
+.c-black{
+	color:#000000;
+}
+.c-white{
+	color:#ffffff;
+}
+.c-333{
+	color:#333333;
+}
+.c-999{
+	color:#999999;
+}
+.c-grey{
+	color:#999;
+}
+.c-placeholder{
+	color:#808080;
+}
+.c-disabled{
+	color:#c0c0c0;
+}
+//background-color
+.bg-transparent{
+	// 透明色
+	background-color:transparent;
+}
+.bg-black{
+	background-color:#000000;
+}
+.bg-white{
+	background-color:#ffffff;
+}
+.bg-grey{
+	background-color:#f8f8f8;
+}
+.bg-hover{
+	background-color:#f1f1f1;
+}
+.bg-mask{
+	background-color:rgba(0, 0, 0, 0.4);
+}
+.bg-3fb{
+	background-color: #fbfbfb;
+}
+// margin-auto
+.mx-auto{
+	margin:0 auto;
+}
+.my-auto{
+	margin:auto 0;
+}
+.ml-auto{
+	margin-left:auto;
+}
+.mr-auto{
+	margin-right:auto;
+}
+//margin-top100 margin-bottom100
+.mt-100{
+	margin-top:100px;
+}
+.mt-100r{
+	margin-top:200rpx;
+}
+.mb-100{
+	margin-bottom:100px;
+}
+.mb-100r{
+	margin-bottom:200rpx;
+}
+// position
+.static {
+    position: static;
+}
+.fixed {
+    position: fixed;
+}
+.absolute {
+    position: absolute;
+}
+.relative {
+    position: relative;
+}
+.sticky {
+    position: sticky;
+}
+// 浮动
+.float-r {
+    float: right;
+}
+.float-l {
+    float: left;
+}
+.float-none {
+    float: none;
+}
+.clearfix {
+    &:after {
+        visibility: hidden;
+        display: block;
+        font-size: 0;
+        content: " ";
+        clear: both;
+        height: 0;
+    }
+}
+// 元素类型
+.block {
+    display: block;
+}
+.i-block {
+    display: inline-block;
+}
+.inline {
+    display: inline;
+}
+// text拓展
+.t-l {
+    text-align: left;
+}
+.t-c {
+    text-align: center;
+}
+.t-r {
+    text-align: right;
+}
+.t-j {
+    text-align: justify;
+}
+
+
+// border-radius 定位 z-index
+$percentage:"%";
+@for $i from 0 through 10{
+	// border-radius  radius50 = border-radius:50%
+	.radius#{$i}{
+		border-radius:#{$i}#{$percentage}
+	}
+	.radius#{$i*10}{
+		border-radius:#{$i*10}#{$percentage}
+	}
+	// 定位 top bottom left right 
+	// t1 t2 t3 t4 t5 t6..t10
+	.t#{$i}{
+		top:#{$i}#{$percentage}
+	}
+	.b#{$i}{
+		bottom:#{$i}#{$percentage}
+	}
+	.l#{$i}{
+		left:#{$i}#{$percentage}
+	}
+	.r#{$i}{
+		right:#{$i}#{$percentage}
+	}
+	// t10 t20 t30...t100
+	.t#{$i*10}{
+		top:#{$i*10}#{$percentage}
+	}
+	.b#{$i*10}{
+		bottom:#{$i*10}#{$percentage}
+	}
+	.l#{$i*10}{
+		left:#{$i*10}#{$percentage}
+	}
+	.r#{$i*10}{
+		right:#{$i*10}#{$percentage}
+	}
+	// z-index 0-10
+	.z-#{$i}{ 
+		z-index:#{$i}
+	}
+	// z-index 10-100
+	.z-#{$i*10}{ 
+		z-index:#{$i*10}
+	}
+}
+
+
+
+
+
+
