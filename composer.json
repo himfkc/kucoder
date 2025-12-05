@@ -6,6 +6,7 @@
         "high performance",
         "http service"
     ],
+    "type": "project",
     "homepage": "https://kucoder.com",
     "license": "Apache-2.0",
     "authors": [
