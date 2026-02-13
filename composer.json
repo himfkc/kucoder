@@ -16,6 +16,9 @@
         }
     ],
     "require": {
+        "php": ">=8.1",
+        "workerman/workerman": "~5.1",
+        "workerman/webman-framework": "^2.1",
         "monolog/monolog": "^2.0",
         "webman/console": "^2.1",
         "webman/think-orm": "^2.1",
@@ -27,18 +30,24 @@
         "webman/log": "~2.1",
         "webman/event": "^1.0",
         "symfony/process": "^7.3",
+        "symfony/var-dumper": "^7.3",
         "guzzlehttp/guzzle": "^7.9",
+        "webman/rate-limiter": "^1.1",
         "vlucas/phpdotenv": "^5.6",
         "yansongda/pay": "~3.7.0",
-        "foroco/php-browser-detection": "^2.8",
+        "hyperf/pimple": "~2.2.0",
         "ramsey/uuid": "^4.9",
+        "foroco/php-browser-detection": "^2.8",
+        "php-di/php-di": "^7.0",
+        "workerman/http-client": "^3.0",
         "ext-redis": "*",
-        "ext-bcmath": "*",
         "ext-fileinfo": "*",
-        "ext-zip": "*",
         "ext-openssl": "*",
-        "ext-curl": "*",
-        "ext-sodium": "*"
+        "ext-sodium": "*",
+        "ext-zip": "*",
+        "ext-pdo": "*",
+        "ext-bcmath": "*",
+        "ext-curl": "*"
     },
     "autoload": {
         "psr-4": {

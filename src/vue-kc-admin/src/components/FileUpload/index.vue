@@ -1,6 +1,6 @@
 <template>
   <div class="upload-file">
-    <el-upload multiple :action="uploadUrl" :before-upload="handleBeforeUpload" :file-list="fileList" :data="data"
+    <el-upload multiple :action="url" :before-upload="handleBeforeUpload" :file-list="fileList" :data="data"
       :limit="limit" :on-error="handleUploadError" :on-exceed="handleExceed" :on-success="handleUploadSuccess"
       :show-file-list="false" :headers="headers" :with-credentials="withCredentials" class="upload-file-uploader"
       ref="fileUpload" crossorigin="anonymous" v-if="!disabled">
@@ -32,13 +32,14 @@
 <script setup>
 import { getToken } from "@/utils/auth"
 import Sortable from 'sortablejs'
+import { SUCCESS_RES_CODE, ERROR_RES_CODE } from "@/utils/constant"
 
 const props = defineProps({
   modelValue: [String, Object, Array],
   // 上传接口地址
   action: {
     type: String,
-    default: "/app/kucoder/admin/common/upload"
+    default: "/kucoder/upload"
   },
   // 上传时附带的额外参数
   data: {
@@ -90,8 +91,8 @@ const { proxy } = getCurrentInstance()
 const emit = defineEmits(['update:modelValue', 'uploadAfter'])
 const number = ref(0)
 const uploadList = ref([])
-const baseApi = import.meta.env.VITE_APP_BASE_API
-const uploadUrl = ref(import.meta.env.VITE_APP_ENV === 'production' ? '' : '/dev' + props.action) // 上传文件服务器地址
+const baseApi = import.meta.env.DEV ? import.meta.env.VITE_DEV_PROXY : import.meta.env.VITE_APP_BASE_API
+const url = ref(baseApi + props.action)
 const headers = ref({ Authorization: "Bearer " + getToken() })
 const fileList = ref([])
 const showTip = computed(
@@ -162,7 +163,7 @@ function handleUploadError(err) {
 function handleUploadSuccess(res, file) {
   console.log('上传文件成功 res', res)
   console.log('上传文件成功 file', file)
-  if (res.code === 1) {
+  if (res.code === SUCCESS_RES_CODE) {
     uploadList.value.push({ name: res.data.file.name, url: res.data.file.url })
     uploadedSuccessfully(res)
   } else {

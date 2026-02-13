@@ -3,6 +3,7 @@ import { logoutKc } from '@/api/kucoder/plugin/kcLogin';
 import { imgUrl } from '@/utils/kucoder'
 import { defineStore } from 'pinia'
 import usePermissionStore from './permission'
+import useSettingsStore from './settings'
 import useTagsViewStore from './tagsView'
 
 
@@ -20,19 +21,17 @@ const useUserStore = defineStore(
     }),
     actions: {
       // 登录
-      login(userInfo) {
-        const username = userInfo.username.trim()
-        const password = userInfo.password
-        const code = userInfo.code
-        const uuid = userInfo.uuid
+      login(data) {
+        const settingsStore = useSettingsStore()
         return new Promise((resolve, reject) => {
-          login(username, password, code, uuid)
+          login(data)
             .then(({ res, code, msg }) => {
               console.log('登录结果', res)
               this.token = res.token
               this.name = res.nickname
               this.avatar = imgUrl(res.avatar, '', 'avatar')
               this.site_set = res.site_set
+              settingsStore.setTitle(res.site_set.site_name || 'kucoder - php高性能框架')
               if (res?.kc_user) {
                 this.kc.user = res.kc_user
               }
@@ -95,6 +94,7 @@ const useUserStore = defineStore(
         this.site_set = {}
       },
     },
+    
     persist: true
   }
 )

@@ -1,9 +1,9 @@
 <template>
   <div class="component-upload-image">
-    <el-upload multiple :disabled="disabled" :action="uploadImgUrl" list-type="picture-card"
-      :on-success="handleUploadSuccess" :before-upload="handleBeforeUpload" :data="data" :limit="limit"
-      :on-error="handleUploadError" :on-exceed="handleExceed" ref="imageUpload" :before-remove="handleDelete"
-      :show-file-list="true" :headers="headers" :file-list="fileList" :on-preview="handlePictureCardPreview"
+    <el-upload multiple :disabled="disabled" :action="url" list-type="picture-card" :on-success="handleUploadSuccess"
+      :before-upload="handleBeforeUpload" :data="data" :limit="limit" :on-error="handleUploadError"
+      :on-exceed="handleExceed" ref="imageUpload" :before-remove="handleDelete" :show-file-list="true"
+      :headers="headers" :file-list="fileList" :on-preview="handlePictureCardPreview"
       :class="{ hide: fileList.length >= limit }">
       <!-- <el-icon class="avatar-uploader-icon"><plus /></el-icon> -->
       <icon-ep-plus class="avatar-uploader-icon" />
@@ -30,13 +30,14 @@
 import { getToken } from "@/utils/auth"
 import { isExternal } from "@/utils/validate"
 import Sortable from 'sortablejs'
+import { SUCCESS_RES_CODE, ERROR_RES_CODE } from "@/utils/constant"
 
 const props = defineProps({
   modelValue: [String, Object, Array],
   // 上传接口地址
   action: {
     type: String,
-    default: "/common/upload"
+    default: "/kucoder/upload"
   },
   // 上传携带的参数
   data: {
@@ -80,8 +81,8 @@ const number = ref(0)
 const uploadList = ref([])
 const dialogImageUrl = ref("")
 const dialogVisible = ref(false)
-const baseUrl = import.meta.env.VITE_APP_BASE_API
-const uploadImgUrl = ref(import.meta.env.VITE_APP_BASE_API + props.action) // 上传的图片服务器地址
+const baseUrl = import.meta.env.DEV ? import.meta.env.VITE_DEV_PROXY : import.meta.env.VITE_APP_BASE_API
+const url = ref(baseUrl + props.action)
 const headers = ref({ Authorization: "Bearer " + getToken() })
 const fileList = ref([])
 const showTip = computed(
@@ -153,7 +154,7 @@ function handleExceed() {
 function handleUploadSuccess(res, file) {
   console.log('上传图片成功 res', res)
   console.log('上传图片成功 file', file)
-  if (res.code === 200) {
+  if (res.code === SUCCESS_RES_CODE) {
     uploadList.value.push({ name: res.data.file.name, url: res.data.file.url })
     uploadedSuccessfully()
   } else {

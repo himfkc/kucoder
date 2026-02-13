@@ -12,7 +12,6 @@ class Menu
      */
     function deleteCache($data): void
     {
-        // dump('事件data',$data);
         if(is_array($data['key'])) {
             foreach ($data['key'] as $key) {
                 delete_cache($key);

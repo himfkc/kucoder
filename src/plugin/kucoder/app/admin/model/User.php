@@ -40,7 +40,6 @@ class User extends Base
 
     public function setRoleIdsAttr(array $value): string
     {
-        // dump('要更新的role_Ids为：',$value);
         return $value ? implode(',', $value) : '';
     }
 }

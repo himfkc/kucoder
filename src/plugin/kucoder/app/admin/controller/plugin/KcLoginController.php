@@ -29,8 +29,10 @@ class KcLoginController extends AdminBase
      */
     public function login(): Response
     {
-        $uri = $this->httpUrl . 'login/login';
+        $type = $this->request->post('type', 'login');
+        $uri = $this->httpUrl . ($type === 'register' ? 'login/register' : 'login/login');
         $data = $this->request->post();
+        $data['site_host'] = request()->host(true);
         $res = $this->http_post($uri, $data, allResponse: true, needLogin: false);
         if ($res->hasHeader('Set-Cookie')) {
             $setCookie = $res->getHeader('Set-Cookie');
@@ -64,12 +66,10 @@ class KcLoginController extends AdminBase
      */
     public function logout(): Response
     {
-        dump('准备退出插件市场');
         $uri = $this->httpUrl . 'login/logout';
         $post = $this->request->post();
         $post['cookie'] = KcIdentity::getCookie($uri, $this->auth->getId(), $this->app);
         $res = $this->http_post($uri, $post);
-        dump('logout res', $res);
         if($res['code'] !== 0){
             KcIdentity::clear($this->auth->getId(),$this->app);
             Cache::delete($this->app . ":kc_user_{$this->auth->nickname}");

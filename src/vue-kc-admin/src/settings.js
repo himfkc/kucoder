@@ -1,8 +1,16 @@
+import useUserStore from '@/store/modules/user'
 export default {
   /**
    * 网页标题
    */
-  title: import.meta.env.VITE_APP_TITLE,
+  // title: '',
+  get title() {
+    try {
+      return useUserStore().site_set?.site_name
+    } catch {
+      return '系统后台'
+    }
+  },
   /**
    * 侧边栏主题 深色主题theme-dark，浅色主题theme-light
    */
@@ -35,7 +43,7 @@ export default {
   /**
    * 是否显示动态标题
    */
-  dynamicTitle: false,
+  dynamicTitle: true,
 
   /**
    * @type {string | array} 'production' | ['production', 'development']

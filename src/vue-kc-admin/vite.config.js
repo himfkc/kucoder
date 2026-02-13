@@ -8,16 +8,14 @@ export default defineConfig(({ mode, command }) => {
   console.log('mode: ', mode) // mode development
   console.log('command: ', command) // command serve
   const env = loadEnv(mode, process.cwd())
-  const { VITE_APP_ENV, VITE_APP_BASE_API, VITE_DEPLOY_DIR, VITE_HMR } = env
+  const { VITE_APP_BASE_API, VITE_DEPLOY_DIR, VITE_HMR, VITE_DEV_PROXY } = env
   const isHMREnabled = VITE_HMR !== 'false'
-
-  const config = {
-
+  return {
     // 部署生产环境和开发环境下的URL。
     // 默认情况下，vite 会假设你的应用是被部署在一个域名的根路径上 例如 https://kucoder.com/ 则 base 设置为 '/'
     // 如果应用被部署在一个子路径上，你就需要用这个选项指定这个子路径。例如，如果你的应用被部署在 https://kucoder.com/vue/，则设置 base 为 /vue/
     // base: VITE_APP_ENV === 'production' ? '/' : '/',
-    base: VITE_APP_ENV === 'production' ? VITE_DEPLOY_DIR : VITE_DEPLOY_DIR,
+    base: VITE_DEPLOY_DIR,
     plugins: createVitePlugins(env, command === 'build'),
     resolve: {
       // https://cn.vitejs.dev/config/#resolve-alias
@@ -31,27 +29,37 @@ export default defineConfig(({ mode, command }) => {
       extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue']
     },
     // 打包配置
-    /* build: {
+    build: {
       // https://vite.dev/config/build-options.html
-      sourcemap: command === 'build' ? false : 'inline',
+      /* sourcemap: command === 'build' ? false : 'inline',
       outDir: 'dist',
       assetsDir: 'assets',
-      chunkSizeWarningLimit: 2000,
+      chunkSizeWarningLimit: 2000, */
       // rollup.config.js参数可写在rollupOptions里 这与从Rollup配置文件导出的选项相同
       rollupOptions: {
-        output: {
+        /* output: {
           chunkFileNames: 'static/js/[name]-[hash].js',
           entryFileNames: 'static/js/[name]-[hash].js',
           assetFileNames: 'static/[ext]/[name]-[hash].[ext]'
-        }
-      }
-    }, */
+        } */
+        external: ['qrcode']
+      },
+    },
+    // 生产环境移除console和debugger esbuild与build同级配置
+    esbuild: command === 'build' ? {
+        drop: ['console', 'debugger'],
+      } : {},
+    define: {
+      // 恢复 console.error 和 console.warn（不被移除）
+      'console.error': 'console.error',
+      'console.warn': 'console.warn'
+    },
     // server的以下选项仅适用于开发环境
     server: {
       // 指定服务器应该监听哪个 IP 地址。 如果将此设置为 0.0.0.0 或者 true 将监听所有地址，包括局域网和公网地址。
       host: true,
       // 指定开发服务器端口。注意：如果端口已经被使用，Vite 会自动尝试下一个可用的端口，所以这可能不是开发服务器最终监听的实际端口。
-      port: 9527,
+      port: 9528,
       //开发服务器启动时，自动在浏览器中打开应用程序。如果为真，将会打开默认浏览器。
       open: false,
       // Vite允许响应的主机名。 默认情况下，允许 localhost 及其下的所有 .localhost 域名和所有 IP 地址。 使用 HTTPS 时，将跳过此检查。
@@ -59,15 +67,16 @@ export default defineConfig(({ mode, command }) => {
       allowedHosts: [],
       // 为开发服务器配置自定义代理规则。期望接收一个 { key: options } 对象，https://cn.vitejs.dev/config/#server-proxy
       proxy: {
-        '/dev': {
+        [VITE_DEV_PROXY]: {
           target: VITE_APP_BASE_API,
           changeOrigin: true,
-          rewrite: (p) => p.replace(/^\/dev/, '')
+          rewrite: (p) => p.replace(VITE_DEV_PROXY, '')
+          // rewrite: (p) => p.replace(/^\/dev/, '')
         },
-        '^/v3/api-docs/(.*)': {
+        /* '^/v3/api-docs/(.*)': {
           target: VITE_APP_BASE_API,
           changeOrigin: true,
-        }
+        } */
       },
       // 热更新
       hmr: isHMREnabled,
@@ -102,6 +111,4 @@ export default defineConfig(({ mode, command }) => {
       include: optimizeDepsIncludes,
     }
   }
-  process.env.VITE_PORT = config.server.port
-  return config
 })

@@ -1,28 +1,24 @@
 import axios from 'axios'
-import { ElNotification, ElMessageBox, ElMessage, ElLoading } from 'element-plus'
-import { getToken } from '@/utils/auth'
+import { ElMessageBox, ElMessage, ElLoading } from 'element-plus'
 import errorCode from '@/utils/errorCode'
 import { tansParams, blobValidate } from '@/utils/ruoyi'
-import cache from '@/plugins/cache'
 import { saveAs } from 'file-saver'
 import useUserStore from '@/store/modules/user'
 import { adminBasePath } from '@/api/adminRouteBasePath'
-import { isJson } from '@/utils/kucoder'
-import { logoutKc } from '@/api/kucoder/plugin/kcLogin';
-import { LOGIN_E_CODE } from './constant'
+import { LOGIN_E_CODE, KC_CODE_PREFIX,SUCCESS_RES_CODE,ERROR_RES_CODE } from './constant'
 
 let downloadLoadingInstance
-
+console.log('环境变量', import.meta.env)
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8';
 axios.defaults.headers['Accept'] = 'application/json, text/plain, */*';
 axios.defaults.headers['withCredentials'] = true; // 允许跨域请求携带 Cookie
 // 创建axios实例
 const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
-  baseURL: import.meta.env.VITE_APP_ENV === 'production' ? '' : '/dev',
   // baseURL: import.meta.env.VITE_APP_BASE_API,
-  // 10s超时
-  timeout: 10000
+  baseURL: import.meta.env.DEV ? import.meta.env.VITE_DEV_PROXY : import.meta.env.VITE_APP_BASE_API,
+  // 5s超时
+  timeout: 5000
 })
 
 // request拦截器
@@ -86,17 +82,19 @@ service.interceptors.response.use(res => {
     return res.data
   }
   const { data, msg, code } = res.data
-  if (code === 1) {
+  if (code === SUCCESS_RES_CODE) {
     return Promise.resolve({ data, msg, code, res: data })
   }
   // 未登录或登录过期或登录异常
   if (LOGIN_E_CODE.includes(code)) {
     ElMessageBox.alert(msg, '系统提示', { confirmButtonText: '重新登录', type: 'warning' })
       .then(() => {
+        useUserStore().kc.user = {}
+        useUserStore().kc.site_set = {}
         useUserStore()
           .clear()
           .then(() => {
-            if (import.meta.env.VITE_APP_ENV === 'production') {
+            if (!import.meta.env.DEV) {
               location.href = import.meta.env.VITE_APP_BASE_API + import.meta.env.VITE_DEPLOY_DIR + adminBasePath + '/login'
             } else {
               location.href = import.meta.env.VITE_DEPLOY_DIR + adminBasePath + '/login'
@@ -106,7 +104,7 @@ service.interceptors.response.use(res => {
       .catch(err => {
         console.log(err)
       })
-  } else if (code.toString().startsWith('888')) {
+  } else if (code.toString().startsWith(KC_CODE_PREFIX)) {
     // kucoder异常
     const kcCode = code.toString().substring(3)
     if (LOGIN_E_CODE.includes(Number(kcCode))) {

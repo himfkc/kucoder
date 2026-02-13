@@ -53,9 +53,9 @@ export function dataScope(data) {
 // 角色状态修改
 export function change(data) {
   return request({
-    url: basePath + '/system/role/change',
+    url: basePath + '/system/role/edit',
     method: 'post',
-    data: data
+    data: {...data,edit_status:1}
   })
 }
 
@@ -109,5 +109,14 @@ export function deptTreeSelect(roleId) {
   return request({
     url: basePath + '/system/role/deptTree/' + roleId,
     method: 'get'
+  })
+}
+
+// 彻底删除
+export function trueDel(data) {
+  return request({
+    url: basePath + '/system/role/trueDel',
+    method: 'post',
+    data: data
   })
 }

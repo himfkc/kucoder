@@ -55,7 +55,16 @@ export function delDept(data) {
 
 export function change(data) {
   return request({
-    url: basePath + '/system/dept/change',
+    url: basePath + '/system/dept/edit',
+    method: 'post',
+    data: {...data,edit_status:1}
+  })
+}
+
+// 彻底删除
+export function trueDel(data) {
+  return request({
+    url: basePath + '/system/dept/trueDel',
     method: 'post',
     data: data
   })

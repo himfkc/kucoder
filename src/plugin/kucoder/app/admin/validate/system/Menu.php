@@ -28,18 +28,18 @@ class Menu extends Validate
     protected function kcCheckPath($value, $rule, $data): bool|string
     {
         if(in_array($data['type'],['menu','button']) && empty($value)){
-            return '菜单控制器和按钮的路径不能为空';
+            return '菜单控制器和按钮的名称不能为空';
         }
         //二级目录的path不能为空
         if ($data['pid'] !== 0 && $data['type'] == 'dir' && empty($value)) {
-            return '子目录的路径不能为空';
+            return '子目录名称不能为空';
         }
         return true;
     }
 
     protected function kcCheckUrl($value, $rule, $data): bool|string
     {
-        if (filter_var($value, FILTER_VALIDATE_URL) === false) {
+        if ($data['type'] === 'link' && !filter_var($value, FILTER_VALIDATE_URL)) {
             return '外链地址格式不正确';
         }
         return true;

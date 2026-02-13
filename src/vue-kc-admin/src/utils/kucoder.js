@@ -1,5 +1,5 @@
 import { isHttp, isEmpty } from "@/utils/validate"
-import defAva from '@/assets/images/profile.jpg'
+import assetsAvatar from '@/assets/images/avatar.png'
 import { ElLoading, ElMessage, ElMessageBox } from 'element-plus'
 // import { adminBasePath } from "@/api/adminRouteBasePath";
 
@@ -71,31 +71,39 @@ export function kcMsg(msg, type = 'warning', duration = 3000) {
     })
 }
 
+// alert默认不显示取消按钮
 export function kcAlert(msg, title = '提示', options = {}) {
-    return ElMessageBox.alert(msg, title || '提示', { 'type': 'warning', ...options, center: true, draggable: true })
+    return ElMessageBox.alert(msg, title || '提示', { type: 'warning', ...options, center: true, draggable: true })
 }
 
+// confirm默认显示取消按钮
 export function kcConfirm(msg, title = '提示', options = {}) {
     return ElMessageBox.confirm(msg, title || '提示', { ...options, center: true, draggable: true })
 }
 
+// prompt默认显示取消按钮
 export function kcPrompt(msg, title = '提示', options = {}) {
     return ElMessageBox.prompt(msg, title || '提示', { ...options, center: true, draggable: true })
 }
 
 export async function getLoginPath() {
     const adminRouteBasePath = await import('@/api/adminRouteBasePath')
-    return 'http://localhost:' + import.meta.env.VITE_PORT + import.meta.env.VITE_DEPLOY_DIR + adminRouteBasePath + '/login'
+    // return 'http://localhost:' + import.meta.env.VITE_PORT + import.meta.env.VITE_DEPLOY_DIR + adminRouteBasePath + '/login'
+    return import.meta.env.VITE_DEPLOY_DIR + adminRouteBasePath + '/login'
 }
 
 export function imgUrl(img, domain = '', type = 'img') {
-    if (type = 'avatar') {
+    if (type === 'avatar') {
         if (!isHttp(img)) {
-            img = (isEmpty(img)) ? defAva : domain ? join_path(domain, img) : join_path(import.meta.env.VITE_APP_BASE_API, img)
+            // 如果没有图片，使用默认头像
+            if (isEmpty(img)) {
+                return assetsAvatar
+            }
+            // 否则拼接路径
+            return domain ? join_path(domain, img) : join_path(import.meta.env.VITE_APP_BASE_API, img)
         }
     } else {
         if (!isHttp(img)) {
-            console.log('img', img, domain)
             img = (isEmpty(img)) ? '' : domain ? join_path(domain, img) : join_path(import.meta.env.VITE_APP_BASE_API, img)
         }
     }
@@ -122,6 +130,41 @@ export function numberToChinese(num) {
     ];
 
     return chineseNumbers[number];
+}
+
+// 判断是否是合法域名
+export function isValidDomain(domain) {
+    // 基本长度检查（域名最长253字符，每段最长63字符）
+    if (!domain || domain.length > 253) {
+        return false
+    }
+
+    // 正则验证
+    const regex = /^(?:(?=[a-z0-9-]{1,63}\.)[a-z0-9]+(?:-[a-z0-9]+)*\.)+[a-z]{2,}$/i
+
+    if (!regex.test(domain)) {
+        return false
+    }
+
+    // 检查每段长度（每段不超过63字符）
+    const parts = domain.split('.')
+    for (const part of parts) {
+        if (part.length > 63) {
+            return false
+        }
+        // 每段不能以连字符开头或结尾
+        if (part.startsWith('-') || part.endsWith('-')) {
+            return false
+        }
+    }
+
+    // 顶级域名至少2个字符
+    const tld = parts[parts.length - 1]
+    if (tld.length < 2) {
+        return false
+    }
+
+    return true
 }
 
 /**

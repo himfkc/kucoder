@@ -11,28 +11,8 @@
     <div class="right-menu">
       <template v-if="appStore.device !== 'mobile'">
 
-        <!-- <el-tooltip content="登录kucoder" effect="dark" placement="bottom">
-          <div class="right-menu-item">
-            <kc-login ref="kcLoginRef" class="" @success="kcLoginSuccess"></kc-login>
-          </div>
-        </el-tooltip> -->
-
-        <el-tooltip content="测试代码 路径为/plugin/kucoder/app/kucoder/controller/TestController" effect="dark"
-          placement="bottom">
-          <div class="right-menu-item">
-            <icon-ep-videoPlay class="icon" @click="testCode"></icon-ep-videoPlay>
-          </div>
-        </el-tooltip>
-
-        <el-tooltip content="菜单搜索" effect="dark" placement="bottom">
+        <!-- <el-tooltip content="菜单搜索" effect="dark" placement="bottom">
           <header-search id="header-search" class="right-menu-item" />
-        </el-tooltip>
-        <!-- <el-tooltip content="源码地址" effect="dark" placement="bottom">
-          <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
-        </el-tooltip>
-
-        <el-tooltip content="文档地址" effect="dark" placement="bottom">
-          <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />
         </el-tooltip> -->
 
         <el-tooltip content="全屏" effect="dark" placement="bottom">
@@ -61,9 +41,9 @@
             <router-link :to="adminBasePath + '/user/profile'">
               <el-dropdown-item>个人中心</el-dropdown-item>
             </router-link>
-            <el-dropdown-item divided command="removeCache">
+            <!-- <el-dropdown-item divided command="removeCache">
               <span>清除缓存</span>
-            </el-dropdown-item>
+            </el-dropdown-item> -->
             <el-dropdown-item divided command="logout">
               <span>退出登录</span>
             </el-dropdown-item>
@@ -87,38 +67,15 @@ import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import HeaderSearch from '@/components/HeaderSearch'
-// import RuoYiGit from '@/components/RuoYi/Git'
-// import RuoYiDoc from '@/components/RuoYi/Doc'
 import useAppStore from '@/store/modules/app'
 import useUserStore from '@/store/modules/user'
 import useSettingsStore from '@/store/modules/settings'
 import { adminBasePath } from '@/api/adminRouteBasePath'
-import request from '@/utils/request'
 
-// 测试代码
-function testCode() {
-  request({
-    url: '/app/kucoder/kucoder/test/index?type=getenv',
-    method: 'get'
-  }).then(res => {
-    console.log(res)
-  })
-}
-
-// 登录kucoder
-const kcLoginRef = useTemplateRef('kcLoginRef')
-const kcLoginSuccess = (data) => {
-  console.log('登录成功', data)
-  console.log('userStore', userStore)
-  userStore.kc.site_set = data.site_set
-  delete data.site_set
-  userStore.kc.user = data
-}
 
 const appStore = useAppStore()
 const userStore = useUserStore()
 const settingsStore = useSettingsStore()
-const router = useRouter()
 
 function toggleSideBar() {
   appStore.toggleSideBar()

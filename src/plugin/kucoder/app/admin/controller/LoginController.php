@@ -6,6 +6,7 @@ namespace plugin\kucoder\app\admin\controller;
 use plugin\kucoder\app\kucoder\controller\AdminBase;
 use plugin\kucoder\app\kucoder\lib\Captcha;
 use plugin\kucoder\app\kucoder\lib\KcIdentity;
+use plugin\kucoder\app\kucoder\service\LoginLogService;
 use plugin\kucoder\app\kucoder\service\MenuService;
 use Psr\SimpleCache\InvalidArgumentException;
 use support\exception\BusinessException;
@@ -22,7 +23,7 @@ class LoginController extends AdminBase
     protected array $noNeedLogin = ['init', 'login', 'changeCaptcha', 'logout'];
     protected array $noNeedRight = ['getRouters', 'logout'];
 
-    private static array $showFields = ['token','nickname','avatar','site_set'];
+    private static array $showFields = ['token', 'nickname', 'avatar', 'site_set'];
 
     /**
      * @return Response
@@ -46,7 +47,6 @@ class LoginController extends AdminBase
      */
     public function login(Request $request): Response
     {
-        // dump('login 请求方式' , $request->isPost());
         //判断是否是post请求
         if (!$request->isPost()) {
             return $this->error('请求方式错误');
@@ -63,20 +63,21 @@ class LoginController extends AdminBase
         if (!$userInfo = $this->auth->login([$this, 'myLogin'])) {
             return $this->error('登录失败');
         }
+        $cd = $userInfo;
         $userInfo = reserve_array_key($userInfo, self::$showFields);
         $userInfo['site_set'] = [
-            'logo' => '/favicon.ico',
-            'site_name' => 'Kucoder快速开发框架',
-            // 'upload_path' => config('plugin.kucoder.app.upload_path'),
+            'logo' => config_in_db('kucoder',null,'site_logo'),
+            'site_name' => config_in_db('kucoder',null,'site_name'),
+            // 'upload_path' => config('plugin.kucoder.app.upload_path'),  //上传接口默认/kucoder/upload
             'sys_url' => config('plugin.kucoder.app.sys_url'),
             'sys_file_url' => config('plugin.kucoder.app.sys_file_url') ?: config('plugin.kucoder.app.sys_url'),
         ];
         //是否已登录kucoder
-        $openssl_secret_key = config('plugin.kucoder.app.openssl_secret_key') ?: '';
+        $openssl_secret_key = config('plugin.kucoder.secret-key.openssl.secret_key') ?: '';
         $opensslKey = base64_decode($openssl_secret_key);
-        if ($opensslKey && strlen($opensslKey) === 32){
-            if(KcIdentity::has($this->auth->getId(),$this->app)) {
-                $kcUser = Cache::get($this->app . ":kc_user_{$this->auth->nickname}");
+        if ($opensslKey && strlen($opensslKey) === 32) {
+            if (KcIdentity::has($cd['user_id'], $this->app)) {
+                $kcUser = Cache::get($this->app . ":kc_user_{$cd['nickname']}");
                 $userInfo['kc_user'] = $kcUser;
             }
         }
@@ -89,15 +90,22 @@ class LoginController extends AdminBase
      * @return mixed
      * @throws Throwable
      */
-    protected function myLogin(string $modelClass):object
+    protected function myLogin(string $modelClass): object
     {
         //默认的用户名密码登录
         $username = request()->post('username');
         $password = request()->post('password');
         $user = (new $modelClass)->where('username', $username)->find();
         if (!$user) $this->throw('用户不存在');
-        if (!password_verify($password, $user->password)) $this->throw('用户名或密码错误');
-        if (intval($user->status) !== 1) $this->throw('用户已被禁用');
+        if (!password_verify($password, $user->password)){
+            LoginLogService::add(0, 0,'用户名或密码错误');
+            $this->throw('用户名或密码错误');
+        }
+        if (intval($user->status) !== 1){
+            LoginLogService::add(0, 0,'用户已被禁用',$user->user_id);
+            $this->throw('用户已被禁用');
+        }
+        $user->post_password = $password;
         return $user;
     }
 
@@ -118,7 +126,6 @@ class LoginController extends AdminBase
         $userId = $this->auth->getId();
         $menus = $this->auth->getUserMenus($userId);
         $btns = $this->auth->getUserBtns($userId);
-
         $roleMenus = array_map(function ($item) {
             return [
                 'id' => $item['id'],
@@ -127,9 +134,13 @@ class LoginController extends AdminBase
             ];
         }, $menus);
         $roleMenus = get_recursion_data($roleMenus);
-
+        if($this->auth->getUserInfo()['is_super_admin']){
+            $routes = MenuService::allMenusToRoutes($menus);
+        }else{
+            $routes = MenuService::menusToRoutes($menus);
+        }
         return $this->ok('', [
-            'routes' => MenuService::menusToRoutes($menus),
+            'routes' => $routes,
             'btns' => $btns,
             'roleMenus' => $roleMenus,
         ]);

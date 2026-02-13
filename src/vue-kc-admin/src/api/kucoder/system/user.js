@@ -12,10 +12,20 @@ export function listUser(query) {
 }
 
 // 查询用户详细
-export function getUser(userId) {
+/* export function getUser(userId) {
   return request({
     url: basePath + '/system/user/' + parseStrEmpty(userId),
     method: 'get'
+  })
+} */
+
+// 查看用户详情
+export function getUserInfo(id='') {
+  const data = id ? { id } : {}
+  return request({
+    url: basePath + '/system/user/info',
+    method: 'post',
+    data: data
   })
 }
 
@@ -62,38 +72,39 @@ export function resetUserPwd(userId, password) {
 // 用户状态修改
 export function change(data) {
   return request({
-    url: basePath + '/system/user/change',
+    url: basePath + '/system/user/edit',
+    method: 'post',
+    data: {...data,edit_status:1}
+  })
+}
+
+// 查询用户个人信息
+/* export function getUserProfile() {
+  return request({
+    url: basePath + '/system/user/profile',
+    method: 'get'
+  })
+} */
+
+// 修改用户个人信息
+export function updateUserProfile(data) {
+  return request({
+    url: basePath + '/system/user/updateProfile',
     method: 'post',
     data: data
   })
 }
 
-// 查询用户个人信息
-export function getUserProfile() {
-  return request({
-    url: basePath + '/system/user/profile',
-    method: 'get'
-  })
-}
-
-// 修改用户个人信息
-export function updateUserProfile(data) {
-  return request({
-    url: basePath + '/system/user/profile',
-    method: 'put',
-    data: data
-  })
-}
-
 // 用户密码重置
-export function updateUserPwd(oldPassword, newPassword) {
+export function updateUserPwd(oldPassword, newPassword,confirmPassword) {
   const data = {
-    oldPassword,
-    newPassword
+    old_password:oldPassword,
+    new_password:newPassword,
+    confirm_password:confirmPassword
   }
   return request({
-    url: basePath + '/system/user/profile/updatePwd',
-    method: 'put',
+    url: basePath + '/system/user/updatePwd',
+    method: 'post',
     data: data
   })
 }
@@ -132,3 +143,14 @@ export function deptTreeSelect() {
     method: 'get'
   })
 }
+
+// 彻底删除
+export function trueDel(data) {
+  return request({
+    url: basePath + '/system/user/trueDel',
+    method: 'post',
+    data: data
+  })
+}
+
+

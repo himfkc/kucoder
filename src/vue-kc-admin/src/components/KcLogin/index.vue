@@ -14,12 +14,16 @@
         align-center>
         <el-form ref="kcLoginFormRef" :model="kcLoginForm" :rules="kcLoginFormRules" label-width="80px" class="y c">
             <!-- 用户名 -->
-            <el-form-item label="用户名" prop="username">
+            <el-form-item label="用户名/邮箱" prop="username">
                 <el-input v-model="kcLoginForm.username" placeholder="请输入用户名" />
             </el-form-item>
             <!-- 密码 -->
             <el-form-item label="密码" prop="password">
                 <el-input v-model="kcLoginForm.password" placeholder="请输入密码" type="password" show-password />
+            </el-form-item>
+            <!-- 邮箱 -->
+            <el-form-item label="邮箱" prop="email" v-if="register" required>
+                <el-input v-model="kcLoginForm.email" placeholder="请输入邮箱" />
             </el-form-item>
             <!-- 验证码 -->
             <el-form-item label="验证码" prop="code" class="x c ac">
@@ -35,14 +39,22 @@
         </el-form>
         <template #footer>
             <el-button @click="cancelKcLogin">取消</el-button>
-            <el-button type="primary" @click="kcLogin">登录</el-button>
+            <el-button type="primary" @click="kcLogin" v-if="!register">登录</el-button>
+            <el-button type="info" @click="kcNoAccount" v-if="!register">没有账号</el-button>
+            <el-button type="success" @click="kcRegister" v-if="register">注册</el-button>
         </template>
     </el-dialog>
+
+    <!-- 站点授权 -->
+    <kc-authorize v-model="kcAuthorizeDialogVisible"></kc-authorize>
 </template>
 
 <script setup>
-import { loginKc, logoutKc, getCodeImg } from "@/api/kucoder/plugin/kcLogin"
+import { loginKc, logoutKc, getCodeImg, registerKc } from "@/api/kucoder/plugin/kcLogin"
 import useUserStore from '@/store/modules/user'
+import { validEmail } from '@/utils/validate'
+import { AUTH_E_CODE, KC_CODE_PREFIX } from '@/utils/constant'
+import { kcMsg, kcAlert, kcLoading, kcConfirm } from "@/utils/kucoder"
 
 /* 
 const props = defineProps({
@@ -66,6 +78,7 @@ const codeImg = ref("")
 const kcLoginForm = ref({
     username: '',
     password: '',
+    email: '',
     code: undefined,
     uuid: undefined,
 })
@@ -76,20 +89,50 @@ const kcLoginFormRules = ref({
 })
 function cancelKcLogin() {
     kcLoginDialogVisible.value = false
+    register.value = false
     // emits('update:modelValue', false)
     codeImg.value = ""
     kcLoginForm.value = {
         username: '',
         password: '',
+        email: '',
         code: undefined,
         uuid: undefined,
     }
 }
 
+const register = ref(false)
+function kcNoAccount() {
+    register.value = true
+}
+function kcRegister() {
+    if (!kcLoginForm.value.email || !validEmail(kcLoginForm.value.email)) {
+        kcMsg('邮箱格式不正确'); return
+    }
+    kcLoginFormRef.value.validate(valid => {
+        if (valid) {
+            console.log('kcLoginForm', kcLoginForm.value)
+            const loading = kcLoading('注册中...')
+            registerKc(kcLoginForm.value, { headers: { showErrMsg: false } })
+                .then((res) => {
+                    loading.close()
+                    console.log('kcRegister res', res)
+                    kcAlert(res.data.msg)
+                    cancelKcLogin()
+                })
+                .catch(err => {
+                    loading.close()
+                    console.log('err', err)
+                    loginErrHandle(err)
+                })
+        }
+    })
+}
+
 function getCode() {
     getCodeImg().then(({ res, code, msg }) => {
-        console.log('response', res)
-        codeImg.value = "data:image/gif;base64," + res.captcha.img_base64;
+        console.log('验证码response', res)
+        codeImg.value = res.captcha.img_base64;
         kcLoginForm.value.uuid = res.captcha.uuid;
     })
 }
@@ -98,7 +141,7 @@ function kcLogin() {
     kcLoginFormRef.value.validate(valid => {
         if (valid) {
             console.log('kcLoginForm', kcLoginForm.value)
-            loginKc(kcLoginForm.value)
+            loginKc(kcLoginForm.value, { headers: { showErrMsg: false } })
                 .then(({ res, code, msg }) => {
                     console.log('kcLogin res', res)
                     userStore.kc.site_set = res.data.site_set
@@ -110,9 +153,38 @@ function kcLogin() {
                 })
                 .catch(err => {
                     console.log('err', err)
+                    loginErrHandle(err)
                 })
         }
     })
+}
+
+// 站点授权
+const kcAuthorizeDialogVisible = ref(false)
+function loginErrHandle(err) {
+    const code = err.code.toString()
+    console.log('err2', code.startsWith(KC_CODE_PREFIX))
+    if (code.startsWith(KC_CODE_PREFIX)) {
+        const kcCode = code.substring(3)
+        if (AUTH_E_CODE.includes(Number(kcCode))) {
+            kcLoginDialogVisible.value = false
+            kcConfirm(err.msg, '系统提示', {
+                type: 'warning',
+                confirmButtonText: '去授权',
+            }).then(confirm => {
+                console.log('action', confirm)
+                kcAuthorizeDialogVisible.value = true
+            }).catch(cancel => {
+                console.log('action', cancel)
+                kcAuthorizeDialogVisible.value = false
+            })
+        } else {
+            kcAlert(err.msg)
+        }
+    } else {
+        console.log('err3', err)
+        kcAlert(err.msg)
+    }
 }
 
 function kcLoginMesBox() {

@@ -42,7 +42,9 @@ const useSettingsStore = defineStore(
         this.isDark = !this.isDark
         toggleDark()
       }
-    }
+    },
+
+    persist: true
   })
 
 export default useSettingsStore

@@ -6,7 +6,6 @@ namespace plugin\kucoder\app\admin\controller\plugin;
 use Exception;
 use plugin\kucoder\app\kucoder\constants\KcConst;
 use plugin\kucoder\app\kucoder\controller\AdminBase;
-use plugin\kucoder\app\kucoder\install\PluginInstall;
 use plugin\kucoder\app\kucoder\lib\KcFile;
 use plugin\kucoder\app\kucoder\lib\KcIdentity;
 use plugin\kucoder\app\kucoder\service\PluginService;
@@ -22,7 +21,7 @@ class PluginLocalController extends AdminBase
     use HttpTrait;
 
     protected string $modelClass = "\\plugin\\kucoder\\app\\admin\\model\\PluginLocal";
-    protected array $accessMethods = ['index'];
+    protected array $allowAccessActions = ['index'];
 
     /**
      * @throws Exception
@@ -37,9 +36,21 @@ class PluginLocalController extends AdminBase
     /**
      * @throws Exception
      */
+    protected function index_before(): void
+    {
+        $this->auth->siteRight($siteRight);
+        if (isset($siteRight['data']) && $siteRight['data']) {
+            if (!password_verify(request()->host(true), $siteRight['data'])) {
+                $this->throw($siteRight['msg']);
+            }
+        }
+    }
+
+    /**
+     * @throws Exception|Throwable
+     */
     protected function index_after(array|object $data): array
     {
-        // dump('插件数据1: ', $data);
         $marketPlugins = array_filter($data, fn($plugin) => $plugin['source'] === 1);
         if(!$marketPlugins) {
             return $data;
@@ -48,7 +59,6 @@ class PluginLocalController extends AdminBase
         $uri = $this->httpUrl . 'market/version';
         $pluginIds['cookie'] = KcIdentity::getCookie($uri, $this->auth->getId());
         $res = $this->http_post($uri, $pluginIds);
-        dump('远程插件版本数据: ', $res);
         foreach ($data as &$plugin) {
             if ($plugin['source'] === 1 && isset($res['data'][$plugin['id']])) {
                 $versions = $res['data'][$plugin['id']];
@@ -63,7 +73,6 @@ class PluginLocalController extends AdminBase
                 ], array_merge($geVersions, $ltVersions));
             }
         }
-        // dump('插件数据2: ', $data);
         return $data;
     }
 
@@ -146,10 +155,10 @@ class PluginLocalController extends AdminBase
         }
         $savePath = $saveDir . '/' . $plugin['name'] . '_' . $plugin['version'] . '.zip';
         if (!is_file($savePath)) {
-            dump('开始下载插件');
             $uri = $this->httpUrl . 'market/download';
             $downOptions = ['save_file_path' => $savePath];
             $plugin['cookie'] = KcIdentity::getCookie($uri, $this->auth->getId(), $this->app);
+            $plugin['site_host'] = request()->host(true);
             $this->http_download($uri, $plugin, $downOptions);
         }
         KcFile::extractZip($savePath, $pluginPath);
@@ -158,9 +167,16 @@ class PluginLocalController extends AdminBase
     /**
      * 导入本地调试插件
      * @return Response
+     * @throws Exception
      */
     public function importLocalPlugin(): Response
     {
+        $this->auth->siteRight($siteRight);
+        if (isset($siteRight['data']) && $siteRight['data']) {
+            if (!password_verify(request()->host(true), $siteRight['data'])) {
+                $this->throw($siteRight['msg']);
+            }
+        }
         Db::startTrans();
         try {
             $post = $this->request->post();
@@ -184,7 +200,6 @@ class PluginLocalController extends AdminBase
             return $this->success('导入成功');
         } catch (Throwable $t) {
             Db::rollBack();
-            dump('导入本地调试插件异常: ', $this->errorInfo($t));
             return $this->error('导入本地调试插件失败: ' . $t->getMessage(), [], $t->getCode());
         }
     }

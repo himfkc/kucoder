@@ -1,6 +1,8 @@
 <?php
 
 use plugin\kucoder\app\admin\model\Config;
+use plugin\kucoder\app\admin\model\ConfigGroup;
+use plugin\kucoder\app\kucoder\constants\KcConst;
 use support\exception\BusinessException;
 use support\think\Cache;
 use think\facade\Db;
@@ -16,9 +18,6 @@ if (!function_exists('in_action')) {
             $noNeed = explode(',', $noNeed);
         }
         if (in_array('*', $noNeed)) return true;
-        // var_dump(request()->action);
-        // var_dump('-------------------------------------');
-        // var_dump($noNeed);
         if (in_array(request()->action, $noNeed)) return true;
         return false;
     }
@@ -48,7 +47,9 @@ if (!function_exists('get_site_config')) {
 if (!function_exists('get_recursion_data')) {
     /**
      * 递归获取数据
-     * @param array $data
+     * @param array|object $data
+     * @param string $idField
+     * @param string $pidField
      * @param int $pid
      * @param int $level
      * @param bool $self
@@ -162,7 +163,6 @@ if (!function_exists('delete_cache')) {
      */
     function delete_cache(string $key = '', string $tag = ''): bool
     {
-        dump('执行删除缓存key', $key);
         if (!$key && !$tag) {
             throw  new \Exception('请指定要删除的缓存key或者tag');
         }
@@ -229,15 +229,15 @@ if (!function_exists('get_pluginName')) {
     }
 }
 
-if(!function_exists('dev_env')){
-    function dev_env(): bool
+if(!function_exists('is_dev_env')){
+    function is_dev_env(): bool
     {
         return getenv('ENV') === 'development';
     }
 }
 
-if(!function_exists('app_debug')){
-    function app_debug(): bool
+if(!function_exists('is_app_debug')){
+    function is_app_debug(): bool
     {
         return getenv('APP_DEBUG') === 'true';
     }
@@ -266,36 +266,44 @@ if (!function_exists('config_app')) {
 if (!function_exists('config_in_db')) {
     /**
      * 获取sys_config表的插件配置
-     * @param string|null $plugin
-     * @param string|null $group
-     * @param string|null $name
-     * @param bool $simple
+     * @param string|null $plugin 参数所属插件名
+     * @param string|null $group  参数所属配置组
+     * @param string|null $name   参数名
+     * @param bool $simple   简单模式
      * @return mixed
      * @throws Throwable
      */
-    function config_in_db(?string $plugin = null, ?string $group = null, ?string $name = null, $simple = true): mixed
+    function config_in_db(?string $plugin = null, ?string $group = null, ?string $name = null, bool $simple = true): mixed
     {
-        $config = Cache::remember('config_in_db', function () {
-            return Config::select()->toArray();
+        $configs = Cache::remember(KcConst::ADMIN_APP .':config:configs', function () {
+            return plugin\kucoder\app\admin\model\Config::select()->toArray();
         }, config('plugin.kucoder.app.cache_expire_time'));
 
         if ($plugin) {
-            $item = array_filter($config, fn($item) => $item['plugin'] === $plugin);
-            $item = $simple ? array_column($item, 'value', 'name') : $item;
-            return array_values($item);
+            $configs = array_filter($configs, fn($item) => $item['plugin'] === $plugin);
+            if($group){
+                $groups = Cache::remember(KcConst::ADMIN_APP.':config:groups', function (){
+                    return plugin\kucoder\app\admin\model\ConfigGroup::select()->toArray();
+                }, config('plugin.kucoder.app.cache_expire_time'));
+                $groupItems = array_values(array_filter($groups, fn($item) => $item['name'] === $group && $item['plugin'] === $plugin));
+                if(isset($groupItems[0])){
+                    $group_id = $groupItems[0]['id'];
+                    $configs = array_filter($configs, fn($item) => $item['group_id'] === $group_id);
+                }
+            }
+            if($name){
+                $configs = array_values(array_filter($configs, fn($item) => $item['name'] === $name));
+                if(isset($configs[0]) && isset($configs[0]['value'])){
+                    return $configs[0]['value'];
+                }else{
+                    return null;
+                }
+            }
+            $items = $simple ? array_column($configs, 'value', 'name') : $configs;
+            return array_values($items);
         }
-        if ($group) {
-            $item = array_filter($config, fn($item) => $item['group'] === $group && (!$plugin || $item['plugin'] === $plugin));
-            $item = $simple ? array_column($item, 'value', 'name') : $item;
-            return array_values($item);
-        }
-        if ($name) {
-            $item = array_filter($config, fn($item) => $item['name'] === $name && (!$group || $item['group'] === $group) && (!$plugin || $item['plugin'] === $plugin));
-            $item = $simple ? array_column($item, 'value', 'name') : $item;
-            return $item['name'] ?? null;
-        }
-
-        return $config;
+        $items = $simple ? array_column($configs, 'value', 'name') : $configs;
+        return array_values($items);
     }
 }
 
@@ -323,6 +331,16 @@ if (!function_exists('enable_coroutine')) {
     function enable_coroutine(string $worker = 'webman'): bool
     {
         return (bool)config("process.{$worker}")['eventLoop'];
+    }
+}
+
+if (!function_exists('kc_dump')) {
+    function kc_dump(mixed ...$vars): mixed
+    {
+        if (is_dev_env()) {
+            return dump($vars);
+        }
+        return null;
     }
 }
 
@@ -372,25 +390,6 @@ if (!function_exists('get_plugin_info')) {
     }
 }
 
-if (!function_exists('generate_order_no')) {
-    /**
-     * 生成订单号
-     * @param string $payType
-     * @return string
-     * @throws \Random\RandomException
-     */
-    function generate_order_no(string $payType = 'wechat'): string
-    {
-        //唯一订单号 微信小程序支付的订单号out_trade_no的最大长度限制为32位string(32)，且只能包含数字、大小写字母、下划线、减号和星号。这一规则适用于微信、抖音、快手和QQ小程序。
-        if ($payType === 'wechat') {
-            // time().uniqid().mt_rand(0, 9999)  time()目前10位 uniqid()返回13位 加上mt_rand最多返回4位 共27位 小于32位
-            // date('YmdHis')固定 14 位数字（字符串） uniqid()返回13位  加上random_int返回4位 共31位 小于32位
-            return date('YmdHis') . uniqid() . random_int(1000, 9999);
-        }
-        return date('YmdHis') . uniqid();
-    }
-}
-
 if (!function_exists('devMsg')) {
     /**
      * @throws Exception
@@ -416,7 +415,6 @@ if (!function_exists('throw_err')) {
                 $msg = "数据冲突 数据库中已存在字段值为{$fieldVal}的冲突数据";
             }
         }
-        dump('throw_err:', $msg, $code);
         // throw new Exception($msg, $code);
         throw new BusinessException($msg, $code);
     }

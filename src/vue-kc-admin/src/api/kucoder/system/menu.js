@@ -28,6 +28,15 @@ export function updateMenu(data) {
   })
 }
 
+//更改字段状态 在请求携带的data数据中添加edit_status字段
+export function change(data) {
+  return request({
+    url: basePath + '/system/menu/edit',
+    method: 'post',
+    data: {...data,edit_status:1}
+  })
+}
+
 // 删除菜单
 export function delMenu(data) {
   return request({
@@ -37,14 +46,7 @@ export function delMenu(data) {
   })
 }
 
-//更改字段状态
-export function change(data) {
-  return request({
-    url: basePath + '/system/menu/change',
-    method: 'post',
-    data: data
-  })
-}
+
 
 // 导出菜单
 export function exportPluginMenu(query) {
@@ -80,5 +82,14 @@ export function roleMenuTreeselect(roleId) {
   return request({
     url: basePath + '/system/menu/roleMenuTreeselect/' + roleId,
     method: 'get'
+  })
+}
+
+// 彻底删除
+export function trueDel(data) {
+  return request({
+    url: basePath + '/system/menu/trueDel',
+    method: 'post',
+    data: data
   })
 }

@@ -1,7 +1,8 @@
+const VITE_DEPLOY_DIR = import.meta.env.VITE_DEPLOY_DIR
 export class HMR {
     static async disable() {
         try {
-            const response = await fetch('/__hmr_control', {
+            const response = await fetch(`'${VITE_DEPLOY_DIR}/__hmr_control'`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: 'disable' })
@@ -20,7 +21,7 @@ export class HMR {
 
     static async enable() {
         try {
-            const response = await fetch('/__hmr_control', {
+            const response = await fetch(`'${VITE_DEPLOY_DIR}/__hmr_control'`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: 'enable' })
@@ -39,7 +40,7 @@ export class HMR {
 
     static async getStatus() {
         try {
-            const response = await fetch('/__hmr_control')
+            const response = await fetch(`'${VITE_DEPLOY_DIR}/__hmr_control'`)
             const result = await response.json()
             return result.enabled
         } catch (error) {

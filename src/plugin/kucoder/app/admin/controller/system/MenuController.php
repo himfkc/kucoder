@@ -37,6 +37,7 @@ class MenuController extends AdminBase
 
     /**
      * @throws ReflectionException
+     * @throws Exception
      */
     public function exportPluginMenu(string $pluginName=''): Response
     {
@@ -58,18 +59,23 @@ class MenuController extends AdminBase
 
     protected function save_before(&$param): void
     {
-        dump('save_before', $param);
         try {
-            if (isset($param['path']) && $param['path'] && (!in_array($param['type'], ['link', 'button']))) {
+            if (isset($param['path']) && $param['path'] && (!in_array($param['type'], ['link', 'button','dir']))) {
                 if (str_contains($param['path'], '/')) {
                     $pathArr = explode('/', $param['path']);
                 } else {
                     $pathArr = [$param['path']];
                 }
-                array_walk($pathArr, function (&$item, $key) {
+                /*array_walk($pathArr, function (&$item, $key) {
                     $item = ucfirst($item);
                 });
                 $param['name'] = ucfirst($param['plugin']) . implode('', $pathArr);
+                */
+                $pathStr= '';
+                array_walk($pathArr, function ($item, $key) use (&$pathStr) {
+                    $pathStr .= '_'.$item;
+                });
+                $param['name'] = $param['plugin'] . $pathStr;
             }
         } catch (Throwable $t) {
             $this->errorInfo($t);
@@ -87,15 +93,15 @@ class MenuController extends AdminBase
     protected function add_after($data): void
     {
         //如果是控制器菜单类型 添加curd子菜单
-        if ($data['type'] === 'menu' && $data['insertGetId']) {
-            dump('add_after $data', $data);
+        if ($data['type'] === 'menu' && $data['autoMenuBtns'] && $data['insertGetId']) {
             try {
                 $menuData = [
                     ['title' => '查询', 'path' => $data['path'] . '/index', 'pid' => $data['insertGetId'], 'type' => 'button', 'plugin' => $data['plugin'], 'create_uid' => $this->auth->getId()],
+                    ['title' => '详情', 'path' => $data['path'] . '/info', 'pid' => $data['insertGetId'], 'type' => 'button', 'plugin' => $data['plugin'], 'create_uid' => $this->auth->getId()],
                     ['title' => '新增', 'path' => $data['path'] . '/add', 'pid' => $data['insertGetId'], 'type' => 'button', 'plugin' => $data['plugin'], 'create_uid' => $this->auth->getId()],
                     ['title' => '修改', 'path' => $data['path'] . '/edit', 'pid' => $data['insertGetId'], 'type' => 'button', 'plugin' => $data['plugin'], 'create_uid' => $this->auth->getId()],
                     ['title' => '删除', 'path' => $data['path'] . '/delete', 'pid' => $data['insertGetId'], 'type' => 'button', 'plugin' => $data['plugin'], 'create_uid' => $this->auth->getId()],
-                    ['title' => '回收站', 'path' => $data['path'] . '/recycle', 'pid' => $data['insertGetId'], 'type' => 'button', 'plugin' => $data['plugin'], 'create_uid' => $this->auth->getId()]
+                    ['title' => '回收站', 'path' => $data['path'] . '/trueDel', 'pid' => $data['insertGetId'], 'type' => 'button', 'plugin' => $data['plugin'], 'create_uid' => $this->auth->getId()]
                 ];
                 $this->model->replace(false)->saveAll($menuData);
             } catch (Throwable $t) {
@@ -118,7 +124,9 @@ class MenuController extends AdminBase
 
     private function delete_menu_cache(): void
     {
-        Event::dispatch('adminMenu.deleteCache', ['key' => ["{$this->app}:menu:all", "{$this->app}:menu:delete"]]);
+        Event::dispatch('adminMenu.deleteCache', [
+            'key' => ["{$this->app}:menu:all", "{$this->app}:menu:delete", "{$this->app}:menu:allRoutes"]
+        ]);
     }
 
 }

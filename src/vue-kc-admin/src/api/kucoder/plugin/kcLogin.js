@@ -2,11 +2,21 @@ import request from '@/utils/request'
 import { basePath } from '@/api/kucoder/index'
 
 // 登录kucoder
-export function loginKc(data) {
+export function loginKc(data, option = {}) {
     return request({
         url: basePath + '/plugin/kcLogin/login',
         method: 'post',
-        data: data
+        data: { ...data, type: 'login' },
+        ...option
+    })
+}
+// 注册
+export function registerKc(data, option = {}) {
+    return request({
+        url: basePath + '/plugin/kcLogin/login',
+        method: 'post',
+        data: { ...data, type: 'register' },
+        ...option
     })
 }
 

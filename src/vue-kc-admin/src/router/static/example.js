@@ -5,7 +5,7 @@ import Layout from '@/layout'
 export default [
     {
         path: '/example',
-        component: () => import('@/views/pluginName/example'),
+        component: () => import('@/views/yourPluginName/example'),
         hidden: true
     },
 ]

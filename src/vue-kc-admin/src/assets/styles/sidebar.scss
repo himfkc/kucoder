@@ -60,8 +60,8 @@
       overflow: hidden;
     }
 
-    .svg-icon {
-      margin-right: 16px;
+    .svg-icon,.my_icon,.el-icon {
+      margin-right: 10px;
     }
 
     .el-menu {
@@ -123,11 +123,18 @@
     .sub-menu-title-noDropdown {
       padding: 0 !important;
       position: relative;
+      height: 56px;
+      display: flex;
+      align-items: center;
 
-      .el-tooltip {
-        padding: 0 !important;
+      .el-menu-tooltip__trigger {
+        display: flex !important;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        padding: 0;
 
-        .svg-icon {
+        .svg-icon,.my_icon,.el-icon {
           margin-left: 20px;
         }
       }
@@ -139,7 +146,7 @@
       &>.el-sub-menu__title {
         padding: 0 !important;
 
-        .svg-icon {
+        .svg-icon,.my_icon {
           margin-left: 20px;
         }
 
@@ -162,6 +169,13 @@
             overflow: hidden;
             visibility: hidden;
             display: inline-block;
+          }
+          // 排除 el-icon 组件，确保图标可见
+          &>i.my_icon {
+            height: auto !important;
+            width: auto !important;
+            overflow: visible !important;
+            visibility: visible !important;
           }
         }
       }
@@ -204,8 +218,8 @@
 // when menu collapsed
 .el-menu--vertical {
   &>.el-menu {
-    .svg-icon {
-      margin-right: 16px;
+    .svg-icon,.my_icon {
+      margin-right: 10px;
     }
   }
 

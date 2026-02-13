@@ -23,7 +23,7 @@ import createUnocss from './unocss'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
 // hmr热更新
-import { hmr } from './hmr'
+// import { hmr } from './hmr'
 
 export default function createVitePlugins(viteEnv, isBuild = false) {
     const vitePlugins = [vue()]
@@ -49,7 +49,7 @@ export default function createVitePlugins(viteEnv, isBuild = false) {
     vitePlugins.push(vueDevTools())
 
     // 使用hmr
-    !isBuild && viteEnv.VITE_APP_ENV === 'development' && vitePlugins.push(hmr())
+    // !isBuild && import.meta.env.DEV && vitePlugins.push(hmr())
 
     return vitePlugins
 }

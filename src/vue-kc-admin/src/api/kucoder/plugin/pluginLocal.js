@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import { basePath, pluginPath } from '@/api/kucoder/index'
+import { basePath } from '@/api/kucoder/index'
 
 export function list(query) {
     return request({
@@ -38,6 +38,15 @@ export function importPlugin(data, options = {}) {
         method: 'post',
         data: data,
         ...options
+    })
+}
+
+// 彻底删除
+export function trueDel(data) {
+    return request({
+        url: basePath + '/plugin/pluginLocal/trueDel',
+        method: 'post',
+        data: data
     })
 }
 

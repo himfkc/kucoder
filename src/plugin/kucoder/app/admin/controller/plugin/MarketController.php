@@ -40,16 +40,15 @@ class MarketController
     public function buy(): Response
     {
         $data = request()->post();
-        dump('购买插件数据: ', $data);
-        $uri = $this->httpUrl . 'market/buy';
+        $data['site_host'] = request()->host(true);
+        $uri = $this->httpUrl . ($data['pay_type'] === 'cardkey' ? 'market/buyByCardKey' : 'market/buy');
         $data['cookie'] = KcIdentity::getCookie($uri, AdminAuth::getInstance()->getId(), 'admin');
         $res = $this->http_post($uri, $data);
-        dump('购买插件结果: ', $res);
         return $this->ok('购买结果', $res);
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     public function payQuery(): Response
     {
@@ -59,16 +58,14 @@ class MarketController
           "pay_code_url" => "weixin://wxpay/bizpayurl?pr=lIK3Pr0z3"
           "out_trade_no" => "2025101110235068e9bfb6423f96521"
           "order_id" => 30
-          "kcToken" => "api_token"
+          "token" => "api_token"
         ]
          */
         $param = request()->post();
-        dump('查询param: ', $param);
         $uri = $this->httpUrl . 'market/payQuery';
         $param['cookie'] = KcIdentity::getCookie($uri, AdminAuth::getInstance()->getId(), 'admin');
         $res = $this->http_post($uri, $param, true);
         $res = json_decode((string)$res->getBody(), true);
-        dump('查询支付结果: ', $res);
         if (isset($res['data']['pay_status']) && $res['data']['pay_status'] === 1) {
             //写入插件表
             try {

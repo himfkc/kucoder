@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  0 => 
+  0 =>
   array (
     'title' => '系统管理',
     'icon' => 'link',
@@ -17,9 +17,9 @@ return array (
     'sort' => 1,
     'show' => 1,
     'remark' => '系统管理目录',
-    'children' => 
+    'children' =>
     array (
-      0 => 
+      0 =>
       array (
         'title' => '管理员管理',
         'icon' => 'link',
@@ -35,9 +35,9 @@ return array (
         'sort' => 1,
         'show' => 1,
         'remark' => '用户管理菜单',
-        'children' => 
+        'children' =>
         array (
-          0 => 
+          0 =>
           array (
             'title' => '用户查询',
             'icon' => '#',
@@ -53,11 +53,11 @@ return array (
             'sort' => 1,
             'show' => 0,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             'title' => '用户新增',
             'icon' => '#',
@@ -73,11 +73,11 @@ return array (
             'sort' => 2,
             'show' => 0,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             'title' => '用户修改',
             'icon' => '#',
@@ -93,11 +93,11 @@ return array (
             'sort' => 3,
             'show' => 0,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             'title' => '用户删除',
             'icon' => '#',
@@ -113,11 +113,11 @@ return array (
             'sort' => 4,
             'show' => 0,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          4 => 
+          4 =>
           array (
             'title' => '用户导出',
             'icon' => '#',
@@ -133,11 +133,11 @@ return array (
             'sort' => 5,
             'show' => 0,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          5 => 
+          5 =>
           array (
             'title' => '用户导入',
             'icon' => '#',
@@ -153,11 +153,11 @@ return array (
             'sort' => 6,
             'show' => 0,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          6 => 
+          6 =>
           array (
             'title' => '重置密码',
             'icon' => '#',
@@ -173,11 +173,11 @@ return array (
             'sort' => 7,
             'show' => 0,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          7 => 
+          7 =>
           array (
             'title' => '回收站',
             'icon' => '#',
@@ -193,13 +193,13 @@ return array (
             'sort' => 999,
             'show' => 0,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
         ),
       ),
-      1 => 
+      1 =>
       array (
         'title' => '角色管理',
         'icon' => 'link',
@@ -215,9 +215,9 @@ return array (
         'sort' => 2,
         'show' => 1,
         'remark' => '角色管理菜单',
-        'children' => 
+        'children' =>
         array (
-          0 => 
+          0 =>
           array (
             'title' => '角色查询',
             'icon' => '#',
@@ -233,11 +233,11 @@ return array (
             'sort' => 1,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             'title' => '角色新增',
             'icon' => '#',
@@ -253,11 +253,11 @@ return array (
             'sort' => 2,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             'title' => '角色修改',
             'icon' => '#',
@@ -273,11 +273,11 @@ return array (
             'sort' => 3,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             'title' => '角色删除',
             'icon' => '#',
@@ -293,11 +293,11 @@ return array (
             'sort' => 4,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          4 => 
+          4 =>
           array (
             'title' => '角色导出',
             'icon' => '#',
@@ -313,11 +313,11 @@ return array (
             'sort' => 5,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          5 => 
+          5 =>
           array (
             'title' => '回收站',
             'icon' => '#',
@@ -333,13 +333,13 @@ return array (
             'sort' => 999,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
         ),
       ),
-      2 => 
+      2 =>
       array (
         'title' => '菜单管理',
         'icon' => 'link',
@@ -355,9 +355,9 @@ return array (
         'sort' => 3,
         'show' => 1,
         'remark' => '菜单管理菜单',
-        'children' => 
+        'children' =>
         array (
-          0 => 
+          0 =>
           array (
             'title' => '菜单查询',
             'icon' => '#',
@@ -373,11 +373,11 @@ return array (
             'sort' => 1,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             'title' => '菜单新增',
             'icon' => '#',
@@ -393,11 +393,11 @@ return array (
             'sort' => 2,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             'title' => '菜单修改',
             'icon' => '#',
@@ -413,11 +413,11 @@ return array (
             'sort' => 3,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             'title' => '菜单删除',
             'icon' => '#',
@@ -433,11 +433,11 @@ return array (
             'sort' => 4,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          4 => 
+          4 =>
           array (
             'title' => '回收站',
             'icon' => '#',
@@ -453,11 +453,11 @@ return array (
             'sort' => 999,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          5 => 
+          5 =>
           array (
             'title' => '导出插件菜单',
             'icon' => '#',
@@ -473,13 +473,13 @@ return array (
             'sort' => 999,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
         ),
       ),
-      3 => 
+      3 =>
       array (
         'title' => '部门管理',
         'icon' => 'link',
@@ -495,9 +495,9 @@ return array (
         'sort' => 4,
         'show' => 1,
         'remark' => '部门管理菜单',
-        'children' => 
+        'children' =>
         array (
-          0 => 
+          0 =>
           array (
             'title' => '部门查询',
             'icon' => '#',
@@ -513,11 +513,11 @@ return array (
             'sort' => 1,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             'title' => '部门新增',
             'icon' => '#',
@@ -533,11 +533,11 @@ return array (
             'sort' => 2,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             'title' => '部门修改',
             'icon' => '#',
@@ -553,11 +553,11 @@ return array (
             'sort' => 3,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             'title' => '部门删除',
             'icon' => '#',
@@ -573,11 +573,11 @@ return array (
             'sort' => 4,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          4 => 
+          4 =>
           array (
             'title' => '回收站',
             'icon' => '#',
@@ -593,13 +593,13 @@ return array (
             'sort' => 999,
             'show' => 0,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
         ),
       ),
-      4 => 
+      4 =>
       array (
         'title' => '岗位管理',
         'icon' => 'link',
@@ -615,9 +615,9 @@ return array (
         'sort' => 5,
         'show' => 0,
         'remark' => '岗位管理菜单',
-        'children' => 
+        'children' =>
         array (
-          0 => 
+          0 =>
           array (
             'title' => '岗位查询',
             'icon' => '#',
@@ -633,11 +633,11 @@ return array (
             'sort' => 1,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             'title' => '岗位新增',
             'icon' => '#',
@@ -653,11 +653,11 @@ return array (
             'sort' => 2,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             'title' => '岗位修改',
             'icon' => '#',
@@ -673,11 +673,11 @@ return array (
             'sort' => 3,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             'title' => '岗位删除',
             'icon' => '#',
@@ -693,11 +693,11 @@ return array (
             'sort' => 4,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          4 => 
+          4 =>
           array (
             'title' => '岗位导出',
             'icon' => '#',
@@ -713,13 +713,13 @@ return array (
             'sort' => 5,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
         ),
       ),
-      5 => 
+      5 =>
       array (
         'title' => '字典管理',
         'icon' => 'link',
@@ -735,9 +735,9 @@ return array (
         'sort' => 6,
         'show' => 0,
         'remark' => '字典管理菜单',
-        'children' => 
+        'children' =>
         array (
-          0 => 
+          0 =>
           array (
             'title' => '字典查询',
             'icon' => '#',
@@ -753,11 +753,11 @@ return array (
             'sort' => 1,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             'title' => '字典新增',
             'icon' => '#',
@@ -773,11 +773,11 @@ return array (
             'sort' => 2,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             'title' => '字典修改',
             'icon' => '#',
@@ -793,11 +793,11 @@ return array (
             'sort' => 3,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             'title' => '字典删除',
             'icon' => '#',
@@ -813,11 +813,11 @@ return array (
             'sort' => 4,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          4 => 
+          4 =>
           array (
             'title' => '字典导出',
             'icon' => '#',
@@ -833,13 +833,13 @@ return array (
             'sort' => 5,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
         ),
       ),
-      6 => 
+      6 =>
       array (
         'title' => '配置参数',
         'icon' => 'link',
@@ -855,9 +855,9 @@ return array (
         'sort' => 7,
         'show' => 1,
         'remark' => '参数设置菜单',
-        'children' => 
+        'children' =>
         array (
-          0 => 
+          0 =>
           array (
             'title' => '参数查询',
             'icon' => '#',
@@ -873,11 +873,11 @@ return array (
             'sort' => 1,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             'title' => '参数新增',
             'icon' => '#',
@@ -893,11 +893,11 @@ return array (
             'sort' => 2,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             'title' => '参数修改',
             'icon' => '#',
@@ -913,11 +913,11 @@ return array (
             'sort' => 3,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             'title' => '参数删除',
             'icon' => '#',
@@ -933,11 +933,11 @@ return array (
             'sort' => 4,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          4 => 
+          4 =>
           array (
             'title' => '参数导出',
             'icon' => '#',
@@ -953,13 +953,13 @@ return array (
             'sort' => 5,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
         ),
       ),
-      7 => 
+      7 =>
       array (
         'title' => '通知公告',
         'icon' => 'link',
@@ -975,9 +975,9 @@ return array (
         'sort' => 8,
         'show' => 0,
         'remark' => '通知公告菜单',
-        'children' => 
+        'children' =>
         array (
-          0 => 
+          0 =>
           array (
             'title' => '公告查询',
             'icon' => '#',
@@ -993,11 +993,11 @@ return array (
             'sort' => 1,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          1 => 
+          1 =>
           array (
             'title' => '公告新增',
             'icon' => '#',
@@ -1013,11 +1013,11 @@ return array (
             'sort' => 2,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          2 => 
+          2 =>
           array (
             'title' => '公告修改',
             'icon' => '#',
@@ -1033,11 +1033,11 @@ return array (
             'sort' => 3,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
-          3 => 
+          3 =>
           array (
             'title' => '公告删除',
             'icon' => '#',
@@ -1053,13 +1053,13 @@ return array (
             'sort' => 4,
             'show' => 1,
             'remark' => '',
-            'children' => 
+            'children' =>
             array (
             ),
           ),
         ),
       ),
-      8 => 
+      8 =>
       array (
         'title' => '日志管理',
         'icon' => 'link',
@@ -1075,9 +1075,9 @@ return array (
         'sort' => 9,
         'show' => 1,
         'remark' => '日志管理菜单',
-        'children' => 
+        'children' =>
         array (
-          0 => 
+          0 =>
           array (
             'title' => '操作日志',
             'icon' => 'link',
@@ -1093,9 +1093,9 @@ return array (
             'sort' => 1,
             'show' => 1,
             'remark' => '操作日志菜单',
-            'children' => 
+            'children' =>
             array (
-              0 => 
+              0 =>
               array (
                 'title' => '操作查询',
                 'icon' => '#',
@@ -1111,11 +1111,11 @@ return array (
                 'sort' => 1,
                 'show' => 1,
                 'remark' => '',
-                'children' => 
+                'children' =>
                 array (
                 ),
               ),
-              1 => 
+              1 =>
               array (
                 'title' => '操作删除',
                 'icon' => '#',
@@ -1131,11 +1131,11 @@ return array (
                 'sort' => 2,
                 'show' => 1,
                 'remark' => '',
-                'children' => 
+                'children' =>
                 array (
                 ),
               ),
-              2 => 
+              2 =>
               array (
                 'title' => '详细信息',
                 'icon' => '#',
@@ -1151,11 +1151,11 @@ return array (
                 'sort' => 3,
                 'show' => 1,
                 'remark' => '',
-                'children' => 
+                'children' =>
                 array (
                 ),
               ),
-              3 => 
+              3 =>
               array (
                 'title' => '日志导出',
                 'icon' => '#',
@@ -1171,13 +1171,13 @@ return array (
                 'sort' => 4,
                 'show' => 1,
                 'remark' => '',
-                'children' => 
+                'children' =>
                 array (
                 ),
               ),
             ),
           ),
-          1 => 
+          1 =>
           array (
             'title' => '登录日志',
             'icon' => 'link',
@@ -1193,9 +1193,9 @@ return array (
             'sort' => 2,
             'show' => 1,
             'remark' => '登录日志菜单',
-            'children' => 
+            'children' =>
             array (
-              0 => 
+              0 =>
               array (
                 'title' => '登录查询',
                 'icon' => '#',
@@ -1211,11 +1211,11 @@ return array (
                 'sort' => 1,
                 'show' => 1,
                 'remark' => '',
-                'children' => 
+                'children' =>
                 array (
                 ),
               ),
-              1 => 
+              1 =>
               array (
                 'title' => '登录删除',
                 'icon' => '#',
@@ -1231,11 +1231,11 @@ return array (
                 'sort' => 2,
                 'show' => 1,
                 'remark' => '',
-                'children' => 
+                'children' =>
                 array (
                 ),
               ),
-              2 => 
+              2 =>
               array (
                 'title' => '日志导出',
                 'icon' => '#',
@@ -1251,11 +1251,11 @@ return array (
                 'sort' => 3,
                 'show' => 1,
                 'remark' => '',
-                'children' => 
+                'children' =>
                 array (
                 ),
               ),
-              3 => 
+              3 =>
               array (
                 'title' => '账户解锁',
                 'icon' => '#',
@@ -1271,7 +1271,7 @@ return array (
                 'sort' => 4,
                 'show' => 1,
                 'remark' => '',
-                'children' => 
+                'children' =>
                 array (
                 ),
               ),

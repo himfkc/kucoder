@@ -5,13 +5,12 @@ import Layout from '@/layout'
 import { ElMessage } from 'element-plus'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-import { getToken } from '@/utils/auth'
-import { isHttp, isPathMatch } from '@/utils/validate'
+// import { getToken } from '@/utils/auth'
+import { isHttp } from '@/utils/validate'
 import useUserStore from '@/store/modules/user'
 import useSettingsStore from '@/store/modules/settings'
 import usePermissionStore from '@/store/modules/permission'
 import { adminBasePath } from '@/api/adminRouteBasePath'
-
 /**
  * Note: 路由配置项
  *
@@ -24,8 +23,8 @@ import { adminBasePath } from '@/api/adminRouteBasePath'
  * redirect: noRedirect             // 当设置 noRedirect 的时候该路由在面包屑导航中不可被点击
  * name:'router-name'               // 设定路由的名字，一定要填写不然使用<keep-alive>时会出现各种问题
  * query: '{"id": 1, "name": "ry"}' // 访问路由的默认传递参数
- * roles: ['admin', 'common']       // 访问路由的角色权限
- * permissions: ['a:a:a', 'b:b:b']  // 访问路由的菜单权限
+ * roles: ['admin', 'common']       // 访问路由的角色权限 弃用
+ * permissions: ['a:a:a', 'b:b:b']  // 访问路由的菜单权限 弃用
  * meta : {
     noCache: true                   // 如果设置为true，则不会被 <keep-alive> 缓存(默认 false)
     title: 'title'                  // 设置该路由在侧边栏和面包屑中展示的名字
@@ -39,26 +38,17 @@ import { adminBasePath } from '@/api/adminRouteBasePath'
 const whiteList = ['Install', 'Login', 'Register', 'home', '401', '404', 'Admin']
 // 公共路由 Route paths should start with a "/"
 export const constantRoutes = [
-  {
-    // 欢迎页面
-    path: '/',
-    name: 'Home',
-    component: () => import('@/views/index.vue'),
-    hidden: true,
-    meta: {
-      title: '欢迎使用Kucoder',
-    },
-  },
   // 后台管理首页
   {
     path: adminBasePath,
     component: Layout,
     name: 'Admin',
+    hidden:true,
     redirect: { name: 'Index' },  // redirect: adminBasePath + '/index',
     children: [
       {
         path: 'index',
-        component: () => import('@/views/kucoder/index'),
+        component: () => import('@/views/index.vue'),
         name: 'Index',
         meta: { title: '首页', icon: 'dashboard', affix: true }
       }
@@ -128,26 +118,9 @@ export const constantRoutes = [
     component: () => import('@/views/kucoder/error/404'),
     hidden: true
   },
-  /* {
-    path: adminBasePath + "/:pathMatch(.*)*",
-    // 后台找不到页面了-可能是路由未加载上
-    redirect: (to) => {
-      return {
-        name: 'adminMainLoading',
-        params: {
-          to: JSON.stringify({
-            path: to.path,
-            query: to.query,
-          }),
-        },
-      }
-    },
-    component: () => import('@/views/kucoder/error/404'),
-    hidden: true
-  }, */
 ]
 
-// 写死的动态路由 弃用
+// 动态路由 不方便修改
 export const dynamicRoutes = [
   /* {
     path: '/system/user-auth',
@@ -160,62 +133,6 @@ export const dynamicRoutes = [
         component: () => import('@/views/system/user/authRole'),
         name: 'AuthRole',
         meta: { title: '分配角色', activeMenu: '/system/user' }
-      }
-    ]
-  },
-  {
-    path: '/system/role-auth',
-    component: Layout,
-    hidden: true,
-    permissions: ['system:role:edit'],
-    children: [
-      {
-        path: 'user/:roleId(\\d+)',
-        component: () => import('@/views/system/role/authUser'),
-        name: 'AuthUser',
-        meta: { title: '分配用户', activeMenu: '/system/role' }
-      }
-    ]
-  },
-  {
-    path: '/system/dict-data',
-    component: Layout,
-    hidden: true,
-    permissions: ['system:dict:list'],
-    children: [
-      {
-        path: 'index/:dictId(\\d+)',
-        component: () => import('@/views/system/dict/data'),
-        name: 'Data',
-        meta: { title: '字典数据', activeMenu: '/system/dict' }
-      }
-    ]
-  },
-  {
-    path: '/monitor/job-log',
-    component: Layout,
-    hidden: true,
-    permissions: ['monitor:job:list'],
-    children: [
-      {
-        path: 'index/:jobId(\\d+)',
-        component: () => import('@/views/monitor/job/log'),
-        name: 'JobLog',
-        meta: { title: '调度日志', activeMenu: '/monitor/job' }
-      }
-    ]
-  },
-  {
-    path: '/tool/gen-edit',
-    component: Layout,
-    hidden: true,
-    permissions: ['tool:gen:edit'],
-    children: [
-      {
-        path: 'index/:tableId(\\d+)',
-        component: () => import('@/views/tool/gen/editTable'),
-        name: 'GenEdit',
-        meta: { title: '修改生成配置', activeMenu: '/tool/gen' }
       }
     ]
   } */
@@ -241,10 +158,6 @@ const router = createRouter({
     return { top: 0 }
   },
 })
-
-/* router.beforeResolve((to, from) => {
-  console.log('路由变化:', from, to)
-}) */
 
 /**
  * 路由守卫
