@@ -2,9 +2,9 @@
 declare(strict_types=1);
 
 // +----------------------------------------------------------------------
-// | KuCoder [ MAKE WEB EASY ]
+// | Kucoder [ MAKE WEB FAST AND EASY ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2024~9999 http://kucoder.com All rights reserved.
+// | Copyright (c) 2026~9999 https://kucoder.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------

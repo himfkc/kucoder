@@ -1,5 +1,16 @@
 <?php
 
+// +----------------------------------------------------------------------
+// | Kucoder [ MAKE WEB FAST AND EASY ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2026~9999 https://kucoder.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+// +----------------------------------------------------------------------
+// | Author: kucoder
+// +----------------------------------------------------------------------
+
+
 use plugin\kucoder\app\admin\model\Config;
 use plugin\kucoder\app\admin\model\ConfigGroup;
 use plugin\kucoder\app\kucoder\constants\KcConst;
