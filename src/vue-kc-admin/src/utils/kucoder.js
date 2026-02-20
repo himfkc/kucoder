@@ -87,9 +87,11 @@ export function kcPrompt(msg, title = '提示', options = {}) {
 }
 
 export async function getLoginPath() {
-    const adminRouteBasePath = await import('@/api/adminRouteBasePath')
-    // return 'http://localhost:' + import.meta.env.VITE_PORT + import.meta.env.VITE_DEPLOY_DIR + adminRouteBasePath + '/login'
-    return import.meta.env.VITE_DEPLOY_DIR + adminRouteBasePath + '/login'
+    const adminRouteBasePathObj = await import('@/api/adminRouteBasePath');
+    const adminBasePath = adminRouteBasePathObj.adminBasePath;
+    let currentUrl = window.location.href
+    const loginUrl  = currentUrl.replace('/admin',adminBasePath).replace('/install','/login')
+    return loginUrl
 }
 
 export function imgUrl(img, domain = '', type = 'img') {

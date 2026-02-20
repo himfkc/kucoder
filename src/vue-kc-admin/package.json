@@ -3,17 +3,13 @@
   "version": "1.0.0",
   "description": "kucoder快速开发框架的vue后台管理系统 基于Vue3、ElementPlus、JavaScript(非ts)",
   "author": "kucoder",
-  "copyright": "Copyright ©2025-9999 kucoder",
+  "copyright": "Copyright ©2026-9999 kucoder",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "build:stage": "vite build --mode staging",
     "preview": "vite preview"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://gitee.com/y_project/RuoYi-Vue.git"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",

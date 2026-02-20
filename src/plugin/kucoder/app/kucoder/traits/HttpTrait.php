@@ -27,13 +27,13 @@ trait HttpTrait
 
     protected Client $http;
     protected string $httpUrl = '';
-    protected bool $httpsVerify = true;
     protected static ?Client $httpInstance = null;
     private array $options = [
         'headers' => [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json, text/plain, */*',
         ],
+        'verify' => true,  //验证https证书
     ];
     private array $downOptions = [
         //保存的文件地址 必填
@@ -66,8 +66,12 @@ trait HttpTrait
         if ($needLogin) {
             $cookie ? $this->cookieHandle($data) : $this->tokenHandle($data);
         }
+        $this->httpsVerify();
+        // kc_dump('get this->options:', $this->options);
         try {
+            kc_dump('准备发送get请求: ',$uri, $data);
             $res = $this->http()->get($uri, $this->options);
+            kc_dump('http_get res:', $res);
         } catch (Throwable $t) {
             throw new Exception(
                 $this->errorPrefix['msg'] . 'get_' . devMsg($t->getMessage()),
@@ -85,10 +89,13 @@ trait HttpTrait
         if ($needLogin) {
             $cookie ? $this->cookieHandle($data) : $this->tokenHandle($data);
         }
+        $this->httpsVerify();
         $data['site_host'] = request()->host(true);
+        // $data['site_host'] = 'x.y.taobao.com.cn';
         if ($data) {
             $this->options['json'] = $data;
         }
+        kc_dump('post this->options:', $this->options);
         try {
             $res = $this->http()->post($uri, $this->options);
         } catch (Throwable $t) {
@@ -113,6 +120,7 @@ trait HttpTrait
                 $this->options['headers']['Authorization'] = 'Bearer ' . $token;
             }
         }
+        $this->httpsVerify();
 
         $multipart = [];
         $data['site_host'] = request()->host(true);
@@ -132,6 +140,7 @@ trait HttpTrait
         $multipartStream = new MultipartStream($multipart, $boundary);
         $this->options['headers']['Content-Type'] = 'multipart/form-data;boundary=' . $boundary;
         $this->options['body'] = $multipartStream;
+        // kc_dump('upload this->options:', $this->options);
         try {
             $res = $this->http()->post($uri, $this->options);
         } catch (Throwable $t) {
@@ -157,6 +166,7 @@ trait HttpTrait
         if ($needLogin) {
             $cookie ? $this->cookieHandle($data) : $this->tokenHandle($data);
         }
+        $this->httpsVerify();
         $data['site_host'] = request()->host(true);
         if ($data) {
             $this->options['json'] = $data;
@@ -190,6 +200,7 @@ trait HttpTrait
             }
             //下载请求
             $res = $this->http()->request($options['method'], $uri, $this->options);
+            // kc_dump('download response: ', $res);
             if ($res->getStatusCode() !== 200) {
                 $this->throw($this->errorPrefix['msg'] . '200状态码错误_' . $res->getReasonPhrase());
             }
@@ -199,6 +210,7 @@ trait HttpTrait
                 //stream需手动获取流并写入文件 适合需要自定义流式处理逻辑（如进度监控、数据过滤、断点续传等）
                 if ($options['down_type'] === 'stream') {
                     $stream = $res->getBody();
+                    // kc_dump('stream: ', $stream);
                     // 确保流可读
                     if (!$stream->isReadable()) {
                         $this->throw("响应体不可读");
@@ -245,7 +257,6 @@ trait HttpTrait
         }
         $this->options['cookies'] = $data['cookie'];
         unset($data['cookie']);
-        $this->httpsVerify();
     }
 
     private function tokenHandle(array &$data): void
@@ -257,7 +268,6 @@ trait HttpTrait
         } else {
             $this->throw($this->noLoginMsg, $this->errorPrefix['code'] . KcError::TokenEmpty[0]);
         }
-        $this->httpsVerify();
     }
 
     /**
@@ -269,6 +279,7 @@ trait HttpTrait
             throw new Exception($this->errorPrefix['msg'] . '200状态码错误_' . $res->getReasonPhrase());
         }
         $body = json_decode((string)$res->getBody(), true);
+        // kc_dump('http body:', $body);
         if ($body && is_array($body) && $body['code'] !== 1) {
             throw new Exception(
                 $this->errorPrefix['msg'] . $body['msg'],
@@ -281,10 +292,8 @@ trait HttpTrait
 
     private function httpsVerify(): void
     {
-        //调试环境下不验证服务器的https证书
-        if (is_dev_env() || !$this->httpsVerify) {
-            $this->options['verify'] = false;
-        }
+        //验证服务器的https证书
+        $this->options['verify'] = $this->options['verify'] ? base_path('plugin/kucoder/app/kucoder/lib/http/cacert.pem') : false;
     }
 
     protected function http(): ?Client

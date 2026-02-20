@@ -60,6 +60,9 @@
                         <el-form-item label="Redis密码">
                             <el-input v-model="form.redis_password" placeholder="Redis密码" show-password />
                         </el-form-item>
+                        <el-form-item label="Redis前缀">
+                            <el-input v-model="form.redis_prefix" placeholder="Redis存储前缀" />
+                        </el-form-item>
                         <el-form-item label="后台登录用户名" prop="admin_username">
                             <el-input v-model="form.admin_username" placeholder="登录用户名" />
                         </el-form-item>
@@ -97,7 +100,7 @@
             </div>
             <div class="x c ac gap-5">
                 <el-button type="info" @click="gotoPreviousStep">上一步</el-button>
-                <el-button type="primary" @click="init" :disabled="envInited">初始化环境</el-button>
+                <el-button type="primary" @click="init" :disabled="envInited">校验并初始化</el-button>
                 <el-button type="primary" @click="installSubmit" :disabled="!envInited">开始安装</el-button>
             </div>
         </div>
@@ -106,7 +109,7 @@
 </template>
 
 <script setup>
-import { kcMsg, kcLoading, kcAlert, getLoginPath } from '@/utils/kucoder'
+import { kcMsg, kcLoading, kcAlert} from '@/utils/kucoder'
 import { envCheck, getQrcode, verifyWxCode, install, initEnv } from '@/api/kucoder/system/install'
 import { HMR } from "@/utils/hmr"
 
@@ -114,20 +117,11 @@ const step = ref(1)
 const envCheckData = ref([])
 const envInited = ref(false)
 
-/* const installRelySubmit = () => {
-    const loading = kcLoading('正在安装依赖中...请勿操作 耗时较长 执行步骤可在后端控制台查看')
-    installRely().then(res => {
-        console.log('installRely', res)
-        kcMsg('安装成功')
-        loading.close()
-    }).catch(err => {
-        console.log('installRely', err)
-        kcAlert(err.message)
-        loading.close()
-    })
-} */
-
 const init = async () => {
+    if (!await checkWxCode()){
+        // kcMsg('校验码不正确')
+        return;
+    } 
     await HMR.disable()
     const loading = kcLoading('正在初始化环境...请勿操作')
     initEnv(form.value)
@@ -138,18 +132,18 @@ const init = async () => {
             setTimeout(() => {
                 envInited.value = true
             }, 1000)
-            // await HMR.enable()
+            await HMR.enable()
         })
         .catch(async (err) => {
             console.log('init', err)
             loading.close()
-            // await HMR.enable()
+            await HMR.enable()
         })
 }
 const wx_code = ref(null)
 async function checkWxCode() {
     if (!wx_code.value || !/^[0-9]{6}$/.test(wx_code.value)) {
-        kcMsg('校验码不正确')
+        kcMsg('校验码格式不正确')
         return false
     }
     return await verifyWxCode({ wx_code: wx_code.value })
@@ -161,8 +155,6 @@ async function checkWxCode() {
         })
 }
 const installSubmit = async () => {
-    if (!await checkWxCode()) return;
-    console.log('登录地址', getLoginPath())
     step.value = null;
     const loading = kcLoading('正在安装kucoder中...请勿操作 耗时较长 执行步骤可在后端控制台查看')
     install(form.value, { timeout: 0 })
@@ -170,11 +162,11 @@ const installSubmit = async () => {
             console.log('install', res)
             kcMsg('安装成功')
             loading.close()
-            kcAlert(await getLoginPath(), '安装成功，后台登录地址如下',
-                { showClose: false, confirmButtonText: '跳转到登录页面' }
-            ).then(async () => {
+            kcAlert(getLoginPath(res.data.vue_admin_entry), '安装成功，后台登录地址如下',
+                { showClose: false, confirmButtonText: '点击跳转到登录页面' }
+            ).then(async () => { 
                 await HMR.enable()
-                window.location.href = await getLoginPath()
+                window.location.href = getLoginPath(res.data.vue_admin_entry)
             })
         })
         .catch(async (err) => {
@@ -184,6 +176,13 @@ const installSubmit = async () => {
             await HMR.enable()
         })
 }
+
+function getLoginPath(adminBasePath) {
+    const currentUrl = window.location.href
+    const loginUrl  = currentUrl.replace('/admin',adminBasePath).replace('/install','/login')
+    return loginUrl
+}
+
 const form = ref({
     db_type: 'mysql',
     db_host: '127.0.0.1',
@@ -194,6 +193,7 @@ const form = ref({
     db_prefix: 'kc_',
     redis_host: '127.0.0.1',
     redis_port: '6379',
+    redis_prefix:'kucoder:',
     redis_password: '',
     admin_username: '',
     admin_password: '',
@@ -255,7 +255,11 @@ watch(() => step.value, (val) => {
     }
 })
 
-onMounted(() => {
+onMounted(async () => {
+    console.log('HMR状态：',await HMR.getStatus());
+    if(!await HMR.getStatus()){
+        await HMR.enable()
+    }
     envCheck().then(res => {
         console.log('envCheck', res)
         envCheckData.value = res.data

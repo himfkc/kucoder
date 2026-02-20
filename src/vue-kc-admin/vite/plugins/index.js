@@ -23,9 +23,9 @@ import createUnocss from './unocss'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
 // hmr热更新
-// import { hmr } from './hmr'
+import { hmr } from './hmr'
 
-export default function createVitePlugins(viteEnv, isBuild = false) {
+export default function createVitePlugins(env, isBuild = false) {
     const vitePlugins = [vue()]
     // 自动导入import
     vitePlugins.push(createAutoImport())
@@ -37,7 +37,7 @@ export default function createVitePlugins(viteEnv, isBuild = false) {
     vitePlugins.push(createSvgIcon(isBuild))
 
     // 压缩vite-plugin-compression
-    // isBuild && vitePlugins.push(...createCompression(viteEnv))
+    // isBuild && vitePlugins.push(...createCompression(env))
 
     // 使用unplugin-icons
     vitePlugins.push(createIcons())
@@ -49,7 +49,7 @@ export default function createVitePlugins(viteEnv, isBuild = false) {
     vitePlugins.push(vueDevTools())
 
     // 使用hmr
-    // !isBuild && import.meta.env.DEV && vitePlugins.push(hmr())
+    !isBuild && vitePlugins.push(hmr(env))
 
     return vitePlugins
 }

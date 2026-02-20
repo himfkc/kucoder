@@ -78,7 +78,7 @@ class LoginController extends AdminBase
         $userInfo = reserve_array_key($userInfo, self::$showFields);
         $userInfo['site_set'] = [
             'logo' => config_in_db('kucoder',null,'site_logo'),
-            'site_name' => config_in_db('kucoder',null,'site_name'),
+            'site_name' => config_in_db('kucoder',null,'site_name') ?: 'Kucoder系统后台',
             // 'upload_path' => config('plugin.kucoder.app.upload_path'),  //上传接口默认/kucoder/upload
             'sys_url' => config('plugin.kucoder.app.sys_url'),
             'sys_file_url' => config('plugin.kucoder.app.sys_file_url') ?: config('plugin.kucoder.app.sys_url'),

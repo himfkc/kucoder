@@ -81,18 +81,21 @@ class MenuService
     {
         $pluginName = $pluginName ?: request()->plugin;
         $menuFile = $filePath ?: base_path() . '/plugin/' . $pluginName . '/config/menu.php';
-        $menuPid = MenuModel::where(['plugin' => $pluginName, 'type' => 'dir'])->value('id');
-        if ($menuPid) {
-            $allMenus = AdminAuth::getInstance()->getAllMenus();
-            $pluginMenus = array_filter($allMenus, fn($menu) => $menu['plugin'] == $pluginName);
-            $fieldsToRemove = ['create_uid', 'update_uid', 'create_time', 'update_time', 'delete_time'];
-            $pluginMenus = _2dArray_filter_field($pluginMenus, [], $fieldsToRemove);
-            $menuTree = get_recursion_data($pluginMenus, 'id', 'pid', $menuPid ?: 0, 0, true);
+        $menuPids = MenuModel::where(['plugin' => $pluginName, 'pid' => 0])->column('id');
+        $allMenus = AdminAuth::getInstance()->getAllMenus();
+        $pluginMenus = array_filter($allMenus, fn($menu) => $menu['plugin'] == $pluginName);
+        $fieldsToRemove = ['create_uid', 'update_uid', 'create_time', 'update_time', 'delete_time'];
+        $pluginMenus = _2dArray_filter_field($pluginMenus, [], $fieldsToRemove);
+        $allMenuTree = [];
+        foreach($menuPids as $menuPid) {
+            $menuTree = get_recursion_data($pluginMenus, 'id', 'pid', $menuPid, 0, true);
             $menuTree = _2dTreeArray_filter_field($menuTree, [], ['id', 'pid']);
-            $menuTreeExport = var_export($menuTree, true);
-        } else {
-            $menuTreeExport = var_export([], true);
+            $allMenuTree= array_merge($allMenuTree,$menuTree);
         }
+        $menuTreeExport = var_export($allMenuTree, true);
+        if (!$menuTreeExport) {
+           $menuTreeExport = var_export([], true); 
+        } 
         $fp = fopen($menuFile, 'w+');
         $content = <<<EOF
 <?php

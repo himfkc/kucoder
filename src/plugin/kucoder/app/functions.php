@@ -349,7 +349,7 @@ if (!function_exists('kc_dump')) {
     function kc_dump(mixed ...$vars): mixed
     {
         if (is_dev_env()) {
-            return dump($vars);
+            return dump(...$vars);
         }
         return null;
     }

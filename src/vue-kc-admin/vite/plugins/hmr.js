@@ -1,5 +1,8 @@
-export function hmr() {
-    const VITE_DEPLOY_DIR = import.meta.env.VITE_DEPLOY_DIR
+export function hmr(env) {
+    let VITE_DEPLOY_DIR = env.VITE_DEPLOY_DIR
+    if(VITE_DEPLOY_DIR !== '/' && !VITE_DEPLOY_DIR.endsWith('/')){
+        VITE_DEPLOY_DIR = VITE_DEPLOY_DIR + '/'
+    }
     let hmrEnabled = true
     let originalSend = null
 
@@ -24,7 +27,7 @@ export function hmr() {
             }
 
             // 设置控制端点
-            server.middlewares.use(`'${VITE_DEPLOY_DIR}/__hmr_control'`, (req, res) => {
+            server.middlewares.use(`${VITE_DEPLOY_DIR}__hmr_control`, (req, res) => {
                 res.setHeader('Content-Type', 'application/json')
 
                 if (req.method === 'GET') {

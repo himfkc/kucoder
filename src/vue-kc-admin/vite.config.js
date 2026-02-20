@@ -5,8 +5,11 @@ import optimizeDepsIncludes from './vite/optimizeDeps'
 
 // https://cn.vitejs.dev/config/
 export default defineConfig(({ mode, command }) => {
-  console.log('mode: ', mode) // mode development
-  console.log('command: ', command) // command serve
+  console.log('mode: ', mode) // mode: development/production
+  console.log('command: ', command) // command: serve/build
+  // 使用 loadEnv 加载环境变量
+  // 参数1: 当前模式 (development, production 等)
+  // 参数2: 项目根目录 (process.cwd())
   const env = loadEnv(mode, process.cwd())
   const { VITE_APP_BASE_API, VITE_DEPLOY_DIR, VITE_HMR, VITE_DEV_PROXY } = env
   const isHMREnabled = VITE_HMR !== 'false'

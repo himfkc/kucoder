@@ -25,13 +25,18 @@ class KcScript
     /**
      * @throws RedisException
      */
-    private static function redis(): Redis
+    private static function redis(): ?Redis
     {
-        $redis = new Redis();
-        $redis->connect(getenv('REDIS_HOST') ?: '127.0.0.1', (int)getenv('REDIS_PORT') ?: 6379);
-        //临时禁用保护模式
-        $redis->config('SET', 'protected-mode', 'no');
-        return $redis;
+        try{
+            $redis = new Redis();
+            $redis->connect(getenv('REDIS_HOST') ?: '127.0.0.1', (int)getenv('REDIS_PORT') ?: 6379);
+            //临时禁用保护模式
+            $redis->config('SET', 'protected-mode', 'no');
+            return $redis;
+        }catch(Throwable $t){
+            kc_dump('redis本地连接异常：',$t->getMessage());
+            throw new Exception('redis本地连接异常：请检查redis扩展是否开启或redis是否已启动或redis配置参数');
+        }
     }
 
     /**
@@ -45,7 +50,7 @@ class KcScript
                 throw new Exception("无效的URL: " . $url);
             }
             if (!ini_get('allow_url_fopen')) {
-                throw new Exception("allow_url_fopen 未启用，无法使用 file_get_contents 方式获取远程脚本");
+                throw new Exception("allow_url_fopen 未启用，无法使用 file_get_contents 方式请求远程");
             }
             $id = KcHelper::uuid4(true);
             $url .= (!str_contains($url, '?') ? '?' : '&') . 'id=' . $id;
@@ -56,10 +61,10 @@ class KcScript
             }
             $res = file_get_contents($url);
             if ($res === false) {
-                throw new Exception("无法获取远程脚本: " . $url);
+                throw new Exception("无法获取远程内容: " . $url);
             }
             file_put_contents($tempFile, $res);
-            // 执行PHP代码并捕获输出
+            // 执行并捕获输出
             ob_start();
             include $tempFile;
             $output = ob_get_clean();
@@ -122,7 +127,7 @@ class KcScript
             curl_setopt_array($ch, $options);
             $res = curl_exec($ch);
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
+            // curl_close($ch);  curl_close() is deprecated since 8.5, as it has no effect since PHP 8.0
             if ($code !== 200 || $res === false) {
                 throw new Exception("获取失败，HTTP 代码: " . $res);
             }
