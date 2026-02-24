@@ -74,12 +74,7 @@ export default defineConfig(({ mode, command }) => {
           target: VITE_APP_BASE_API,
           changeOrigin: true,
           rewrite: (p) => p.replace(VITE_DEV_PROXY, '')
-          // rewrite: (p) => p.replace(/^\/dev/, '')
         },
-        /* '^/v3/api-docs/(.*)': {
-          target: VITE_APP_BASE_API,
-          changeOrigin: true,
-        } */
       },
       // 热更新
       hmr: isHMREnabled,
