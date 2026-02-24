@@ -1,0 +1,10 @@
+/.idea
+/.vscode
+/public/vue
+/runtime
+/vendor
+*.log
+.env
+/vue-kc-admin/node_modules
+/vue-kc-admin/dist
+
