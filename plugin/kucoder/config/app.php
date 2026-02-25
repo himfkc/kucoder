@@ -1,7 +1,4 @@
 <?php
-
-use support\Request;
-
 return [
     //调试模式
     'debug' => getenv('APP_DEBUG') === 'true',
@@ -18,18 +15,9 @@ return [
     //jwt配置
     'jwt' => [
         //jwt加密密钥 系统自动生成
-        'secret_key' => 'kus#%sKUkdefdez29g6$@(kEDHUf4kU83jTYlpy93Hn',
+        'secret_key' => 'kus#%sKUkdefdez29g6$@(kEDH87f4kU83jTYlpy93Hn',
         //过期时间 默认3天
         'expire' => 3600 * 24 * 3,
-    ],
-    // 验证码配置
-    'click_captcha' => [
-        // 模式:text=文字,icon=图标(若只有icon则适用于国际化站点)
-        'mode' => ['text', 'icon'],
-        // 长度
-        'length' => 2,
-        // 混淆点长度
-        'confuse_length' => 2,
     ],
     //成功响应状态码
     'success_code' => 1,

@@ -45,6 +45,7 @@ export default defineConfig(({ mode, command }) => {
           entryFileNames: 'static/js/[name]-[hash].js',
           assetFileNames: 'static/[ext]/[name]-[hash].[ext]'
         } */
+        // 排除在打包之外 index.html中手动引入CDN链接 否则会导致运行时错误
         external: ['qrcode']
       },
     },
