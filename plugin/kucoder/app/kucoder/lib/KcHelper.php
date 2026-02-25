@@ -12,11 +12,11 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\lib;
+namespace kucoder\lib;
 
 use Exception;
 use InvalidArgumentException;
-use plugin\kucoder\app\kucoder\constants\KcConst;
+use kucoder\constants\KcConst;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use support\Response;

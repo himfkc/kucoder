@@ -12,7 +12,7 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\model;
+namespace kucoder\model;
 
 use support\think\Model;
 use think\model\concern\SoftDelete;

@@ -15,7 +15,7 @@ declare(strict_types=1);
 
 namespace plugin\kucoder\app\admin\controller\system;
 
-use plugin\kucoder\app\kucoder\controller\AdminBase;
+use kucoder\controller\AdminBase;
 use plugin\kucoder\app\admin\model\Member as KcMember;
 use support\Request;
 use support\Response;
@@ -37,9 +37,10 @@ class MemberController extends AdminBase
      * @param Request $request
      * @return Response
      */
-    public function info(Request $request): Response
+    public function info(): Response
     {
         try {
+            $request = $this->request;
             $id = (int)$request->get('id');
 
             if (!$id) {

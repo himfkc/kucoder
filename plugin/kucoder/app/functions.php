@@ -10,7 +10,7 @@
 // | Author: kucoder
 // +----------------------------------------------------------------------
 
-use plugin\kucoder\app\kucoder\constants\KcConst;
+use kucoder\constants\KcConst;
 use support\exception\BusinessException;
 use support\think\Cache;
 use think\facade\Db;
@@ -327,11 +327,9 @@ if (!function_exists('config_in_db')) {
                     return null;
                 }
             }
-            $items = $simple ? array_column($configs, 'value', 'name') : $configs;
-            return array_values($items);
+            return $simple ? array_column($configs, 'value', 'name') : $configs;
         }
-        $items = $simple ? array_column($configs, 'value', 'name') : $configs;
-        return array_values($items);
+        return $simple ? array_column($configs, 'value', 'name') : $configs;
     }
 }
 

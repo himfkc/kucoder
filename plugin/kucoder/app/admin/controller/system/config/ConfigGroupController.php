@@ -16,7 +16,7 @@ namespace plugin\kucoder\app\admin\controller\system\config;
 
 use Exception;
 use plugin\kucoder\app\admin\model\ConfigGroup;
-use plugin\kucoder\app\kucoder\controller\AdminBase;
+use kucoder\controller\AdminBase;
 use support\think\Cache;
 
 /**

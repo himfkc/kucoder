@@ -12,7 +12,7 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\service;
+namespace kucoder\service;
 
 use Exception;
 

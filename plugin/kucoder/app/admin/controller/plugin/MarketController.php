@@ -16,10 +16,10 @@ namespace plugin\kucoder\app\admin\controller\plugin;
 
 use Exception;
 use plugin\kucoder\app\admin\model\PluginLocal;
-use plugin\kucoder\app\kucoder\auth\AdminAuth;
-use plugin\kucoder\app\kucoder\lib\KcIdentity;
-use plugin\kucoder\app\kucoder\traits\HttpTrait;
-use plugin\kucoder\app\kucoder\traits\ResponseTrait;
+use kucoder\auth\AdminAuth;
+use kucoder\lib\KcIdentity;
+use kucoder\traits\HttpTrait;
+use kucoder\traits\ResponseTrait;
 use support\Response;
 use Throwable;
 

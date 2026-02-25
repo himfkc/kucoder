@@ -11,14 +11,14 @@
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\traits;
+namespace kucoder\traits;
 
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJarInterface;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\MultipartStream;
-use plugin\kucoder\app\kucoder\constants\KcError;
+use kucoder\constants\KcError;
 use Throwable;
 
 trait HttpTrait

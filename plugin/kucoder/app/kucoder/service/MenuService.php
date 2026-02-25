@@ -12,10 +12,10 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\service;
+namespace kucoder\service;
 
 use plugin\kucoder\app\admin\model\Menu as MenuModel;
-use plugin\kucoder\app\kucoder\auth\AdminAuth;
+use kucoder\auth\AdminAuth;
 use ReflectionException;
 use support\think\Cache;
 use Webman\Event\Event;

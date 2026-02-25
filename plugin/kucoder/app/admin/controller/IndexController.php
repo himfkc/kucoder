@@ -11,10 +11,9 @@ declare(strict_types=1);
 // | Author: kucoder
 // +----------------------------------------------------------------------
 
-
 namespace plugin\kucoder\app\admin\controller;
 
-use plugin\kucoder\app\kucoder\controller\AdminBase;
+use kucoder\controller\AdminBase;
 
 /**
  * 后台首页控制器

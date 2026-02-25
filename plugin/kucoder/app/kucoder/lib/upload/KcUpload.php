@@ -12,69 +12,47 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\lib\upload;
+namespace kucoder\lib\upload;
 
+use kucoder\facade\OSS;
 use Throwable;
 use Exception;
-use plugin\kucoder\app\kucoder\interfaces\OssInterface;
-use support\think\cache;
-use plugin\kucoder\app\admin\model\Config;
-use LocalUpload;
 
 /**
- * kucoder上传类库 支持本地存储、oss存储 支持oss存储时本地备份
+ * kucoder上传类库 支持本地存储\OSS存储
  */
 class KcUpload
 {
-    private OssInterface $oss;
-
-    private static self $instance;
-
-    public static function getInstance(): object|OssInterface|string|null
+    /**
+     * @throws Throwable
+     */
+    public static function getInstance(): string|null
     {
         $configs = config_in_db('kucoder');
-        // $mode = $configs['upload_mode'];
-        // $ossType = $configs['oss_type'];
-        if($configs['upload_mode'] === 'local'){
-            return  LocalUpload::class;
+        kc_dump('kc_config:',$configs);
+        if ($configs['upload_mode'] === 'local') {
+            return LocalUpload::class;
         }
-        if($configs['upload_mode'] === 'oss'){
-            $oss =  match($configs['oss_type']){
-                'alioss' => function(){
-                    return \plugin\alioss\api\PluginAlioss::class ?? null;
-                },
-                'txoss' => function(){
-                    return \plugin\txoss\api\PluginTxoss::class ?? null;
-                },
-                'qnoss' => function(){
-                    return \plugin\qnoss\api\PluginQnoss::class ?? null;
-                },
-                'hwoss' => function(){
-                    return \plugin\hwoss\api\PluginHwoss::class ?? null;
-                },
-                default => function(){
-                    return null;
-                },
-            };
-            if(class_exists($oss())){
-                return $oss();
-            }
-            return null;
+        if ($configs['upload_mode'] === 'oss') {
+            return OSS::class;
         }
+        return null;
     }
 
-    public static function upload(){
-        try{
+    /**
+     * @throws Exception
+     */
+    public static function upload():array|null
+    {
+        try {
             $upload = self::getInstance();
-            if($upload){
-                return $upload->upload();
-            }else{
-
+            if ($upload) {
+                return $upload::upload();
             }
-        }catch(Throwable $t){
-            throw new Exception('上传失败：'.$t->getMessage());
+        } catch (Throwable $t) {
+            throw new Exception('上传失败：' . $t->getMessage());
         }
-        
+        return null;
     }
 
 }

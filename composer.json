@@ -1,27 +1,35 @@
 {
-  "name": "workerman/webman",
+  "name": "kucoder/kucoder",
   "type": "project",
   "keywords": [
+    "vue",
+    "Element Plus",
+    "framework",
     "high performance",
     "http service"
   ],
-  "homepage": "https://www.workerman.net",
-  "license": "MIT",
-  "description": "High performance HTTP Service Framework.",
+  "homepage": "https://kucoder.com",
+  "license": "Apache-2.0",
+  "description": "kucoder-开源免费高性能PHP框架 基于Workerman + Webman + PHP8 + Vue3 + ElementPlus + JavaScript(非ts)",
   "authors": [
     {
       "name": "walkor",
       "email": "walkor@workerman.net",
       "homepage": "https://www.workerman.net",
       "role": "Developer"
+    },
+    {
+      "name": "kucoder",
+      "email": "kucoder@qq.com",
+      "homepage": "https://kucoder.com",
+      "role": "Developer"
     }
   ],
   "support": {
-    "email": "walkor@workerman.net",
-    "issues": "https://github.com/walkor/webman/issues",
-    "forum": "https://wenda.workerman.net/",
-    "wiki": "https://workerman.net/doc/webman",
-    "source": "https://github.com/walkor/webman"
+    "email": "kucoder@qq.com",
+    "forum": "https://kucoder.com/question",
+    "wiki": "https://doc.kucoder.com",
+    "source": "https://github.com/himfkc/kucoder"
   },
   "require": {
     "php": ">=8.1",
@@ -41,24 +49,17 @@
     "guzzlehttp/guzzle": "^7.9",
     "webman/rate-limiter": "^1.1",
     "vlucas/phpdotenv": "^5.6",
-    "yansongda/pay": "~3.7.0",
-    "hyperf/pimple": "~2.2.0",
-    "ext-bcmath": "*",
     "ramsey/uuid": "^4.9",
     "foroco/php-browser-detection": "^2.8",
+    "php-di/php-di": "^7.0",
+    "workerman/http-client": "^3.0",
+    "ext-bcmath": "*",
     "ext-redis": "*",
     "ext-fileinfo": "*",
-    "workerman/workerman": "~5.1",
     "ext-openssl": "*",
-    "w7corp/easywechat": "^6.18",
-    "zoujingli/ip2region": "^3.0",
-    "geoip2/geoip2": "^3.3",
-    "phpmailer/phpmailer": "^7.0",
     "ext-sodium": "*",
     "ext-zip": "*",
     "ext-pdo": "*",
-    "php-di/php-di": "^7.0",
-    "workerman/http-client": "^3.0",
     "ext-curl": "*"
   },
   "suggest": {
@@ -69,7 +70,9 @@
       "": "./",
       "app\\": "./app",
       "App\\": "./app",
-      "app\\View\\Components\\": "./app/view/components"
+      "app\\View\\Components\\": "./app/view/components",
+      "kucoder\\": "./plugin/kucoder/app/kucoder",
+      "Kucoder\\": "./plugin/kucoder/app/kucoder"
     }
   },
   "scripts": {
@@ -77,7 +80,7 @@
       "support\\Plugin::install"
     ],
     "post-package-update": [
-      "support\\Plugin::install"
+      "support\\Plugin::update"
     ],
     "pre-package-uninstall": [
       "support\\Plugin::uninstall"

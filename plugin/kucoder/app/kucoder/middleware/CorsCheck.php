@@ -11,7 +11,7 @@ declare(strict_types=1);
 // | Author: kucoder
 // +----------------------------------------------------------------------
 
-namespace plugin\kucoder\app\kucoder\middleware;
+namespace kucoder\middleware;
 
 use Exception;
 use ReflectionException;

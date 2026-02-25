@@ -12,7 +12,7 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\lib\http;
+namespace kucoder\lib\http;
 
 use InvalidArgumentException;
 
@@ -297,7 +297,7 @@ class KcVerifyHttps
 
 /* 使用示例
  <?php
-use plugin\kucoder\app\kucoder\lib\http\VerifyHttps;
+use kucoder\lib\http\VerifyHttps;
 
 // 1. 禁用 SSL 验证（调试环境）
 $sslOptions = VerifyHttps::applyOptions(['verify' => false]);

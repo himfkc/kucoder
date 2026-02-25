@@ -17,9 +17,9 @@ namespace plugin\kucoder\app\admin\controller\system\config;
 use Exception;
 use plugin\kucoder\app\admin\model\Config;
 use plugin\kucoder\app\admin\model\ConfigGroup;
-use plugin\kucoder\app\kucoder\constants\KcConst;
-use plugin\kucoder\app\kucoder\controller\AdminBase;
-use plugin\kucoder\app\kucoder\lib\KcHelper;
+use kucoder\constants\KcConst;
+use kucoder\controller\AdminBase;
+use kucoder\lib\KcHelper;
 use support\Response;
 use support\think\Cache;
 

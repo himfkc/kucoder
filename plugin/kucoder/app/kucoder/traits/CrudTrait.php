@@ -12,11 +12,11 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\traits;
+namespace kucoder\traits;
 
 use Exception;
-use plugin\kucoder\app\kucoder\constants\KcConst;
-use plugin\kucoder\app\kucoder\lib\KcHelper;
+use kucoder\constants\KcConst;
+use kucoder\lib\KcHelper;
 use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionException;
 use support\Request;

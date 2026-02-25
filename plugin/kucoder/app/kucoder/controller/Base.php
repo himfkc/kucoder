@@ -12,11 +12,11 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\controller;
+namespace kucoder\controller;
 
 use Exception;
-use plugin\kucoder\app\kucoder\service\OperLogService;
-use plugin\kucoder\app\kucoder\traits\ResponseTrait;
+use kucoder\service\OperLogService;
+use kucoder\traits\ResponseTrait;
 use support\Container;
 use support\Request;
 use support\Response;
@@ -46,8 +46,8 @@ class Base
      */
     public function __construct()
     {
-        kc_dump('请求路径:' . request()->path() . '  ' . request()->uri());
         $this->request = App::request();
+        kc_dump('请求路径:' . $this->request->path() . '  ' . $this->request->uri());
         $header_auth_type = $this->request->header('x-auth-type', '');
         $this->request->setHeader('x-auth-type', $header_auth_type ?: $this->authType ?: 'cookie');
         $this->oLog = Container::instance('kucoder')->get('oLog');
@@ -57,19 +57,14 @@ class Base
     {
         if (!in_action($this->noNeedLogin)) {
             //登录验证
-            kc_dump('开始登录验证:');
             $this->auth->checkLogin();
-            kc_dump('登录验证结束1');
             //鉴权验证
-            kc_dump('开始鉴权验证:', in_action($this->noNeedRight));
             if (!in_action($this->noNeedRight)) {
-                kc_dump('开始鉴权验证1');
                 $this->auth->checkRight($this->pluginName);
             }
         }
         if ($this->modelClass) {
             if (!class_exists($this->modelClass)) {
-                kc_dump('模型不存在:', $this->modelClass);
                 $this->throw("模型不存在:{$this->modelClass}");
             }
             $this->model = new $this->modelClass;

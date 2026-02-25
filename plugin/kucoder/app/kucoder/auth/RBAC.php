@@ -11,17 +11,17 @@ declare(strict_types=1);
 // | Author: kucoder
 // +----------------------------------------------------------------------
 
-namespace plugin\kucoder\app\kucoder\auth;
+namespace kucoder\auth;
 
 use Exception;
 use plugin\kucoder\app\admin\model\User;
-use plugin\kucoder\app\kucoder\constants\KcConst;
-use plugin\kucoder\app\kucoder\constants\KcError;
-use plugin\kucoder\app\kucoder\lib\KcJWT;
-use plugin\kucoder\app\kucoder\lib\sodium\KcBox;
-use plugin\kucoder\app\kucoder\service\LoginLogService;
-use plugin\kucoder\app\kucoder\traits\HttpTrait;
-use plugin\kucoder\app\kucoder\traits\ResponseTrait;
+use kucoder\constants\KcConst;
+use kucoder\constants\KcError;
+use kucoder\lib\KcJWT;
+use kucoder\lib\sodium\KcBox;
+use kucoder\service\LoginLogService;
+use kucoder\traits\HttpTrait;
+use kucoder\traits\ResponseTrait;
 use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionException;
 use support\exception\BusinessException;

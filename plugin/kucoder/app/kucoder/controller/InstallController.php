@@ -12,15 +12,15 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\controller;
+namespace kucoder\controller;
 
 use Exception;
 use plugin\kucoder\app\admin\model\Config;
 use plugin\kucoder\app\admin\model\Role;
 use plugin\kucoder\app\admin\model\User;
-use plugin\kucoder\app\kucoder\lib\KcScript;
-use plugin\kucoder\app\kucoder\service\PluginService;
-use plugin\kucoder\app\kucoder\traits\HttpTrait;
+use kucoder\lib\KcScript;
+use kucoder\service\PluginService;
+use kucoder\traits\HttpTrait;
 use support\Request;
 use support\Response;
 use support\think\Db;

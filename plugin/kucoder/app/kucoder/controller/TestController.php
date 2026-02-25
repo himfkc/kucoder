@@ -12,9 +12,9 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\controller;
+namespace kucoder\controller;
 
-use plugin\kucoder\app\kucoder\facade\Http;
+use kucoder\facade\Http;
 
 class TestController
 {

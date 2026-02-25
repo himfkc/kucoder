@@ -12,10 +12,10 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\lib;
+namespace kucoder\lib;
 
-use plugin\kucoder\app\kucoder\lib\http\HttpInterface;
-use plugin\kucoder\app\kucoder\lib\http\KcWorkerHttp;
+use kucoder\lib\http\HttpInterface;
+use kucoder\lib\http\KcWorkerHttp;
 use Psr\Http\Message\ResponseInterface;
 use support\Container;
 

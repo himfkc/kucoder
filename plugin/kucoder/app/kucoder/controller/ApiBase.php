@@ -11,12 +11,12 @@
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\controller;
+namespace kucoder\controller;
 
-use plugin\kucoder\app\kucoder\auth\ApiAuth;
-use plugin\kucoder\app\kucoder\constants\KcConst;
-use plugin\kucoder\app\kucoder\lib\KcHelper;
-use plugin\kucoder\app\kucoder\traits\ApiCrudTrait;
+use kucoder\auth\ApiAuth;
+use kucoder\constants\KcConst;
+use kucoder\lib\KcHelper;
+use kucoder\traits\ApiCrudTrait;
 use support\exception\BusinessException;
 use support\think\Model;
 use Throwable;
@@ -96,9 +96,7 @@ class ApiBase extends Base
      */
     public function __construct()
     {
-        kc_dump('执行apibase控制器的构造函数');
         parent::__construct();
-        kc_dump('执行apibase控制器的构造函数--执行完毕');
         $this->_init();
     }
 
@@ -110,7 +108,6 @@ class ApiBase extends Base
                 $apiAuthConfig['table']['user'] = 'p_member';
             }
             $this->auth = ApiAuth::getInstance($apiAuthConfig);
-            // kc_dump('apiBase auth:', $this->auth);
             $this->checkLoginAndRight();
         } catch (Throwable $e) {
             // 构造函数不能return返回值 会被忽略
