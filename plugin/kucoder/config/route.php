@@ -49,7 +49,7 @@ Route::any('/kcadmin/{dir}/{controller}/{action}',
 
 Route::group('/kucoder', function () {
     //上传接口
-    Route::any('/upload', [plugin\kucoder\app\kucoder\controller\UploadController::class, 'upload']);
+    Route::any('/upload', [kucoder\controller\UploadController::class, 'upload']);
 });
 
 //当路由不存在时返回一个json数据，这在webman作为api接口时非常实用

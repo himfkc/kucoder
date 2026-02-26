@@ -122,10 +122,10 @@
                                  :placeholder="item.placeholder || '请输入' + item.title" />
                            </template>
                            <template v-else-if="item.type === 'upload_img'">
-                              <ImageUpload v-model="formData[item.name]" :limit="1" :file-size="5" />
+                              <ImageUpload v-model="formData[item.name]" :limit="1" :file-size="5" :data="{ plugin: activePlugin }" />
                            </template>
                            <template v-else-if="item.type === 'upload_file'">
-                              <FileUpload v-model="formData[item.name]" :limit="5" :file-size="50" text="点击上传" />
+                              <FileUpload v-model="formData[item.name]" :limit="5" :file-size="50" text="点击上传" :data="{ plugin: activePlugin }" />
                            </template>
                         </div>
                         <el-button v-if="item.allow_del === 1" type="danger" circle size="small" class="delete-btn"
