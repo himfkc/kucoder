@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace plugin\kucoder\app\admin\controller\system;
 
-use plugin\kucoder\app\kucoder\controller\AdminBase;
-use plugin\kucoder\app\kucoder\service\MenuService;
+use kucoder\controller\AdminBase;
+use kucoder\service\MenuService;
 use ReflectionException;
 use support\Response;
 use think\db\exception\DbException;

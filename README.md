@@ -13,22 +13,22 @@
     <img src="https://img.shields.io/badge/Redis-blue" alt="Redis"/>
   </a>
   <a href="https://www.workerman.net/">
-    <img src="https://img.shields.io/badge/Workerman-5.1-green" alt="Workerman"/>
+    <img src="https://img.shields.io/badge/Workerman-5.1+-green" alt="Workerman"/>
   </a>
   <a href="https://www.workerman.net/doc/webman/">
-    <img src="https://img.shields.io/badge/Webman-2.1-green" alt="Webman version"/>
+    <img src="https://img.shields.io/badge/Webman-2.1+-green" alt="Webman version"/>
   </a>
   <a href="https://vuejs.org/">
     <img src="https://img.shields.io/badge/Vue-3.5+-42b883" alt="Vue version"/>
   </a>
   <a href="https://element-plus.org/">
-    <img src="https://img.shields.io/badge/Element%20Plus-2.10+-409eff" alt="Element Plus"/>
+    <img src="https://img.shields.io/badge/Element%20Plus-2.10+-42b883" alt="Element Plus"/>
   </a>
   <a href="https://vitejs.dev/">
-    <img src="https://img.shields.io/badge/Vite-6.0+-646cff" alt="Vite"/>
+    <img src="https://img.shields.io/badge/Vite-6.0+-42b883" alt="Vite"/>
   </a>
     <a href="https://kucoder.com">
-    <img src="https://img.shields.io/badge/Website-Kucoder.com-ff6b6b" alt="Website"/>
+    <img src="https://img.shields.io/badge/Website-Kucoder.com-409eff" alt="Website"/>
   </a>
   <a href="https://www.apache.org/licenses/LICENSE-2.0">
     <img src="https://img.shields.io/badge/License-Apache--2.0-green.svg" alt="License"/>

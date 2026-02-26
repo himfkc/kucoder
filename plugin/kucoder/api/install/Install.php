@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace plugin\kucoder\api\install;
 
 use Exception;
-use plugin\kucoder\app\kucoder\install\KcInstall;
+use kucoder\install\KcInstall;
 use ReflectionException;
 use Throwable;
 

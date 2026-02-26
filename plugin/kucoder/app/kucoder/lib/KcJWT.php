@@ -12,12 +12,12 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\lib;
+namespace kucoder\lib;
 
 use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use plugin\kucoder\app\kucoder\constants\KcError;
+use kucoder\constants\KcError;
 
 class KcJWT
 {

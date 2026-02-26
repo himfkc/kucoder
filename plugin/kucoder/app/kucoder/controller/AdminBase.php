@@ -12,10 +12,10 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\controller;
+namespace kucoder\controller;
 
-use plugin\kucoder\app\kucoder\auth\AdminAuth;
-use plugin\kucoder\app\kucoder\traits\AdminCrudTrait;
+use kucoder\auth\AdminAuth;
+use kucoder\traits\AdminCrudTrait;
 use support\exception\BusinessException;
 use support\think\Model;
 use Throwable;
@@ -103,9 +103,7 @@ class AdminBase extends Base
     {
         try {
             $this->auth = AdminAuth::getInstance();
-            // kc_dump('adminBase auth:', $this->auth);
             $this->checkLoginAndRight();
-            kc_dump('权限检查完毕');
         } catch (Throwable $t) {
             // 构造函数不能return返回值 会被忽略 return无效
             $this->throw($t->getMessage(), $t->getCode());

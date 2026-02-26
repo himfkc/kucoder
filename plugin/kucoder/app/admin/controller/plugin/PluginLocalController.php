@@ -15,12 +15,12 @@ declare(strict_types=1);
 namespace plugin\kucoder\app\admin\controller\plugin;
 
 use Exception;
-use plugin\kucoder\app\kucoder\constants\KcConst;
-use plugin\kucoder\app\kucoder\controller\AdminBase;
-use plugin\kucoder\app\kucoder\lib\KcFile;
-use plugin\kucoder\app\kucoder\lib\KcIdentity;
-use plugin\kucoder\app\kucoder\service\PluginService;
-use plugin\kucoder\app\kucoder\traits\HttpTrait;
+use kucoder\constants\KcConst;
+use kucoder\controller\AdminBase;
+use kucoder\lib\KcFile;
+use kucoder\lib\KcIdentity;
+use kucoder\service\PluginService;
+use kucoder\traits\HttpTrait;
 use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionException;
 use support\Response;

@@ -12,16 +12,16 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\service;
+namespace kucoder\service;
 
-use plugin\kucoder\app\kucoder\auth\AdminAuth;
-use plugin\kucoder\app\kucoder\auth\ApiAuth;
-use plugin\kucoder\app\kucoder\auth\AppMiniAuth;
-use plugin\kucoder\app\kucoder\model\LoginLog;
+use kucoder\auth\AdminAuth;
+use kucoder\auth\ApiAuth;
+use kucoder\auth\AppMiniAuth;
+use kucoder\model\LoginLog;
 
 /**
  * 系统操作日志服务类
- * @package plugin\kucoder\app\kucoder\service
+ * @package kucoder\service
  * param $app_type 应用类型 0=后台admin应用,1=客户端api应用,2=客户端小程序app应用
  * param $status 操作结果 1=成功,0=失败
  * param $msg 操作结果信息

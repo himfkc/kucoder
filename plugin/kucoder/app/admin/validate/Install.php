@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace plugin\kucoder\app\admin\validate;
 
-use plugin\kucoder\app\kucoder\validate\BaseValidate;
+use kucoder\validate\BaseValidate;
 
 class Install extends BaseValidate
 {

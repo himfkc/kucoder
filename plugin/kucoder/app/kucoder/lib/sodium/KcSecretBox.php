@@ -12,10 +12,10 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\lib\sodium;
+namespace kucoder\lib\sodium;
 
 use Exception;
-use plugin\kucoder\app\kucoder\lib\KcConfig;
+use kucoder\lib\KcConfig;
 use SodiumException;
 use Throwable;
 

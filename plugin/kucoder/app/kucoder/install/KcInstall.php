@@ -12,17 +12,17 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\install;
+namespace kucoder\install;
 
 use Exception;
-use plugin\kucoder\app\kucoder\auth\AdminAuth;
-use plugin\kucoder\app\kucoder\constants\KcConst;
-use plugin\kucoder\app\kucoder\lib\KcFile;
-use plugin\kucoder\app\kucoder\lib\KcHelper;
-use plugin\kucoder\app\kucoder\lib\KcIdentity;
-use plugin\kucoder\app\kucoder\service\MenuService;
-use plugin\kucoder\app\kucoder\traits\HttpTrait;
-use plugin\kucoder\app\kucoder\traits\ResponseTrait;
+use kucoder\auth\AdminAuth;
+use kucoder\constants\KcConst;
+use kucoder\lib\KcFile;
+use kucoder\lib\KcHelper;
+use kucoder\lib\KcIdentity;
+use kucoder\service\MenuService;
+use kucoder\traits\HttpTrait;
+use kucoder\traits\ResponseTrait;
 use ReflectionException;
 use support\think\Db;
 use Throwable;

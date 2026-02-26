@@ -16,7 +16,7 @@ declare(strict_types=1);
 namespace plugin\kucoder\app\admin\controller\system;
 
 use plugin\kucoder\app\admin\model\User;
-use plugin\kucoder\app\kucoder\controller\AdminBase;
+use kucoder\controller\AdminBase;
 use plugin\kucoder\app\admin\model\Role;
 use plugin\kucoder\app\admin\model\Dept;
 use support\Response;
@@ -168,7 +168,7 @@ class UserController extends AdminBase
      public function uploadAvatar():Response 
      {
         try{
-           $uploadedPath = \plugin\kucoder\app\kucoder\lib\KcFile::upload();
+           $uploadedPath = \kucoder\lib\KcFile::upload();
            $url = $uploadedPath['avatarfile']['url'];
            $model = $this->model->find($this->auth->getId());
            $model->avatar = $url;

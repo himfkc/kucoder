@@ -12,16 +12,16 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\controller;
+namespace kucoder\controller;
 
 use Exception;
-use plugin\kucoder\app\kucoder\auth\AdminAuth;
-use plugin\kucoder\app\kucoder\auth\ApiAuth;
-use plugin\kucoder\app\kucoder\auth\AppMiniAuth;
-use plugin\kucoder\app\kucoder\constants\KcConst;
-use plugin\kucoder\app\kucoder\lib\KcFile;
-use plugin\kucoder\app\kucoder\lib\upload\KcUpload;
-use plugin\kucoder\app\kucoder\traits\ResponseTrait;
+use kucoder\auth\AdminAuth;
+use kucoder\auth\ApiAuth;
+use kucoder\auth\AppMiniAuth;
+use kucoder\constants\KcConst;
+use kucoder\lib\KcFile;
+use kucoder\lib\upload\KcUpload;
+use kucoder\traits\ResponseTrait;
 use support\Response;
 use Throwable;
 
@@ -47,8 +47,7 @@ class UploadController extends Base
             }
             kc_dump('上传登录验证成功');
         }
-        // $uploadedPath = KcFile::upload();
-        $uploadedPath = KcUpload::upload();
-        return $this->ok('上传成功', $uploadedPath);
+        $upload= KcUpload::upload();
+        return $this->ok('上传成功', $upload);
     }
 }

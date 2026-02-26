@@ -12,11 +12,11 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\controller;
+namespace kucoder\controller;
 
-use plugin\kucoder\app\kucoder\auth\AppMiniAuth;
-use plugin\kucoder\app\kucoder\constants\KcConst;
-use plugin\kucoder\app\kucoder\traits\ApiCrudTrait;
+use kucoder\auth\AppMiniAuth;
+use kucoder\constants\KcConst;
+use kucoder\traits\ApiCrudTrait;
 use support\exception\BusinessException;
 use support\think\Model;
 use Throwable;
@@ -105,7 +105,6 @@ class AppMiniBase extends Base
         try {
             $config = array_merge(KcConst::API_AUTH_CONFIG, ['app' => KcConst::APP_MINI_APP]);
             $this->auth = AppMiniAuth::getInstance($config);
-            // kc_dump('apiBase auth:', $this->auth);
             $this->checkLoginAndRight();
         } catch (Throwable $e) {
             // 构造函数不能return返回值 会被忽略

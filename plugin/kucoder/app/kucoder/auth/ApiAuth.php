@@ -11,10 +11,10 @@ declare(strict_types=1);
 // | Author: kucoder
 // +----------------------------------------------------------------------
 
-namespace plugin\kucoder\app\kucoder\auth;
+namespace kucoder\auth;
 
-use plugin\kucoder\app\kucoder\constants\KcConst;
-use plugin\kucoder\app\kucoder\interfaces\AuthInterface;
+use kucoder\constants\KcConst;
+use kucoder\interfaces\AuthInterface;
 use support\exception\BusinessException;
 use Throwable;
 

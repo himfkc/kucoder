@@ -11,7 +11,7 @@
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\lib\http;
+namespace kucoder\lib\http;
 
 interface HttpInterface
 {

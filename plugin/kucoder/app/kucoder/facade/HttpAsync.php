@@ -12,9 +12,9 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\facade;
+namespace kucoder\facade;
 
-use plugin\kucoder\app\kucoder\lib\KcHttpAsync;
+use kucoder\lib\KcHttpAsync;
 use think\Facade;
 
 /**

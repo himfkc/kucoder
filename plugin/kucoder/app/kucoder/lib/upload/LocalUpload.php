@@ -12,7 +12,7 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\lib\upload;
+namespace kucoder\lib\upload;
 
 use Throwable;
 use Exception;
@@ -39,7 +39,7 @@ class LocalUpload
         if (!$file) {
             throw new Exception('请上传文件');
         }
-        $uploadedPath = [];
+        $uploaded = [];
         foreach ($file as $key => $spl_file) {
             if (!$spl_file->isValid()) {
                 throw new Exception('上传的文件无效');
@@ -53,24 +53,19 @@ class LocalUpload
             try {
                 $saveDir = $request->post('saveDir', '');
                 if (!$saveDir) {
-                    $fileUrl = '/app/'.$plugin . '/upload/' . date('Ymd') . '/' . $spl_file->getUploadName();
+                    $fileUrl = '/app/' . $plugin . '/upload/' . date('Ymd') . '/' . $spl_file->getUploadName();
                     $fileSavePath = base_path('/plugin/') . $plugin . '/public/upload/' . date('Ymd') . '/' . $spl_file->getUploadName();
                 } else {
-                    $fileUrl = '/app/'.$plugin . '/upload/' . trim($saveDir, '/') . '/' . $spl_file->getUploadName();
+                    $fileUrl = '/app/' . $plugin . '/upload/' . trim($saveDir, '/') . '/' . $spl_file->getUploadName();
                     $fileSavePath = base_path('/plugin/') . $plugin . '/public/upload/' . trim($saveDir, '/') . '/' . $spl_file->getUploadName();
                 }
                 $spl_file->move($fileSavePath);
                 $savePath = str_replace(base_path(), '', $fileSavePath);
-                $uploadedPath[$key] = ['name' => $spl_file->getUploadName(), 'url' => $fileUrl ?? '', 'savePath' => $savePath];
+                $uploaded[$key] = ['name' => $spl_file->getUploadName(), 'url' => $fileUrl ?? '', 'savePath' => $savePath];
             } catch (Throwable $t) {
                 throw new Exception('上传失败 ' . $t->getMessage());
             }
         }
-        // return $uploadedPath;
-        return [
-            'success' => true,
-            'message' => '上传成功',
-            'data' => $uploadedPath
-        ];
+        return $uploaded;
     }
 }

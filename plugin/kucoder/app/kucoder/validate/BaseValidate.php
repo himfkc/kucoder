@@ -12,7 +12,7 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\validate;
+namespace kucoder\validate;
 
 use support\think\Db;
 use think\db\exception\DataNotFoundException;

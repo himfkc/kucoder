@@ -12,10 +12,10 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\facade;
+namespace kucoder\facade;
 
 use think\Facade;
-use plugin\kucoder\app\kucoder\lib\CodeStats as LibCodeStats;
+use kucoder\lib\CodeStats as LibCodeStats;
 
 class CodeStats extends Facade
 {

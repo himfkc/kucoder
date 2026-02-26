@@ -12,7 +12,7 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\command;
+namespace kucoder\command;
 
 use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -281,7 +281,7 @@ EOF;
 namespace plugin\\$name\\api;
 
 use Exception;
-use plugin\kucoder\app\kucoder\install\PluginInstall;
+use kucoder\install\PluginInstall;
 
 class Install extends PluginInstall
 {

@@ -14,11 +14,11 @@ declare(strict_types=1);
 
 namespace plugin\kucoder\app\admin\controller;
 
-use plugin\kucoder\app\kucoder\controller\AdminBase;
-use plugin\kucoder\app\kucoder\lib\Captcha;
-use plugin\kucoder\app\kucoder\lib\KcIdentity;
-use plugin\kucoder\app\kucoder\service\LoginLogService;
-use plugin\kucoder\app\kucoder\service\MenuService;
+use kucoder\controller\AdminBase;
+use kucoder\lib\Captcha;
+use kucoder\lib\KcIdentity;
+use kucoder\service\LoginLogService;
+use kucoder\service\MenuService;
 use Psr\SimpleCache\InvalidArgumentException;
 use support\exception\BusinessException;
 use support\Request;

@@ -11,7 +11,7 @@
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\lib;
+namespace kucoder\lib;
 
 use Throwable;
 use Exception;

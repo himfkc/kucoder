@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace plugin\kucoder\app\admin\controller\system\log;
 
-use plugin\kucoder\app\kucoder\controller\AdminBase;
-use plugin\kucoder\app\kucoder\model\Log;
+use kucoder\controller\AdminBase;
+use kucoder\model\Log;
 use support\Response;
 
 /**

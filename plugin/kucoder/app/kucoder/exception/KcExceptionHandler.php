@@ -12,7 +12,7 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\exception;
+namespace kucoder\exception;
 
 use support\exception\PageNotFoundException;
 use Throwable;

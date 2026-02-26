@@ -12,7 +12,7 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\lib\http;
+namespace kucoder\lib\http;
 
 use Exception;
 use GuzzleHttp\Client;

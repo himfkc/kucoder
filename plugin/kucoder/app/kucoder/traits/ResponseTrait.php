@@ -12,7 +12,7 @@ declare(strict_types=1);
 // +----------------------------------------------------------------------
 
 
-namespace plugin\kucoder\app\kucoder\traits;
+namespace kucoder\traits;
 
 use support\exception\BusinessException;
 use support\Response;
