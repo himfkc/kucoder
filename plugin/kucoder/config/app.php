@@ -11,11 +11,11 @@ return [
     //调试环境下允许所有跨域访问
     'allow_cors_dev' => true,
     //vue后台地址入口 默认/admin/ 后台访问方式：域名/vue部署子目录/vue后台地址入口
-    'vue_admin_entry' => '/admin/',
+    'vue_admin_entry' => '/kbr5iEvF/',
     //jwt配置
     'jwt' => [
         //jwt加密密钥 系统自动生成
-        'secret_key' => 'kus#%sKUkdefdez29g6$@(kEDH87f4kU83jTYlpy93Hn',
+        'secret_key' => 'FBKTs1W7qsAd9WmWyKB+EWPlS4DKnAQxdhmmZ75CZsg=',
         //过期时间 默认3天
         'expire' => 3600 * 24 * 3,
     ],
@@ -28,8 +28,6 @@ return [
 
     //上传需要登录
     'upload_need_login' => true,
-    //文件图片存储类型 1:仅本地存储 2:仅oss存储 3:本地和oss同时存储
-    'upload_save_type' => 1,
     //允许上传的文件类型
     'allow_upload_extensions' => ['jpg', 'jpeg', 'png', 'gif', 'zip',
         'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf', 'txt', 'mp3', 'mp4', 'avi', 'wmv', 'mkv', 'flv'],
@@ -39,6 +37,7 @@ return [
 
     //kucoder系统级api 勿修改
     'sys_url' => 'https://api.kucoder.com',
+    // 'sys_url' => 'http://127.0.0.1:8788',
     'sys_file_url' => '',
 
 

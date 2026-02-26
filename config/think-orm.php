@@ -1,5 +1,4 @@
 <?php
-
 return [
     'default' => 'mysql',
     'connections' => [
@@ -37,8 +36,6 @@ return [
                 'idle_timeout' => 60,   // 连接最大空闲时间，超过该时间会被回收
                 'heartbeat_interval' => 50, // 心跳检测间隔，需要小于60秒
             ],
-
-            //getenv($key)的结果为字符串 比如环境变量布尔值false通过getenv函数后变为字符串"false"
             // 全局自动时间戳
             'auto_timestamp' => getenv('DB_AUTO_TIMESTAMP') === 'true',
             // 字段缓存 对模型及Db都有效

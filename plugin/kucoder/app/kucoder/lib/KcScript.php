@@ -24,6 +24,7 @@ class KcScript
 {
     /**
      * @throws RedisException
+     * @throws Exception
      */
     private static function redis(): ?Redis
     {
@@ -35,7 +36,7 @@ class KcScript
             return $redis;
         }catch(Throwable $t){
             kc_dump('redis本地连接异常：',$t->getMessage());
-            throw new Exception('redis本地连接异常：请检查redis扩展是否开启或redis是否已启动或redis配置参数');
+            throw new Exception('redis本地连接异常：请检查redis扩展是否开启/是否已启动/redis配置参数');
         }
     }
 

@@ -38,7 +38,7 @@ return [
             'auth' => getenv('REDIS_PASSWORD'),
             'timeout' => 2,
             'database' => getenv('REDIS_DATABASE'),
-            'prefix' => getenv('REDIS_PREFIX').'redis_session_',
+            'prefix' => getenv('REDIS_PREFIX') . 'redis_session_',
         ],
         'redis_cluster' => [
             'host' => ['127.0.0.1:7000', '127.0.0.1:7001', '127.0.0.1:7002'],
@@ -52,9 +52,9 @@ return [
     // 是否自动刷新session，默认关闭
     'auto_update_timestamp' => false,
     // session过期时间
-    'lifetime' => 7*24*60*60,
+    'lifetime' => 7 * 24 * 60 * 60,
     // 存储session_id的cookie过期时间
-    'cookie_lifetime' => 365*24*60*60,
+    'cookie_lifetime' => 365 * 24 * 60 * 60,
     // 存储session_id的cookie路径
     'cookie_path' => '/',
     // 存储session_id的cookie域名
@@ -63,7 +63,7 @@ return [
     'http_only' => true,
     // 仅在https下开启session，默认关闭
     'secure' => false,
-    // 用于防止CSRF攻击和用户追踪，可选值strict/lax/none
+    // 用于防止CSRF攻击和用户追踪，可选值strict/lax/non
     'same_site' => 'lax',
     // 回收session的几率
     'gc_probability' => [1, 1000],

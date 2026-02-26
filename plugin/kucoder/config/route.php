@@ -4,7 +4,7 @@ use Webman\Route;
 use support\Request;
 
 /* *
- * kucoder路由 仅为示例 kucoder及kucoder的插件默认使用webman的默认路由 即/app/插件/[应用]/[子目录]/控制器/方法
+ * kucoder路由 kucoder及kucoder的插件默认使用webman的默认路由 即/app/插件/[应用]/[子目录]/控制器/方法
  */
 $controller_suffix = config('plugin.kucoder.app.controller_suffix');
 
@@ -52,9 +52,23 @@ Route::group('/kucoder', function () {
     Route::any('/upload', [kucoder\controller\UploadController::class, 'upload']);
 });
 
+// 处理/app/kucoder/kucoder/controller/action的请求
+Route::any('/app/kucoder/kucoder/{controller}/{action}', function (Request $request, string $controller, string $action) {
+    // 使用 kucoder 命名空间
+    $controller_class = "kucoder\\controller\\" . ucfirst($controller) . "Controller";
+    $request->route_base_path = '/app/kucoder/';
+    $request->plugin = 'kucoder';
+    $request->app = 'kucoder';
+    $request->controller = $controller;
+    $request->action = $action;
+    $classInstance = new $controller_class;
+    return call_user_func([$classInstance, $action], $request);
+});
+
+
 //当路由不存在时返回一个json数据，这在webman作为api接口时非常实用
 Route::fallback(function () {
     kc_dump('kucoder路由不存在:'.request()->path().'  '.request()->uri());
     // kc_dump('注册的所有路由',Route::getRoutes());
-    return json(['code' => 404, 'msg' => 'kucoder：页面 not found']);
+    return json(['code' => 404, 'msg' => '404：页面不存在!']);
 });

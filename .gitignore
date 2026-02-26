@@ -6,6 +6,7 @@
 /vendor
 *.log
 /.env
+installed.lock
 node_modules/
 /vue-kc-admin/dist/
 /vue-kc-admin/src/api/*/

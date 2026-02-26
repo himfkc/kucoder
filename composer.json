@@ -71,8 +71,7 @@
       "app\\": "./app",
       "App\\": "./app",
       "app\\View\\Components\\": "./app/view/components",
-      "kucoder\\": "./plugin/kucoder/app/kucoder",
-      "Kucoder\\": "./plugin/kucoder/app/kucoder"
+      "kucoder\\": "./plugin/kucoder/app/kucoder"
     }
   },
   "scripts": {

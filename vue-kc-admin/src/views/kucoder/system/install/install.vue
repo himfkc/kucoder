@@ -179,7 +179,7 @@ const installSubmit = async () => {
 
 function getLoginPath(adminBasePath) {
     const currentUrl = window.location.href
-    const loginUrl  = currentUrl.replace('/admin',adminBasePath).replace('/install','/login')
+    const loginUrl = currentUrl.replace('/admin/', adminBasePath).replace('install', 'login')
     return loginUrl
 }
 

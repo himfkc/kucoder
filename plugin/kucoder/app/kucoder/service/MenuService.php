@@ -43,7 +43,7 @@ class MenuService
             if (isset($menu['children']) && $menu['children']) {
                 $children = $menu['children'];
                 unset($menu['children']);
-                if ($level == 0 && !isset($menu['pid'])) {
+                if (!isset($menu['pid'])) {
                     $menu['pid'] = 0;
                 }
                 $save = MenuModel::create($menu);

@@ -10,10 +10,8 @@ return [
             'type' => 'redis',
             // 服务器地址
             'host' => getenv('REDIS_HOST'),
-            // redis端口 官方默认没有此项
+            // redis端口 官方默认没有这个选项
             'port' => (int)getenv('REDIS_PORT'),
-            // redis密码 官方默认没有此项
-            'password' => getenv('REDIS_PASSWORD'),
             // 缓存前缀
             'prefix' => getenv('REDIS_PREFIX'),
             // 默认缓存有效期 0表示永久缓存

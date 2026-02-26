@@ -52,7 +52,7 @@ return [
     // 'db' => DI\get(Database::class),
 
     /* 自定义接口方法
-     \plugin\kucoder\app\kucoder\lib\http\HttpInterface::class =>
+     \kucoder\lib\http\HttpInterface::class =>
         function (Psr\Container\ContainerInterface $container) {
             $http_client_type = config('plugin.kucoder.app.http_client_type');
             $httpClass = match ($http_client_type) {
@@ -64,12 +64,12 @@ return [
         },
     */
     'http' => function (ContainerInterface $container) {
-        return $container->make(\plugin\kucoder\app\kucoder\lib\http\KcGuzzleHttp::class, []);
+        return $container->make(\kucoder\lib\http\KcGuzzleHttp::class, []);
     },
     'http_async' => function (ContainerInterface $container) {
-        return $container->make(\plugin\kucoder\app\kucoder\lib\http\KcWorkerHttp::class, []);
+        return $container->make(\kucoder\lib\http\KcWorkerHttp::class, []);
     },
     'oLog' => \DI\factory(function ($container) {
-        return $container->make(\plugin\kucoder\app\kucoder\service\OperLogService::class, []);
+        return $container->make(\kucoder\service\OperLogService::class, []);
     }),
 ];

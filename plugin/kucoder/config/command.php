@@ -1,6 +1,6 @@
 <?php
 return [
     'command' => [
-        plugin\kucoder\app\kucoder\command\KcPluginCreate::class,
+        kucoder\command\KcPluginCreate::class,
     ],
 ];

@@ -1,4 +1,4 @@
 <?php
 return [
-    '' => plugin\kucoder\app\kucoder\exception\KcExceptionHandler::class,
+    '' => kucoder\exception\KcExceptionHandler::class,
 ];

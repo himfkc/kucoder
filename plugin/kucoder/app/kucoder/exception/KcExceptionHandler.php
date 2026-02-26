@@ -55,7 +55,7 @@ class KcExceptionHandler extends ExceptionHandler
                     $response = new Response(200, ['Content-Type' => 'application/json'],
                         json_encode([
                             'code' => 404,
-                            'msg' => '异常提示：404 Not Found',
+                            'msg' => '中间件异常：404 页面不存在',
                             'data' => []
                         ], JSON_UNESCAPED_UNICODE));
                     $response->withHeaders([
