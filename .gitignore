@@ -1,10 +1,18 @@
-/.idea
-/.vscode
-/public/vue
+.idea
+.vscode
+/plugin/*/
+!/plugin/kucoder/
 /runtime
 /vendor
 *.log
-.env
-/vue-kc-admin/node_modules
-/vue-kc-admin/dist
+/.env
+node_modules/
+/vue-kc-admin/dist/
+/vue-kc-admin/src/api/*/
+!/vue-kc-admin/src/api/kucoder/
+!/vue-kc-admin/src/api/yourPluginName/
+/vue-kc-admin/src/views/*/
+!/vue-kc-admin/src/views/kucoder/
+!/vue-kc-admin/src/views/yourPluginName/
+
 
