@@ -18,11 +18,11 @@ export function refreshCache() {
 }
 
 // 编辑保存指定分组的配置
-export function edit(groupId, data) {
+export function edit(plugin, groupId, data) {
   return request({
     url: basePath + '/system/config/config/edit',
     method: 'post',
-    data: { group_id: groupId, ...data }
+    data: { plugin, group_id: groupId, ...data }
   })
 }
 

@@ -50,7 +50,7 @@ return [
     // 存储session_id的cookie名
     'session_name' => 'PHPSID',
     // 是否自动刷新session，默认关闭
-    'auto_update_timestamp' => false,
+    'auto_update_timestamp' => true,
     // session过期时间
     'lifetime' => 7 * 24 * 60 * 60,
     // 存储session_id的cookie过期时间

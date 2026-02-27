@@ -53,7 +53,7 @@
     </el-dialog>
 
     <!-- 站点授权 -->
-    <kc-authorize v-model="kcAuthorizeDialogVisible"></kc-authorize>
+    <kc-authorize v-if="kcAuthorizeDialogVisible" v-model="kcAuthorizeDialogVisible"></kc-authorize>
 
     <!-- 用户协议 -->
     <el-dialog title="用户协议" v-model="agreementDialogVisible" width="90%" :style="{ maxWidth: '900px' }" draggable>
@@ -258,12 +258,6 @@ function handleLogoutKc() {
         })
         .catch(() => { })
 }
-
-getCodeImg().then(({ res, code, msg }) => {
-    console.log('response', res)
-    codeImg.value = "data:image/gif;base64," + res.captcha.img_base64;
-    kcLoginForm.value.uuid = res.captcha.uuid;
-})
 
 defineExpose({ kcLoginMesBox })
 </script>

@@ -1,10 +1,9 @@
 <template>
   <el-dialog title="站点授权" v-model="dialogVisible" width="600px" draggable class="p-5" center align-center>
     <el-form ref="kcAuthorizeFormRef" :model="kcAuthorizeForm" :rules="kcAuthorizeFormRules" label-width="100px"
-             class="y c">
+      class="y c">
       <el-form-item label="顶级域名" prop="domain">
-        <el-input v-model="kcAuthorizeForm.domain"
-                  placeholder="请输入你的顶级域名 比如https://***.taobao.com则输入taobao.com" />
+        <el-input v-model="kcAuthorizeForm.domain" placeholder="请输入你的顶级域名 比如https://***.taobao.com则输入taobao.com" />
       </el-form-item>
       <el-form-item label="icp备案号" prop="icp">
         <el-input v-model="kcAuthorizeForm.icp" placeholder="请输入你的icp备案号" />
@@ -90,20 +89,20 @@ const submitkcAuthorize = () => {
       console.log('参数验证通过', valid)
       const url = join_path(userStore.site_set.sys_url + '/kapi/site/authorize')
       kcFetch.post(url, { data: kcAuthorizeForm.value })
-          .then(({ data, msg, code }) => {
-            console.log('授权结果', data, msg, code)
-            if (code !== 1) {
-              kcAlert(msg)
-              return;
-            } else {
-              kcAlert(msg, '提交成功', { type: 'success' })
-            }
-            dialogVisible.value = false;
-          })
-          .catch(err => {
-            console.log('kcFetch err', err)
-            kcMsg(err.msg)
-          })
+        .then(({ data, msg, code }) => {
+          console.log('授权结果', data, msg, code)
+          if (code !== 1) {
+            kcAlert(msg)
+            return;
+          } else {
+            kcAlert(msg, '提交成功', { type: 'success' })
+          }
+          dialogVisible.value = false;
+        })
+        .catch(err => {
+          console.log('kcFetch err', err)
+          kcMsg(err.msg)
+        })
     }
   });
 };
@@ -111,7 +110,9 @@ const cancelkcAuthorize = () => {
   // kcAuthorizeDialogVisible.value = false;
   dialogVisible.value = false;
 }
-getCode();
+onMounted(() => {
+  getCode()
+})
 </script>
 
 <style lang="scss" scoped></style>

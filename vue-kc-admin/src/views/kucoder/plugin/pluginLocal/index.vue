@@ -252,6 +252,13 @@ const kcLoginSuccess = (data) => {
   console.log('userStore', userStore)
   getList();
 }
+const checkLoginKc = () => {
+  if (!userStore.kc.user.token) {
+    kcLoginRef.value.kcLoginMesBox()
+    return false
+  }
+  return true
+}
 
 // 插件配置
 const configTitle = ref('')
@@ -328,13 +335,20 @@ const weixinDialog = ref(false)
 const qrcode = ref('')
 const wx_code = ref('')
 function installPlugin(row) {
+  if (!checkLoginKc()) {
+    console.log('你还未登录')
+    return
+  }
   installRow.value = cloneDeep(row)
-  getQrcode().then(res => {
+  // 本地调试 暂时注释掉 直接安装
+  installSubmit()
+  /* getQrcode().then(res => {
     console.log('weixin', res)
     qrcode.value = res.data.qrcode
   })
-  weixinDialog.value = true
+  weixinDialog.value = true */
 }
+
 async function checkWxCode() {
   if (!wx_code.value || !/^[0-9]{6}$/.test(wx_code.value)) {
     kcMsg('校验码不正确')
@@ -350,11 +364,13 @@ async function checkWxCode() {
       return false
     })
 }
+
 async function installSubmit() {
-  /*const isCheckedWxCode = await checkWxCode()
+  // 本地调试 暂时注释掉
+  /* const isCheckedWxCode = await checkWxCode()
   if (!isCheckedWxCode) {
     return
-  }*/
+  } */
   await HMR.disable()
   const loading = kcLoading('正在安装中...请勿操作 执行步骤可在后端控制台查看')
   install(installRow.value, { timeout: 0, headers: { showErrMsg: false } })
@@ -374,6 +390,9 @@ const uninstallTitle = ref('')
 const uninstallDialog = ref(false)
 const uninstallRow = ref({})
 function uninstallPlugin(row) {
+  if (!checkLoginKc()) {
+    return
+  }
   uninstallTitle.value = '确认卸载插件：' + row.title + ' ?'
   uninstallRow.value = cloneDeep(row)
   uninstallDialog.value = true
@@ -448,6 +467,9 @@ function updatePlugin(row, item = {}) {
 
 }
 async function updateSubmit() {
+  if (!checkLoginKc()) {
+    return
+  }
   await HMR.disable()
   updateDialog.value = false
   const loading = kcLoading('正在升级中...请勿操作 执行步骤可在后端控制台查看')

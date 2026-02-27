@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace kucoder\lib\upload;
 
 use Exception;
-use kucoder\interfaces\OssInterface;
 use Throwable;
 
 /**
@@ -29,30 +28,40 @@ class OssUpload
      */
     public function __construct()
     {
-        try {
-            $kc_config = config_in_db('kucoder');
-            if ($kc_config['upload_mode'] === 'local') {
-                throw new Exception('当前存储为本地存储');
-            }
-            $ossPlugin = match ($kc_config['oss_type']) {
-                //阿里云oss对象存储
-                'alioss' => fn() => \plugin\alioss\api\PluginAlioss::class ?? null,
-                //腾讯云cos对象存储
-                'txoss' => fn() => \plugin\txoss\api\PluginTxoss::class ?? null,
-                //七牛云对象存储
-                'qnoss' => fn() => \plugin\qnoss\api\PluginQnoss::class ?? null,
-                //华为云对象存储
-                'hwoss' => fn() => \plugin\hwoss\api\PluginHwoss::class ?? null,
-                //默认
-                default => fn() => null,
-            };
-            if (!class_exists($ossPlugin())) {
-                throw new Exception($ossPlugin() . '不存在');
-            }
-            $this->driver = $ossPlugin();
-        } catch (Throwable $e) {
-            throw new Exception($e->getMessage());
+        $kc_config = config_in_db('kucoder');
+
+        // 验证配置
+        if (!is_array($kc_config)) {
+            throw new Exception('配置读取失败');
         }
+
+        if ($kc_config['upload_mode'] === 'local') {
+            throw new Exception('当前存储为本地存储');
+        }
+
+        // 获取 OSS 驱动类名
+        $ossPlugin = match ($kc_config['oss_type']) {
+            //阿里云oss对象存储
+            'alioss' => \plugin\alioss\api\PluginAlioss::class ?? null,
+            //腾讯云cos对象存储
+            'txoss' => \plugin\txoss\api\PluginTxoss::class ?? null,
+            //七牛云对象存储
+            'qnoss' => \plugin\qnoss\api\PluginQnoss::class ?? null,
+            //华为云对象存储
+            'hwoss' => \plugin\hwoss\api\PluginHwoss::class ?? null,
+            //默认
+            default => null,
+        };
+
+        if (!$ossPlugin) {
+            throw new Exception('未知的 OSS 类型: ' . ($kc_config['oss_type'] ?? '未指定'));
+        }
+
+        if (!class_exists($ossPlugin)) {
+            throw new Exception('OSS 驱动类不存在: ' . $ossPlugin);
+        }
+
+        $this->driver = $ossPlugin;
     }
 
     /**
@@ -89,16 +98,16 @@ class OssUpload
             // 获取插件名作为路径前缀
             $plugin = $request->post('plugin', $request->plugin);
             $saveDir = $request->post('saveDir', '');
-            // 添加路径前缀
+            // 添加路径前缀（去除开头的 /，避免 OSS 对象名称格式错误）
             if ($saveDir) {
-                $remoteObject = '/app/' . $plugin . '/upload/' . trim($saveDir, '/') . '/' . $remoteObject;
+                $remoteObject = 'app/' . $plugin . '/upload/' . trim($saveDir, '/') . '/' . $remoteObject;
             } else {
-                $remoteObject = '/app/' . $plugin . '/upload/' . date('Ymd') . '/' . $remoteObject;
+                $remoteObject = 'app/' . $plugin . '/upload/' . date('Ymd') . '/' . $remoteObject;
             }
             // 使用本地临时文件路径上传
             $localFile = $spl_file->getRealPath();
             // 调用底层驱动上传
-            $result = ($this->driver)::uploadFile($localFile, $remoteObject, []);
+            $result = ($this->driver)::upload($localFile, $remoteObject, []);
             // 获取实际访问 URL
             $url = ($this->driver)::getUrl($remoteObject, 0);
             // 结果
@@ -113,12 +122,16 @@ class OssUpload
     /**
      * 魔术方法，动态调用底层驱动的方法
      * @param string $method 方法名
-     * @param mixed $args 方法参数
+     * @param array $args 方法参数数组
      * @return mixed
      * @throws Exception
      */
-    public function __call(string $method, mixed ...$args): mixed
+    public function __call(string $method, array $args): mixed
     {
-        return ($this->driver)::$method(...$args);
+        $driver = $this->driver;
+        if (!method_exists($driver, $method)) {
+            throw new Exception('方法不存在: ' . $driver . '::' . $method);
+        }
+        return $driver::$method(...$args);
     }
 }

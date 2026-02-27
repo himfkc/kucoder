@@ -148,27 +148,39 @@ class ConfigController extends AdminBase
     }
 
     /**
-     * 编辑保存指定分组的配置
+     * 编辑保存指定插件的配置
      * @throws Exception
      */
     public function edit(): Response
     {
         $request = $this->request;
+        $plugin = $request->post('plugin');
         $groupId = $request->post('group_id');
         $configs = $request->post();
-        if (empty($groupId)) {
-            return $this->error('分组ID不能为空');
+
+        if (empty($plugin)) {
+            return $this->error('插件不能为空');
         }
-        // 移除group_id字段，保留配置数据
-        unset($configs['group_id']);
+
+        // 移除plugin和group_id字段，保留配置数据
+        unset($configs['plugin'], $configs['group_id']);
+
         if (empty($configs)) {
             return $this->success();
         }
+
         foreach ($configs as $name => $value) {
-            $config = Config::where('name', $name)
-                ->where('group_id', $groupId)
-                ->where('delete_time', null)
-                ->find();
+            // 构建查询条件：必须匹配 plugin，可选匹配 group_id
+            $query = Config::where('name', $name)
+                ->where('plugin', $plugin)
+                ->where('delete_time', null);
+
+            // 如果提供了 group_id，则同时匹配分组
+            if (!empty($groupId)) {
+                $query->where('group_id', $groupId);
+            }
+
+            $config = $query->find();
             if ($config) {
                 // 如果值是数组，进行JSON编码
                 if (is_array($value)) {
@@ -179,6 +191,7 @@ class ConfigController extends AdminBase
                 $config->save();
             }
         }
+
         // $this->edit_after($configs);
         // 清除缓存
         Cache::delete(KcConst::ADMIN_APP . ':config:configs');

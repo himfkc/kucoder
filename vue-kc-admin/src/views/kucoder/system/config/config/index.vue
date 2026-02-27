@@ -71,7 +71,7 @@
                </div>
 
                <el-form v-if="currentGroupConfig.items && currentGroupConfig.items.length > 0" ref="configFormRef"
-                  :model="formData" label-width="140px" class="config-form">
+                  :model="formData" label-width="200" class="config-form">
                   <el-form-item v-for="item in currentGroupConfig.items" :key="item.id" :label="item.title"
                      :prop="item.name">
                      <div class="form-item-content">
@@ -122,10 +122,12 @@
                                  :placeholder="item.placeholder || '请输入' + item.title" />
                            </template>
                            <template v-else-if="item.type === 'upload_img'">
-                              <ImageUpload v-model="formData[item.name]" :limit="1" :file-size="5" :data="{ plugin: activePlugin }" />
+                              <ImageUpload v-model="formData[item.name]" :limit="1" :file-size="5"
+                                 :data="{ plugin: activePlugin }" />
                            </template>
                            <template v-else-if="item.type === 'upload_file'">
-                              <FileUpload v-model="formData[item.name]" :limit="5" :file-size="50" text="点击上传" :data="{ plugin: activePlugin }" />
+                              <FileUpload v-model="formData[item.name]" :limit="5" :file-size="50" text="点击上传"
+                                 :data="{ plugin: activePlugin }" />
                            </template>
                         </div>
                         <el-button v-if="item.allow_del === 1" type="danger" circle size="small" class="delete-btn"
@@ -213,7 +215,7 @@
    </div>
 </template>
 
-<script setup name="Config">
+<script setup>
 import { getIndex, edit, refreshCache, add, deleteConfig } from "@/api/kucoder/system/config/config"
 import { Setting, QuestionFilled, Tools, Document, ChatDotRound, Upload, Lock, Monitor, Delete } from '@element-plus/icons-vue'
 import ConfigGroupVue from "@/views/kucoder/system/config/configGroup/index.vue"
@@ -500,7 +502,7 @@ async function confirmAddConfig() {
       }
 
       // 如果是下拉选择，解析data字段
-      if (['select','radio','checkbox'].includes(addForm.value.type) && addForm.value.dataText) {
+      if (['select', 'radio', 'checkbox'].includes(addForm.value.type) && addForm.value.dataText) {
          try {
             addForm.value.config_data = JSON.parse(addForm.value.dataText)
          } catch {
@@ -566,7 +568,7 @@ async function handleSaveGroup() {
             }
          })
       }
-      await edit(activeGroup.value, saveData)
+      await edit(activePlugin.value, activeGroup.value, saveData)
       proxy.$modal.msgSuccess('保存成功')
       if (newSiteName) {
          userStore.site_set.site_name = newSiteName
@@ -766,6 +768,7 @@ onMounted(() => {
 
                   .form-input-wrapper {
                      flex: 1;
+                     width: 500px;
                   }
 
                   .delete-btn {
