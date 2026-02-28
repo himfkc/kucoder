@@ -82,7 +82,7 @@ class KcIdentity
      */
     public static function getKeys(int $id, string $app, $type = ''): array
     {
-        $openssl_secret_key = config('plugin.kucoder.secret-key.openssl.secret_key') ?: '';
+        $openssl_secret_key = get_env('openssl_secret_key') ?: '';
         $opensslKey = base64_decode($openssl_secret_key);
         // kc_dump('opensslKey:', $opensslKey);
         if (!$opensslKey || strlen($opensslKey) !== 32) {

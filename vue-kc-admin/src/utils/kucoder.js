@@ -1,6 +1,7 @@
 import { isHttp, isEmpty } from "@/utils/validate"
 import assetsAvatar from '@/assets/images/avatar.png'
 import { ElLoading, ElMessage, ElMessageBox } from 'element-plus'
+import useUserStore from '@/store/modules/user'
 // import { adminBasePath } from "@/api/adminRouteBasePath";
 
 /**
@@ -95,6 +96,8 @@ export async function getLoginPath() {
 }
 
 export function imgUrl(img, domain = '', type = 'img') {
+    const userStore = useUserStore()
+    const file_domain = userStore.site_set.oss_domain || import.meta.env.VITE_APP_BASE_API
     if (type === 'avatar') {
         if (!isHttp(img)) {
             // 如果没有图片，使用默认头像
@@ -102,11 +105,11 @@ export function imgUrl(img, domain = '', type = 'img') {
                 return assetsAvatar
             }
             // 否则拼接路径
-            return domain ? join_path(domain, img) : join_path(import.meta.env.VITE_APP_BASE_API, img)
+            return domain ? join_path(domain, img) : join_path(file_domain, img)
         }
     } else {
         if (!isHttp(img)) {
-            img = (isEmpty(img)) ? '' : domain ? join_path(domain, img) : join_path(import.meta.env.VITE_APP_BASE_API, img)
+            img = (isEmpty(img)) ? '' : domain ? join_path(domain, img) : join_path(file_domain, img)
         }
     }
 

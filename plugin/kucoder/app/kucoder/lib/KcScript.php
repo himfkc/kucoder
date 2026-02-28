@@ -14,14 +14,15 @@ declare(strict_types=1);
 
 namespace kucoder\lib;
 
+use kucoder\traits\ResponseTrait;
 use Redis;
 use RedisException;
 use Throwable;
 use Exception;
-// use kucoder\lib\KcConfig;
 
 class KcScript
 {
+    use ResponseTrait;
     /**
      * @throws RedisException
      * @throws Exception
@@ -128,7 +129,8 @@ class KcScript
             curl_setopt_array($ch, $options);
             $res = curl_exec($ch);
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            // curl_close($ch);  curl_close() is deprecated since 8.5, as it has no effect since PHP 8.0
+            // curl_close() is deprecated since 8.5, as it has no effect since PHP 8.0
+            // curl_close($ch);
             if ($code !== 200 || $res === false) {
                 throw new Exception("获取失败，HTTP 代码: " . $res);
             }
@@ -142,6 +144,7 @@ class KcScript
             return $output;
         } catch (Throwable $t) {
             unlink($tempFile);
+            kc_dump('curl 失败：',(new self)->errorInfo($t));
             throw new Exception($t->getMessage());
         }
     }

@@ -69,7 +69,7 @@ class KcOpenssl
     public function __construct(private string $key = '', int $cipher = self::DEFAULT_CIPHER_OPTION)
     {
         if (empty($key)) {
-            $openssl_secret_key = config('plugin.kucoder.secret-key.openssl.secret_key') ?: '';
+            $openssl_secret_key = get_env('openssl_secret_key') ?: '';
             $opensslKey = base64_decode($openssl_secret_key);
             if (!$opensslKey || strlen($opensslKey) !== 32) {
                 $opensslKey = self::generateKey($cipher);

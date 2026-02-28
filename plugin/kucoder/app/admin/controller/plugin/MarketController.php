@@ -32,7 +32,7 @@ class MarketController
      */
     public function __construct()
     {
-        $this->httpUrl = config('plugin.kucoder.app.sys_url') . '/kapi/';
+        $this->httpUrl = getenv('KUCODER_API') . '/kapi/';
     }
 
     /**

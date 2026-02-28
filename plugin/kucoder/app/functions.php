@@ -179,13 +179,13 @@ if (!function_exists('delete_cache')) {
     }
 }
 
-if(!function_exists('delete_prefix_cache')){
+if (!function_exists('delete_prefix_cache')) {
     /**
      * @throws ReflectionException
      */
-    function delete_prefix_cache(string $prefix):void
+    function delete_prefix_cache(string $prefix): void
     {
-        if(!$prefix){
+        if (!$prefix) {
             throw new Exception('缓存前缀不存在,无法删除');
         }
         $redis = Cache::store('redis'); // 返回 \Redis 对象
@@ -302,34 +302,73 @@ if (!function_exists('config_in_db')) {
      */
     function config_in_db(?string $plugin = null, ?string $group = null, ?string $name = null, bool $simple = true): mixed
     {
-        $configs = Cache::remember(KcConst::ADMIN_APP . ':config:configs', function () {
-            return plugin\kucoder\app\admin\model\Config::select()->toArray();
-        }, config('plugin.kucoder.app.cache_expire_time'));
+        try {
+            $configs = Cache::remember(KcConst::ADMIN_APP . ':config:configs', function () {
+                return plugin\kucoder\app\admin\model\Config::select()->toArray();
+            }, get_env('cache_expire_time'));
 
-        if ($plugin) {
-            $configs = array_filter($configs, fn($item) => $item['plugin'] === $plugin);
-            if ($group) {
-                $groups = Cache::remember(KcConst::ADMIN_APP . ':config:groups', function () {
-                    return plugin\kucoder\app\admin\model\ConfigGroup::select()->toArray();
-                }, config('plugin.kucoder.app.cache_expire_time'));
-                $groupItems = array_values(array_filter($groups, fn($item) => $item['name'] === $group && $item['plugin'] === $plugin));
-                if (isset($groupItems[0])) {
-                    $group_id = $groupItems[0]['id'];
-                    $configs = array_filter($configs, fn($item) => $item['group_id'] === $group_id);
+            if ($plugin) {
+                $configs = array_filter($configs, fn($item) => $item['plugin'] === $plugin);
+                if ($group) {
+                    $groups = Cache::remember(KcConst::ADMIN_APP . ':config:groups', function () {
+                        return plugin\kucoder\app\admin\model\ConfigGroup::select()->toArray();
+                    }, get_env('cache_expire_time'));
+                    $groupItems = array_values(array_filter($groups, fn($item) => $item['name'] === $group && $item['plugin'] === $plugin));
+                    if (isset($groupItems[0])) {
+                        $group_id = $groupItems[0]['id'];
+                        $configs = array_filter($configs, fn($item) => $item['group_id'] === $group_id);
+                    }
                 }
-            }
-            if ($name) {
-                $configs = array_values(array_filter($configs, fn($item) => $item['name'] === $name));
-                kc_dump('name configs:', $configs);
-                if (isset($configs[0]) && isset($configs[0]['value'])) {
-                    return $configs[0]['value'];
-                } else {
-                    return null;
+                if ($name) {
+                    $configs = array_values(array_filter($configs, fn($item) => $item['name'] === $name));
+                    kc_dump('name configs:', $configs);
+                    if (isset($configs[0]) && isset($configs[0]['value'])) {
+                        return $configs[0]['value'];
+                    } else {
+                        return null;
+                    }
                 }
+                return $simple ? array_column($configs, 'value', 'name') : $configs;
             }
             return $simple ? array_column($configs, 'value', 'name') : $configs;
+        } catch (Throwable $e) {
+            throw new Exception('配置参数获取失败:' . $e->getMessage());
         }
-        return $simple ? array_column($configs, 'value', 'name') : $configs;
+    }
+}
+
+if (!function_exists('get_env')) {
+    /**
+     * @throws Exception
+     */
+    function get_env(?string $envKey = null, bool $strLower = true): string|int|bool|array
+    {
+        if($envKey){
+            $value = getenv(strtoupper($envKey));
+            return is_numeric($value) ? (int)$value : $value;
+        }
+        //读取.env文件
+        $envFile = base_path('.env');
+        $env = [];
+        if (!is_file($envFile)) {
+            throw new Exception('.env不存在');
+        }
+        $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($lines as $line) {
+            $line = trim($line);
+            // 跳过注释行
+            if (empty($line) || str_starts_with($line, '#')) {
+                continue;
+            }
+            // 解析 KEY=VALUE 格式
+            if (str_contains($line, '=')) {
+                list($key, $value) = explode('=', $line, 2);
+                $key = $strLower ? strtolower(trim($key)) : strtoupper(trim($key));
+                $value = trim($value);
+                $env[$key] = is_numeric($value) ? (int)$value : $value;
+            }
+        }
+        return $env;
     }
 }
 

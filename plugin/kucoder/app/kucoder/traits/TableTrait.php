@@ -69,7 +69,7 @@ trait TableTrait
             }*/
 
             return $data;
-        }, config('plugin.kucoder.app.cache_expire_time'));
+        }, get_env('cache_expire_time'));
     }
 
 }

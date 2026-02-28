@@ -109,7 +109,7 @@
 </template>
 
 <script setup>
-import { kcMsg, kcLoading, kcAlert} from '@/utils/kucoder'
+import { kcMsg, kcLoading, kcAlert } from '@/utils/kucoder'
 import { envCheck, getQrcode, verifyWxCode, install, initEnv } from '@/api/kucoder/system/install'
 import { HMR } from "@/utils/hmr"
 
@@ -118,10 +118,10 @@ const envCheckData = ref([])
 const envInited = ref(false)
 
 const init = async () => {
-    if (!await checkWxCode()){
+    if (!await checkWxCode()) {
         // kcMsg('校验码不正确')
         return;
-    } 
+    }
     await HMR.disable()
     const loading = kcLoading('正在初始化环境...请勿操作')
     initEnv(form.value)
@@ -164,7 +164,7 @@ const installSubmit = async () => {
             loading.close()
             kcAlert(getLoginPath(res.data.vue_admin_entry), '安装成功，后台登录地址如下',
                 { showClose: false, confirmButtonText: '点击跳转到登录页面' }
-            ).then(async () => { 
+            ).then(async () => {
                 await HMR.enable()
                 window.location.href = getLoginPath(res.data.vue_admin_entry)
             })
@@ -179,7 +179,7 @@ const installSubmit = async () => {
 
 function getLoginPath(adminBasePath) {
     const currentUrl = window.location.href
-    const loginUrl = currentUrl.replace('/admin/', adminBasePath).replace('install', 'login')
+    const loginUrl = currentUrl.replace('/admin', adminBasePath).replace('/install', '/login')
     return loginUrl
 }
 
@@ -193,7 +193,7 @@ const form = ref({
     db_prefix: 'kc_',
     redis_host: '127.0.0.1',
     redis_port: '6379',
-    redis_prefix:'kucoder:',
+    redis_prefix: 'kucoder:',
     redis_password: '',
     admin_username: '',
     admin_password: '',
@@ -256,8 +256,8 @@ watch(() => step.value, (val) => {
 })
 
 onMounted(async () => {
-    console.log('HMR状态：',await HMR.getStatus());
-    if(!await HMR.getStatus()){
+    console.log('HMR状态：', await HMR.getStatus());
+    if (!await HMR.getStatus()) {
         await HMR.enable()
     }
     envCheck().then(res => {

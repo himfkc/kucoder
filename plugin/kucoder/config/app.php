@@ -9,23 +9,15 @@ return [
     //允许跨域域名
     'allow_cors_domain' => 'localhost,127.0.0.1',
     //调试环境下允许所有跨域访问
-    'allow_cors_dev' => true,
-    //vue后台地址入口 默认/admin/ 后台访问方式：域名/vue部署子目录/vue后台地址入口
-    'vue_admin_entry' => '/kbr5iEvF/',
-    //jwt配置
-    'jwt' => [
-        //jwt加密密钥 系统自动生成
-        'secret_key' => 'FBKTs1W7qsAd9WmWyKB+EWPlS4DKnAQxdhmmZ75CZsg=',
-        //过期时间 默认3天
-        'expire' => 3600 * 24 * 3,
-    ],
+    'allow_cors_dev' => false,
     //成功响应状态码
     'success_code' => 1,
     //失败响应状态码
     'error_code' => 0,
-    //cache过期时间 24小时
-    'cache_expire_time' => 3600 * 24,
 
+    /**
+     * 上传选项
+     */
     //上传需要登录
     'upload_need_login' => true,
     //允许上传的文件类型
@@ -33,12 +25,6 @@ return [
         'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf', 'txt', 'mp3', 'mp4', 'avi', 'wmv', 'mkv', 'flv'],
     //允许上传的文件大小 50M
     'allow_upload_size' => 50 * 1024 * 1024,
-
-
-    //kucoder系统级api 勿修改
-    'sys_url' => 'https://api.kucoder.com',
-    // 'sys_url' => 'http://127.0.0.1:8788',
-    'sys_file_url' => '',
 
 
     /**

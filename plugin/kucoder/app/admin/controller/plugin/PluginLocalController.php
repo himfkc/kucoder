@@ -41,7 +41,7 @@ class PluginLocalController extends AdminBase
     public function __construct()
     {
         parent::__construct();
-        $this->httpUrl = config('plugin.kucoder.app.sys_url') . '/kapi/';
+        $this->httpUrl = getenv('KUCODER_API') . '/kapi/';
     }
 
     /**

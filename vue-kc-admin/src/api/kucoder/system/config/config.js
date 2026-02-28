@@ -17,7 +17,7 @@ export function refreshCache() {
   })
 }
 
-// 编辑保存指定分组的配置
+// 编辑保存指定插件的配置
 export function edit(plugin, groupId, data) {
   return request({
     url: basePath + '/system/config/config/edit',

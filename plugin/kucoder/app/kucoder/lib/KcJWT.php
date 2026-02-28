@@ -21,10 +21,14 @@ use kucoder\constants\KcError;
 
 class KcJWT
 {
+    /**
+     * @throws Exception
+     */
     public static function encode(array $data = []): string
     {
-        $secret_key = config('plugin.kucoder.app.jwt.secret_key');
-        $expire = config('plugin.kucoder.app.jwt.expire');
+        $secret_key = get_env('jwt_secret_key');
+        $expire = get_env('jwt_expire');
+        kc_dump('jwt expire 类型：',gettype($expire));
         $payload = [
             'iss' => 'https://kucoder.com',
             'aud' => 'https://kucoder.com',
@@ -44,7 +48,7 @@ class KcJWT
             throw new Exception('JWTToken为空');
         }
         try {
-            $secret_key = config('plugin.kucoder.app.jwt.secret_key');
+            $secret_key = get_env('jwt_secret_key');
             $decode = (array)JWT::decode($token, new key($secret_key, 'HS256'));
             return isset($decode['data']) ? (array)$decode['data'] : [];
         } catch (\Throwable $t) {

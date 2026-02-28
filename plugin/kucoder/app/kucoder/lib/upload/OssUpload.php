@@ -24,7 +24,7 @@ class OssUpload
     private string $driver = '';
 
     /**
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     public function __construct()
     {
@@ -98,7 +98,7 @@ class OssUpload
             // 获取插件名作为路径前缀
             $plugin = $request->post('plugin', $request->plugin);
             $saveDir = $request->post('saveDir', '');
-            // 添加路径前缀（去除开头的 /，避免 OSS 对象名称格式错误）
+            // 添加路径前缀
             if ($saveDir) {
                 $remoteObject = 'app/' . $plugin . '/upload/' . trim($saveDir, '/') . '/' . $remoteObject;
             } else {
@@ -113,7 +113,8 @@ class OssUpload
             // 结果
             $uploaded[$key] = [
                 'name' => $spl_file->getUploadName(),
-                'url' => $url['data']['url'] ?? $remoteObject,
+                // 'url' => $url['data']['url'] ?? $remoteObject,
+                'url' => $remoteObject,
             ];
         }
         return $uploaded;
@@ -129,9 +130,11 @@ class OssUpload
     public function __call(string $method, array $args): mixed
     {
         $driver = $this->driver;
+
         if (!method_exists($driver, $method)) {
             throw new Exception('方法不存在: ' . $driver . '::' . $method);
         }
+
         return $driver::$method(...$args);
     }
 }

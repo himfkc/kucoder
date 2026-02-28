@@ -336,16 +336,15 @@ class RBAC
         kc_dump('getLocalIp: ' . request()->getLocalIp());
         kc_dump('getRemoteIp: ' . request()->getRemoteIp());
         kc_dump('getRealIp: ' . request()->getRealIp());
-        $url = config('plugin.kucoder.app.sys_url') . '/kapi/site/right';
+        $url = getenv('KUCODER_API') . '/kapi/site/right';
         $result = $this->http_post($url, [
             'site_host' => request()->host(true),
-            // 'site_host' => 'x.y.taobao.com.cn',
-            'box_public_key' => config('plugin.kucoder.secret-key.sodium.box.public_key'),
+            'box_public_key' => get_env('sodium_box_public_key'),
         ], needLogin: false);
         if (isset($result['data']['res']) && $res = $result['data']['res']) {
             kc_dump('site right result:', $res);
-            $my_box_private_key = base64_decode(config('plugin.kucoder.secret-key.sodium.box.private_key'));
-            $kc_box_public_key = base64_decode(config('plugin.kucoder.secret-key.kc.box_public_key'));
+            $my_box_private_key = base64_decode(get_env('sodium_box_private_key'));
+            $kc_box_public_key = base64_decode(get_env('kc_box_public_key'));
             $kcBox = new KcBox($my_box_private_key);
             $decrypted = $kcBox->decrypt($res, $kc_box_public_key);
             kc_dump('解密后的decrypted : ' . $decrypted);

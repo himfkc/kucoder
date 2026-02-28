@@ -33,7 +33,7 @@ trait HttpTrait
             'Content-Type' => 'application/json',
             'Accept' => 'application/json, text/plain, */*',
         ],
-        'verify' => true,  //验证https证书
+        'verify' => true,  //验证https证书 $this->setHttpOptions(['verify'=>false]);
     ];
     private array $downOptions = [
         //保存的文件地址 必填
@@ -67,11 +67,8 @@ trait HttpTrait
             $cookie ? $this->cookieHandle($data) : $this->tokenHandle($data);
         }
         $this->httpsVerify();
-        // kc_dump('get this->options:', $this->options);
         try {
-            kc_dump('准备发送get请求: ',$uri, $data);
             $res = $this->http()->get($uri, $this->options);
-            kc_dump('http_get res:', $res);
         } catch (Throwable $t) {
             throw new Exception(
                 $this->errorPrefix['msg'] . 'get_' . devMsg($t->getMessage()),
@@ -91,11 +88,10 @@ trait HttpTrait
         }
         $this->httpsVerify();
         $data['site_host'] = request()->host(true);
-        // $data['site_host'] = 'x.y.taobao.com.cn';
         if ($data) {
             $this->options['json'] = $data;
         }
-        kc_dump('post this->options:', $this->options);
+        // kc_dump('post this->options:', $this->options);
         try {
             $res = $this->http()->post($uri, $this->options);
         } catch (Throwable $t) {

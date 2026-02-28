@@ -20,6 +20,7 @@ use plugin\kucoder\app\admin\model\ConfigGroup;
 use kucoder\constants\KcConst;
 use kucoder\controller\AdminBase;
 use kucoder\lib\KcHelper;
+use Psr\SimpleCache\InvalidArgumentException;
 use support\Response;
 use support\think\Cache;
 
@@ -41,7 +42,7 @@ class ConfigController extends AdminBase
         //所有参数配置项
         $configs = Cache::remember(KcConst::ADMIN_APP .':config:configs', function () use ($model) {
             return $model->select()->toArray();
-        }, config('plugin.kucoder.app.cache_expire_time'));
+        }, get_env('cache_expire_time'));
         //配置参数所属的所有插件
         $plugins = array_values(array_unique(array_column($configs, 'plugin')));
         $systemPlugins = $this->getSystemPlugins();
@@ -61,7 +62,7 @@ class ConfigController extends AdminBase
         $configGroupClass = ConfigGroup::class;
         $groups = Cache::remember(KcConst::ADMIN_APP.':config:groups', function () use ($configGroupClass) {
             return (new $configGroupClass)->select()->toArray();
-        }, config('plugin.kucoder.app.cache_expire_time'));
+        }, get_env('cache_expire_time'));
         $data = compact('configs', 'plugins', 'groups');
         return $this->success('获取成功', $data);
     }
@@ -150,6 +151,7 @@ class ConfigController extends AdminBase
     /**
      * 编辑保存指定插件的配置
      * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function edit(): Response
     {
@@ -192,38 +194,9 @@ class ConfigController extends AdminBase
             }
         }
 
-        // $this->edit_after($configs);
         // 清除缓存
         Cache::delete(KcConst::ADMIN_APP . ':config:configs');
         return $this->success('保存成功');
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function edit_after(array $data):void
-    {
-        kc_dump('edit_after：',$data);
-        if(isset($data['vue_admin_entry']) && $data['vue_admin_entry']){
-            $vue_admin_entry = preg_replace('/\/g/','',config_app('kucoder', 'vue_admin_entry'));
-            kc_dump('vue_admin_entry：', $vue_admin_entry,$data['vue_admin_entry']);
-            if($vue_admin_entry !== $data['vue_admin_entry']){
-                $new_entry_front = '/'.$data['vue_admin_entry'];
-                $new_entry_back = '/'.$data['vue_admin_entry'].'/';
-                //更新前端入口
-                $adminRouteBasePath = base_path('vue-kc-admin/src/api/adminRouteBasePath.js');
-                $content = file_get_contents($adminRouteBasePath);
-                // 提取当前值 $1返回第一个捕获组的内容 将整个文件替换为'/admin'
-                // $path = preg_replace('/.*export\s+const\s+adminBasePath\s*=\s*[\'"]([^\'"]+)[\'"].*/', '$1', $content);
-                // 将content中的'/admin'替换为新值
-                // $content = str_replace($path, $new_entry_front, $content);
-                // 用法2：替换值
-                $content = preg_replace('/(export\s+const\s+adminBasePath\s*=\s*[\'"])([^\'"]+)([\'"])/', "$1{$new_entry_front}$3", $content);
-                file_put_contents($adminRouteBasePath, $content);
-                //更新后端入口
-                KcHelper::setConfig(base_path('plugin/kucoder/config/app.php'),'vue_admin_entry', $new_entry_back);
-            }
-        }
     }
 
     /**

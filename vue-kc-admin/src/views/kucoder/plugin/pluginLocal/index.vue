@@ -253,6 +253,7 @@ const kcLoginSuccess = (data) => {
   getList();
 }
 const checkLoginKc = () => {
+  // 是否登录kucoder
   if (!userStore.kc.user.token) {
     kcLoginRef.value.kcLoginMesBox()
     return false
@@ -336,19 +337,15 @@ const qrcode = ref('')
 const wx_code = ref('')
 function installPlugin(row) {
   if (!checkLoginKc()) {
-    console.log('你还未登录')
     return
   }
   installRow.value = cloneDeep(row)
-  // 本地调试 暂时注释掉 直接安装
-  installSubmit()
-  /* getQrcode().then(res => {
+  getQrcode().then(res => {
     console.log('weixin', res)
     qrcode.value = res.data.qrcode
   })
-  weixinDialog.value = true */
+  weixinDialog.value = true
 }
-
 async function checkWxCode() {
   if (!wx_code.value || !/^[0-9]{6}$/.test(wx_code.value)) {
     kcMsg('校验码不正确')
@@ -364,13 +361,11 @@ async function checkWxCode() {
       return false
     })
 }
-
 async function installSubmit() {
-  // 本地调试 暂时注释掉
-  /* const isCheckedWxCode = await checkWxCode()
+  const isCheckedWxCode = await checkWxCode()
   if (!isCheckedWxCode) {
     return
-  } */
+  }
   await HMR.disable()
   const loading = kcLoading('正在安装中...请勿操作 执行步骤可在后端控制台查看')
   install(installRow.value, { timeout: 0, headers: { showErrMsg: false } })

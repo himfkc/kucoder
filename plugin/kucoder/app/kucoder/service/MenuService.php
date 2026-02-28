@@ -137,8 +137,9 @@ EOF;
     {
         $recursionData = [];
         $selfData = [];
-        //vue后台地址入口 默认/admin/
-        $adminBasePath = config('plugin.kucoder.app.vue_admin_entry', '/admin/');
+        //vue后台地址入口 默认/admin
+        $vue_admin_entry = getenv('VUE_ADMIN_ENTRY');
+        $adminBasePath = str_ends_with($vue_admin_entry,'/') ? $vue_admin_entry : $vue_admin_entry.'/';
         foreach ($data as $k => $v) {
             $r = [];
             if ($v['type'] !== 'button') {

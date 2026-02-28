@@ -16,6 +16,7 @@ namespace plugin\kucoder\app\admin\controller\plugin;
 
 use Exception;
 use kucoder\controller\AdminBase;
+use kucoder\lib\KcHelper;
 use kucoder\lib\KcIdentity;
 use kucoder\traits\HttpTrait;
 use support\Response;
@@ -31,7 +32,7 @@ class KcLoginController extends AdminBase
     public function __construct()
     {
         parent::__construct();
-        $this->httpUrl = config('plugin.kucoder.app.sys_url') . '/app/member/api/';
+        $this->httpUrl = getenv('KUCODER_API') . '/app/member/api/';
     }
 
     /**
@@ -44,6 +45,7 @@ class KcLoginController extends AdminBase
         $uri = $this->httpUrl . ($type === 'register' ? 'login/register' : 'login/login');
         $data = $this->request->post();
         $data['site_host'] = request()->host(true);
+        $data['source'] = 'kucoder_admin';
         $res = $this->http_post($uri, $data, allResponse: true, needLogin: false);
         if ($res->hasHeader('Set-Cookie')) {
             $setCookie = $res->getHeader('Set-Cookie');
@@ -56,6 +58,21 @@ class KcLoginController extends AdminBase
             $nickname = $this->auth->nickname;
             unset($body['data']['site_set']);
             Cache::set($this->app . ":kc_user_{$nickname}", $body['data']);
+            //kc_public_key
+            if(isset($body['data']['kc_public_key'])){
+                $kc_box_public_key = $body['data']['kc_public_key']['kc_box_public_key'];
+                $kc_sign_public_key = $body['data']['kc_public_key']['kc_sign_public_key'];
+                if(get_env('kc_box_public_key') !== $kc_box_public_key){
+                    if($kc_box_public_key && $kc_sign_public_key){
+                        $checkBox = strlen($kc_box_public_key) === SODIUM_CRYPTO_BOX_PUBLICKEYBYTES;
+                        $checkSign = strlen($kc_sign_public_key) === SODIUM_CRYPTO_SIGN_PUBLICKEYBYTES;
+                        if ($checkBox && $checkSign){
+                            kc_dump('更新kucoder_public_key');
+                            KcHelper::setEnv($body['data']['kc_public_key']);
+                        }
+                    }
+                }
+            }
             return $this->ok('登录成功', $body);
         }
         return $this->error($body['msg']);

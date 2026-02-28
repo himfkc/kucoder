@@ -40,10 +40,10 @@ class KcSecretBox
     public static function encrypt(string $message, string $key = ''): string
     {
         if (empty($key)) {
-            $key = config('plugin.kucoder.kucoder.sodium.secretbox_key');
+            $key = get_env('sodium_secretbox_key');
             if (empty($key)) {
                 $key = self::generateKey();
-                KcConfig::set(base_path('plugin/kucoder/config/app.php'), 'sodium.secretbox_key', $key);
+                // KcConfig::set(base_path('plugin/kucoder/config/app.php'), 'sodium.secretbox_key', $key);
             }
         }
         try {
@@ -67,7 +67,7 @@ class KcSecretBox
     {
         try {
             if (empty($key)) {
-                $key = config('plugin.kucoder.kucoder.sodium.secretbox_key');
+                $key = get_env('sodium_secretbox_key');
                 if (empty($key)) {
                     throw new Exception('sodium对称加密密钥未配置');
                 }

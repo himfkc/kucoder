@@ -236,7 +236,7 @@ class KcInstall
             'devDependencies' => $package['devDependencies'],
         ];
         $rely = json_encode($rely, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-        $uri = config('plugin.kucoder.app.sys_url') . '/kapi/pins/' . (in_array($type, ['install', 'update']) ? 'installRely' : 'uninstallRely');
+        $uri = getenv('KUCODER_API') . '/kapi/pins/' . (in_array($type, ['install', 'update']) ? 'installRely' : 'uninstallRely');
         $vuePath = kc_path(base_path(), KcConst::VUE_KC_ADMIN);
         $data = ['rely' => $rely, 'basePath' => base_path(), 'vuePath' => $vuePath];
         if ($type === 'update') {

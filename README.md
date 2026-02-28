@@ -38,7 +38,7 @@
 
 ## 📚 简介
 
-**Kucoder** 是一款基于Webman高性能PHP框架开发的快速开发系统，基于Workerman + Webman + PHP8 + Vue3 + ElementPlus + JavaScript(非ts)，遵循Apache-2.0开源协议，采用插件化架构设计，内置完整的管理后台，开箱即用，为开发者提供高性能、安全、现代化的 Web 开发体验。
+**Kucoder** 是一款基于Webman高性能PHP框架开发的快速开发系统，基于Workerman + Webman + PHP8 + Vue3 + ElementPlus + JavaScript(非ts)，内置完善的php后端系统与vue后台管理系统，遵循Apache-2.0开源协议，采用插件化架构设计，开箱即用，支持开发工具类库，独立系统，SASS系统，AI及物联网应用，为开发者提供高性能、安全、现代化的开发体验。
 - 官网：[https://kucoder.com](https://kucoder.com)
 - 文档：[https://doc.kucoder.com](https://doc.kucoder.com)
 ---
@@ -132,7 +132,7 @@
 请参考📚 kucoder文档：[https://doc.kucoder.com](https://doc.kucoder.com)
 
 #### 🚫使用限制
-🚫Kucoder仅限**中国大陆内已备案网站**安装使用(本地调试环境不限制)
+🚫Kucoder仅限**中国大陆内已备案网站**安装使用
 
 ---
 

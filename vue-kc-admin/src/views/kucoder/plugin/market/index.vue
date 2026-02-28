@@ -356,18 +356,9 @@ const marketFileDomain = ref('')
 const common_year = ref(1)
 const advance_year = ref(5)
 const plugin_pay_types = ref([])
-// 查询菜单列表
+// 查询插件列表
 const getList = () => {
-    /* index().then(res => {
-        console.log('插件市场列表', res)
-        pluginList.value = res.data.data
-        enumFieldData.value = handleEnumField(res.enumFieldData || {})
-        // 插件市场文件域名
-        marketFileDomain.value = res.data.sys_file_url ? res.data.sys_file_url : userStore.site_set.sys_file_url
-    }).catch(err => {
-
-    }) */
-    const url = join_path(userStore.site_set.sys_url + '/kapi/market/index')
+    const url = join_path(userStore.site_set.kucoder_api + '/kapi/market/index')
     kcFetch.get(url)
         .then(({ data, msg, code }) => {
             console.log('插件市场列表', data, msg, code)
@@ -378,7 +369,7 @@ const getList = () => {
             pluginList.value = data.list
             enumFieldData.value = handleEnumField(data.enumFieldData || {})
             // 插件市场文件域名
-            marketFileDomain.value = data.setting.sys_file_url ? data.setting.sys_file_url : userStore.site_set.sys_file_url
+            marketFileDomain.value = data.setting.kc_file_domain
             common_year.value = data.setting.common_authorization_year
             advance_year.value = data.setting.advance_authorization_year
             plugin_pay_types.value = data.setting.plugin_pay_types

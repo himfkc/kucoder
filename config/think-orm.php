@@ -14,7 +14,7 @@ return [
             // 数据库密码
             'password' => getenv('DB_PASSWORD'),
             // 数据库连接端口
-            'hostport' => getenv('DB_PORT'),
+            'hostport' => (int)getenv('DB_PORT'),
             // 数据库连接参数
             'params' => [
                 // 连接超时3秒

@@ -69,7 +69,7 @@ const usePermissionStore = defineStore(
                 resolve(rewriteRoutes)
               })
               .catch(({ msg, code }) => {
-                console.warn('获取路由失败', msg, code)
+                console.warning('获取路由失败', msg, code)
                 // ElMessage.error(msg)
                 reject({ msg, code })
               }

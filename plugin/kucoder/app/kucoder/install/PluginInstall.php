@@ -231,7 +231,7 @@ class PluginInstall
         if (is_file($dependencies_file)) {
             $rely = file_get_contents($dependencies_file);
             $instance = new self();
-            $uri = config('plugin.kucoder.app.sys_url') . '/kapi/pins/' . (in_array($type, ['install', 'update']) ? 'installRely' : 'uninstallRely');
+            $uri = getenv('KUCODER_API') . '/kapi/pins/' . (in_array($type, ['install', 'update']) ? 'installRely' : 'uninstallRely');
             $vuePath = kc_path(base_path(), KcConst::VUE_KC_ADMIN);
             $cookie = KcIdentity::getCookie($uri, AdminAuth::getInstance()->getId(), 'admin');
             $res = $instance->http_post($uri, ['rely' => $rely, 'basePath' => base_path(), 'vuePath' => $vuePath,'cookie' => $cookie]);

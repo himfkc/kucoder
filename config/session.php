@@ -33,11 +33,11 @@ return [
             'save_path' => runtime_path() . '/sessions',
         ],
         'redis' => [
-            'host' => getenv('REDIS_HOST'),
-            'port' => (int)getenv('REDIS_PORT'),
+            'host' => getenv('REDIS_HOST') ?: '127.0.0.1',
+            'port' => (int)getenv('REDIS_PORT') ?: 6379,
             'auth' => getenv('REDIS_PASSWORD'),
             'timeout' => 2,
-            'database' => getenv('REDIS_DATABASE'),
+            'database' => (int)getenv('REDIS_DATABASE'),
             'prefix' => getenv('REDIS_PREFIX') . 'redis_session_',
         ],
         'redis_cluster' => [
@@ -50,7 +50,7 @@ return [
     // 存储session_id的cookie名
     'session_name' => 'PHPSID',
     // 是否自动刷新session，默认关闭
-    'auto_update_timestamp' => true,
+    'auto_update_timestamp' => false,
     // session过期时间
     'lifetime' => 7 * 24 * 60 * 60,
     // 存储session_id的cookie过期时间

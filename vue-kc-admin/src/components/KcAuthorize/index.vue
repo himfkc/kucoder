@@ -87,7 +87,7 @@ const submitkcAuthorize = () => {
     console.log('参数验证结果', valid)
     if (valid) {
       console.log('参数验证通过', valid)
-      const url = join_path(userStore.site_set.sys_url + '/kapi/site/authorize')
+      const url = join_path(userStore.site_set.kucoder_api + '/kapi/site/authorize')
       kcFetch.post(url, { data: kcAuthorizeForm.value })
         .then(({ data, msg, code }) => {
           console.log('授权结果', data, msg, code)

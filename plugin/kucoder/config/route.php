@@ -50,6 +50,8 @@ Route::any('/kcadmin/{dir}/{controller}/{action}',
 Route::group('/kucoder', function () {
     //上传接口
     Route::any('/upload', [kucoder\controller\UploadController::class, 'upload']);
+    //测试接口
+    Route::any('/test', [kucoder\controller\TestController::class, 'index']);
 });
 
 // 处理/app/kucoder/kucoder/controller/action的请求
@@ -68,7 +70,7 @@ Route::any('/app/kucoder/kucoder/{controller}/{action}', function (Request $requ
 
 //当路由不存在时返回一个json数据，这在webman作为api接口时非常实用
 Route::fallback(function () {
-    kc_dump('kucoder路由不存在:'.request()->path().'  '.request()->uri());
+    kc_dump('kucoder路由不存在:'.request()->path());
     // kc_dump('注册的所有路由',Route::getRoutes());
     return json(['code' => 404, 'msg' => '404：页面不存在!']);
 });

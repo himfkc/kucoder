@@ -16,6 +16,7 @@ namespace plugin\kucoder\app\admin\controller;
 
 use kucoder\controller\AdminBase;
 use kucoder\lib\Captcha;
+use kucoder\lib\KcHelper;
 use kucoder\lib\KcIdentity;
 use kucoder\service\LoginLogService;
 use kucoder\service\MenuService;
@@ -81,11 +82,11 @@ class LoginController extends AdminBase
             'logo' => config_in_db('kucoder',null,'site_logo'),
             'site_name' => config_in_db('kucoder',null,'site_name') ?: 'Kucoder系统后台',
             // 'upload_path' => config('plugin.kucoder.app.upload_path'),  //上传接口默认/kucoder/upload
-            'sys_url' => config('plugin.kucoder.app.sys_url'),
-            'sys_file_url' => config('plugin.kucoder.app.sys_file_url') ?: config('plugin.kucoder.app.sys_url'),
+            'kucoder_api' => getenv('KUCODER_API'),
+            'oss_domain' => KcHelper::getOssDomain(),
         ];
         //是否已登录kucoder
-        $openssl_secret_key = config('plugin.kucoder.secret-key.openssl.secret_key') ?: '';
+        $openssl_secret_key = get_env('openssl_secret_key') ?: '';
         $opensslKey = base64_decode($openssl_secret_key);
         if ($opensslKey && strlen($opensslKey) === 32) {
             if (KcIdentity::has($cd['user_id'], $this->app)) {

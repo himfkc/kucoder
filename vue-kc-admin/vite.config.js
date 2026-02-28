@@ -11,7 +11,7 @@ export default defineConfig(({ mode, command }) => {
 	// 参数1: 当前模式 (development, production 等)
 	// 参数2: 项目根目录 (process.cwd())
   const env = loadEnv(mode, process.cwd())
-  const { VITE_APP_BASE_API, VITE_DEPLOY_DIR, VITE_HMR, VITE_DEV_PROXY } = env
+  const { VITE_APP_BASE_API, VITE_DEPLOY_DIR, VITE_HMR, VITE_DEV_PROXY,VITE_DEV_PORT } = env
   const isHMREnabled = VITE_HMR !== 'false'
   return {
     // 部署生产环境和开发环境下的URL。
@@ -63,7 +63,7 @@ export default defineConfig(({ mode, command }) => {
       // 指定服务器应该监听哪个 IP 地址。 如果将此设置为 0.0.0.0 或者 true 将监听所有地址，包括局域网和公网地址。
       host: true,
       // 指定开发服务器端口。注意：如果端口已经被使用，Vite 会自动尝试下一个可用的端口，所以这可能不是开发服务器最终监听的实际端口。
-      port: 9527,
+      port: VITE_DEV_PORT,
       //开发服务器启动时，自动在浏览器中打开应用程序。如果为真，将会打开默认浏览器。
       open: false,
       // Vite允许响应的主机名。 默认情况下，允许 localhost 及其下的所有 .localhost 域名和所有 IP 地址。 使用 HTTPS 时，将跳过此检查。

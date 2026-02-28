@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `__prefix__ku_config` (
     `weigh` int(11) NOT NULL DEFAULT '0' COMMENT '权重',
     `delete_time` datetime DEFAULT NULL COMMENT '软删除时间',
     PRIMARY KEY (`id`) USING BTREE
-    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='系统参数配置表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='系统参数配置表';
 
 INSERT INTO `__prefix__ku_config` (`group_id`, `plugin`, `name`, `title`, `tip`, `type`, `value`, `config_data`, `is_secret`, `validate`, `extend`, `allow_del`, `hide`, `weigh`, `delete_time`) VALUES
 ( 1, 'kucoder', 'site_name', '系统名称', '', 'input', 'kucoder系统后台', NULL, 0, 'required', '', 0, 0, 99, NULL),
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `__prefix__ku_config_group` (
   `plugin` varchar(30) NOT NULL DEFAULT '' COMMENT '分组所属插件',
   `delete_time` datetime DEFAULT NULL COMMENT '软删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='系统参数分组表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='系统参数分组表';
 
 INSERT INTO `__prefix__ku_config_group` (`id`, `title`, `name`, `icon`, `plugin`, `delete_time`) VALUES
   (1, '基础配置', 'base', '', 'kucoder', NULL),
@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `__prefix__ku_dept` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`dept_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='后台用户部门表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='后台用户部门表';
 
 
 -- 表__prefix__ku_log 结构
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `__prefix__ku_log` (
   KEY `idx_sys_oper_log_bt` (`action`) USING BTREE,
   KEY `idx_sys_oper_log_s` (`status`) USING BTREE,
   KEY `idx_sys_oper_log_ot` (`create_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='操作日志表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='操作日志表';
 
 
 -- 表__prefix__ku_log_login 结构
@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `__prefix__ku_log_login` (
   PRIMARY KEY (`id`) USING BTREE,
   KEY `idx_sys_oper_log_s` (`status`) USING BTREE,
   KEY `idx_sys_oper_log_ot` (`create_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='登录日志表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='登录日志表';
 
 
 -- 表__prefix__ku_member 结构
@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `__prefix__ku_member` (
   PRIMARY KEY (`m_id`) USING BTREE,
   UNIQUE KEY `username` (`username`) USING BTREE,
   KEY `mobile` (`mobile`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='系统会员表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='系统会员表';
 
 
 -- 表__prefix__ku_menu 结构
@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `__prefix__ku_menu` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='后台菜单权限表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='后台菜单权限表';
 
 
 -- 表__prefix__ku_plugin_local 结构
@@ -198,7 +198,7 @@ CREATE TABLE IF NOT EXISTS `__prefix__ku_plugin_local` (
   `update_time` datetime NOT NULL COMMENT '更新时间',
   `delete_time` datetime DEFAULT NULL COMMENT '软删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='本地插件表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='本地插件表';
 
 
 -- 表__prefix__ku_role 结构
@@ -218,7 +218,7 @@ CREATE TABLE IF NOT EXISTS `__prefix__ku_role` (
     `update_time` datetime DEFAULT NULL COMMENT '更新时间',
     `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
     PRIMARY KEY (`role_id`) USING BTREE
-    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='后台用户角色表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='后台用户角色表';
 
 
 -- 表__prefix__ku_user 结构
@@ -252,4 +252,4 @@ CREATE TABLE IF NOT EXISTS `__prefix__ku_user` (
     UNIQUE KEY `username` (`username`) USING BTREE,
     UNIQUE KEY `email` (`email`) USING BTREE,
     UNIQUE KEY `mobile` (`mobile`) USING BTREE
-    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='后台用户表';
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='后台用户表';
