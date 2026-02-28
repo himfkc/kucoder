@@ -23,7 +23,7 @@ use support\Response;
  */
 class LoginLogController extends AdminBase
 {
-    protected string $modelClass = "\\plugin\\kucoder\\app\\kucoder\\model\\LoginLog";
+    protected string $modelClass = LoginLog::class;
     protected array $allowAccessActions = ['index', 'delete'];
 
     // 默认排序：按创建时间倒序

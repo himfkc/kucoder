@@ -15,23 +15,21 @@ const usePermissionStore = defineStore(
   'permission',
   {
     state: () => ({
-      source_routes: [],
-      btns: [],
-      roleMenus: [],
-
-      routes: [],
-      addRoutes: [],
-      defaultRoutes: [],
-      topbarRouters: [],
-      sidebarRouters: []
+      btns: [],       //按钮鉴权
+      roleMenus: [],  //角色管理的菜单权限
+      source_routes: [], // 原始数据 后端返回的JSON对象，未处理
+      routes: [],   // Vue Router主路由 处理后的数据  经过filterAsyncRouter处理后的路由，包含真正的Vue组件
+      topbarRouters: [],  // 顶部导航
+      sidebarRouters: []  // 侧边栏 + 顶部搜索 菜单
     }),
+    getters: {
+      btnsSet(state) {
+        return new Set(state.btns)
+      }
+    },
     actions: {
       setRoutes(routes) {
-        this.addRoutes = routes
         this.routes = constantRoutes.concat(routes)
-      },
-      setDefaultRoutes(routes) {
-        this.defaultRoutes = constantRoutes.concat(routes)
       },
       setTopbarRoutes(routes) {
         this.topbarRouters = routes
@@ -41,6 +39,7 @@ const usePermissionStore = defineStore(
       },
       generateRoutes() {
         return new Promise((resolve, reject) => {
+          
           if (!this.routes.length) {
             console.log('没有路由了，重新请求路由数据')
             // 向后端请求路由数据
@@ -50,21 +49,22 @@ const usePermissionStore = defineStore(
                 this.btns = res.btns
                 this.roleMenus = res.roleMenus
 
-                const sdata = JSON.parse(JSON.stringify(res.routes))
                 const rdata = JSON.parse(JSON.stringify(res.routes))
-                const defaultData = JSON.parse(JSON.stringify(res.routes))
+                const sdata = JSON.parse(JSON.stringify(res.routes))
 
                 const sidebarRoutes = filterAsyncRouter(sdata)
+                // rdata 被处理后变成 rewriteRoutes(会调用 filterChildren 扁平化子路由)
                 const rewriteRoutes = filterAsyncRouter(rdata, false, true)
-                const defaultRoutes = filterAsyncRouter(defaultData)
 
-                const asyncRoutes = filterDynamicRoutes(dynamicRoutes)
-                asyncRoutes.forEach(route => { router.addRoute(route) })
+                /* const asyncRoutes = filterDynamicRoutes(dynamicRoutes)
+                asyncRoutes.forEach(route => { router.addRoute(route) }) */
 
+                // Vue Router 主路由 处理后的数据  经过 filterAsyncRouter 处理后的路由，包含真正的 Vue 组件
                 this.setRoutes(rewriteRoutes)
+                // 侧边栏 + 顶部搜索 菜单
                 this.setSidebarRouters(constantRoutes.concat(sidebarRoutes))
-                this.setDefaultRoutes(sidebarRoutes)
-                this.setTopbarRoutes(defaultRoutes)
+                // 顶部导航
+                this.setTopbarRoutes(sidebarRoutes)
 
                 resolve(rewriteRoutes)
               })
@@ -77,21 +77,18 @@ const usePermissionStore = defineStore(
           } else {
             console.log('已经有路由了，直接返回', this.source_routes)
             // 如果已经有路由了，直接返回
-            const sdata = JSON.parse(JSON.stringify(this.source_routes))
             const rdata = JSON.parse(JSON.stringify(this.source_routes))
-            const defaultData = JSON.parse(JSON.stringify(this.source_routes))
+            const sdata = JSON.parse(JSON.stringify(this.source_routes))
 
             const sidebarRoutes = filterAsyncRouter(sdata)
             const rewriteRoutes = filterAsyncRouter(rdata, false, true)
-            const defaultRoutes = filterAsyncRouter(defaultData)
 
-            const asyncRoutes = filterDynamicRoutes(dynamicRoutes)
-            asyncRoutes.forEach(route => { router.addRoute(route) })
+            /* const asyncRoutes = filterDynamicRoutes(dynamicRoutes)
+            asyncRoutes.forEach(route => { router.addRoute(route) }) */
 
             this.setRoutes(rewriteRoutes)
             this.setSidebarRouters(constantRoutes.concat(sidebarRoutes))
-            this.setDefaultRoutes(sidebarRoutes)
-            this.setTopbarRoutes(defaultRoutes)
+            this.setTopbarRoutes(sidebarRoutes)
             resolve(rewriteRoutes)
           }
         })
@@ -145,7 +142,7 @@ function filterChildren(childrenMap, lastRouter = false) {
 }
 
 // 动态路由遍历，验证是否具备权限
-export function filterDynamicRoutes(routes) {
+/* export function filterDynamicRoutes(routes) {
   const res = []
   routes.forEach(route => {
     if (route.permissions) {
@@ -159,7 +156,7 @@ export function filterDynamicRoutes(routes) {
     }
   })
   return res
-}
+} */
 
 export const loadView = (view) => {
   let res

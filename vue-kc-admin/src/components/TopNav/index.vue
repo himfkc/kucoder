@@ -1,31 +1,22 @@
 <template>
-  <el-menu
-    :default-active="activeMenu"
-    mode="horizontal"
-    @select="handleSelect"
-    :ellipsis="false"
-  >
+  <el-menu :default-active="activeMenu" mode="horizontal" @select="handleSelect" :ellipsis="false">
     <template v-for="(item, index) in topMenus">
-      <el-menu-item :style="{'--theme': theme}" :index="item.path" :key="index" v-if="index < visibleNumber">
-        <svg-icon
+      <el-menu-item :style="{ '--theme': theme }" :index="item.path" :key="index" v-if="index < visibleNumber">
+        <!-- <svg-icon
         v-if="item.meta && item.meta.icon && item.meta.icon !== '#'"
-        :icon-class="item.meta.icon"/>
+        :icon-class="item.meta.icon"/> -->
+        <kc-icon :icon="item.meta.icon" v-if="item.meta && item.meta.icon && item.meta.icon !== '#'"></kc-icon>
         {{ item.meta.title }}
       </el-menu-item>
     </template>
 
     <!-- 顶部菜单超出数量折叠 -->
-    <el-sub-menu :style="{'--theme': theme}" index="more" v-if="topMenus.length > visibleNumber">
+    <el-sub-menu :style="{ '--theme': theme }" index="more" v-if="topMenus.length > visibleNumber">
       <template #title>更多菜单</template>
       <template v-for="(item, index) in topMenus">
-        <el-menu-item
-          :index="item.path"
-          :key="index"
-          v-if="index >= visibleNumber">
-        <svg-icon
-          v-if="item.meta && item.meta.icon && item.meta.icon !== '#'"
-          :icon-class="item.meta.icon"/>
-        {{ item.meta.title }}
+        <el-menu-item :index="item.path" :key="index" v-if="index >= visibleNumber">
+          <svg-icon v-if="item.meta && item.meta.icon && item.meta.icon !== '#'" :icon-class="item.meta.icon" />
+          {{ item.meta.title }}
         </el-menu-item>
       </template>
     </el-sub-menu>
@@ -64,9 +55,9 @@ const topMenus = computed(() => {
     if (menu.hidden !== true) {
       // 兼容顶部栏一级菜单内部跳转
       if (menu.path === '/' && menu.children) {
-          topMenus.push(menu.children[0])
+        topMenus.push(menu.children[0])
       } else {
-          topMenus.push(menu)
+        topMenus.push(menu)
       }
     }
   })
@@ -79,10 +70,10 @@ const childrenMenus = computed(() => {
   routers.value.map((router) => {
     for (let item in router.children) {
       if (router.children[item].parentPath === undefined) {
-        if(router.path === "/") {
+        if (router.path === "/") {
           router.children[item].path = "/" + router.children[item].path
         } else {
-          if(!isHttp(router.children[item].path)) {
+          if (!isHttp(router.children[item].path)) {
             router.children[item].path = router.path + "/" + router.children[item].path
           }
         }
@@ -104,7 +95,7 @@ const activeMenu = computed(() => {
       activePath = "/" + tmpPath.substring(0, tmpPath.indexOf("/"))
       appStore.toggleSideBarHide(false)
     }
-  } else if(!route.children) {
+  } else if (!route.children) {
     activePath = path
     appStore.toggleSideBarHide(true)
   }
@@ -149,7 +140,7 @@ function activeRoutes(key) {
       }
     })
   }
-  if(routes.length > 0) {
+  if (routes.length > 0) {
     permissionStore.setSidebarRouters(routes)
   } else {
     appStore.toggleSideBarHide(true)
@@ -171,22 +162,24 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-.topmenu-container.el-menu--horizontal > .el-menu-item {
+.topmenu-container.el-menu--horizontal>.el-menu-item {
   float: left;
   height: 50px !important;
   line-height: 50px !important;
-  color: #999093 !important;
+  color: #515252 !important;
+  // font-weight: bold;
   padding: 0 5px !important;
   margin: 0 10px !important;
 }
 
-.topmenu-container.el-menu--horizontal > .el-menu-item.is-active, .el-menu--horizontal > .el-sub-menu.is-active .el-submenu__title {
+.topmenu-container.el-menu--horizontal>.el-menu-item.is-active,
+.el-menu--horizontal>.el-sub-menu.is-active .el-submenu__title {
   border-bottom: 2px solid #{'var(--theme)'} !important;
   color: #303133;
 }
 
 /* sub-menu item */
-.topmenu-container.el-menu--horizontal > .el-sub-menu .el-sub-menu__title {
+.topmenu-container.el-menu--horizontal>.el-sub-menu .el-sub-menu__title {
   float: left;
   height: 50px !important;
   line-height: 50px !important;
@@ -196,7 +189,9 @@ onMounted(() => {
 }
 
 /* 背景色隐藏 */
-.topmenu-container.el-menu--horizontal>.el-menu-item:not(.is-disabled):focus, .topmenu-container.el-menu--horizontal>.el-menu-item:not(.is-disabled):hover, .topmenu-container.el-menu--horizontal>.el-submenu .el-submenu__title:hover {
+.topmenu-container.el-menu--horizontal>.el-menu-item:not(.is-disabled):focus,
+.topmenu-container.el-menu--horizontal>.el-menu-item:not(.is-disabled):hover,
+.topmenu-container.el-menu--horizontal>.el-submenu .el-submenu__title:hover {
   background-color: #ffffff;
 }
 
@@ -212,6 +207,4 @@ onMounted(() => {
   margin-left: 8px;
   margin-top: 0px;
 }
-
-
 </style>

@@ -1,6 +1,7 @@
 /**
- * v-auth-del 删除按钮权限处理
- * 自动根据当前组件的 name 生成权限标识，判断是否有删除权限
+ * v-auth 按钮权限处理
+ * 自动根据当前组件的 name 生成权限标识，判断是否有按钮操作权限
+ * Copyright (c) 2026 kucoder
  */
 
 import usePermissionStore from '@/store/modules/permission'
@@ -24,7 +25,7 @@ function convertNameToPermission(name,arg) {
 
 export default {
   mounted(el, binding, vnode) {
-    const permissions = usePermissionStore().btns
+    const permissions = usePermissionStore().btnsSet
     let directiveValue = binding.value ?? '';
     // console.log('指令值：',directiveValue)
     if(!isEmpty(directiveValue)){
@@ -71,7 +72,7 @@ export default {
         // console.log('转化后的权限按钮：',directiveValue)
     }
 
-    const hasPermission = permissions.some(permission => permission === directiveValue)
+    const hasPermission = permissions.has(directiveValue)
     
     if (!hasPermission) {
       el.parentNode?.removeChild(el)

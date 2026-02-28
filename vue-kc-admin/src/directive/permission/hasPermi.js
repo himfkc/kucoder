@@ -9,7 +9,7 @@ export default {
   mounted(el, binding, vnode) {
     const { value } = binding
     const all_permission = "*:*:*"
-    const permissions = usePermissionStore().btns
+    const permissions = usePermissionStore().btnsSet
 
     if (value && value instanceof Array && value.length > 0) {
       const permissionFlag = value
@@ -21,9 +21,7 @@ export default {
         }
       })
 
-      const hasPermissions = permissions.some(permission => {
-        return all_permission === permission || btnAuth.includes(permission)
-      })
+      const hasPermissions = permissions.has(all_permission) || btnAuth.some(item => permissions.has(item))
 
       if (!hasPermissions) {
         el.parentNode && el.parentNode.removeChild(el)

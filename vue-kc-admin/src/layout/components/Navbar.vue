@@ -11,9 +11,9 @@
     <div class="right-menu">
       <template v-if="appStore.device !== 'mobile'">
 
-        <!-- <el-tooltip content="菜单搜索" effect="dark" placement="bottom">
+        <el-tooltip content="菜单搜索" effect="dark" placement="bottom">
           <header-search id="header-search" class="right-menu-item" />
-        </el-tooltip> -->
+        </el-tooltip>
 
         <el-tooltip content="全屏" effect="dark" placement="bottom">
           <screenfull id="screenfull" class="right-menu-item hover-effect" />
@@ -77,7 +77,7 @@ const appStore = useAppStore()
 const userStore = useUserStore()
 const settingsStore = useSettingsStore()
 
-const avatar = computed(()=>userStore.avatar);
+const avatar = computed(() => userStore.avatar);
 
 function toggleSideBar() {
   appStore.toggleSideBar()

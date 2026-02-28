@@ -123,7 +123,7 @@ trait CrudTrait
                 $res = $paginator->items();
                 $total = $paginator->total();
             }
-            kc_dump('查询sql', $this->model->getLastSql());
+            // kc_dump('查询sql', $this->model->getLastSql());
             //后处理
             $resData = $res;
             if (method_exists($this, 'index_after')) {
@@ -217,11 +217,11 @@ trait CrudTrait
         } catch (Throwable $t) {
             return $this->error($t->getMessage());
         }
-        kc_dump('add的params:' . json_encode($param, JSON_UNESCAPED_UNICODE));
+        // kc_dump('add的params:' . json_encode($param, JSON_UNESCAPED_UNICODE));
 
         //字段处理
         $data = $this->excludeFields($param);
-        kc_dump('add的data:' . json_encode($param, JSON_UNESCAPED_UNICODE));
+        // kc_dump('add的data:' . json_encode($param, JSON_UNESCAPED_UNICODE));
         //添加者user_id
         if ($this->create_uid) {
             $data[$this->create_uid] = $this->auth->getId();
@@ -242,8 +242,8 @@ trait CrudTrait
             $res = $this->model->save($data, true);
             $data['insertGetId'] = $this->model->getKey();
             //后置操作
-            kc_dump('add结果res:' . $res);
-            kc_dump('add新增的id:' . $data['insertGetId']);
+            // kc_dump('add结果res:' . $res);
+            // kc_dump('add新增的id:' . $data['insertGetId']);
             if (!$data['insertGetId']) {
                 $this->throw('添加失败', null, true);
             }
@@ -331,7 +331,7 @@ trait CrudTrait
                         }
                     }
                 }
-                kc_dump('edit的数据', $data);
+                // kc_dump('edit的数据', $data);
                 $res = $model->save($data, [$pk => $id]);
                 //更新成功返回true 如果提交的数据与数据库数据一致则更新结果返回0
                 if (!in_array($res, [true, 0])) {
@@ -459,9 +459,6 @@ trait CrudTrait
             $decodeFullUrl = urldecode($full_url);
             $query = parse_url($decodeFullUrl, PHP_URL_QUERY);
 
-            // kc_dump('fullurl-decode', $decodeFullUrl);
-            // kc_dump('query', $query);
-
             //$limit
             $page = $this->request->input('pageNum', 1);
             $pageSize = $this->request->get('pageSize', 10);
@@ -523,7 +520,7 @@ trait CrudTrait
                     if (count($itemArr) === 2) {
                         $key = trim($itemArr[0]);
                         $value = trim($itemArr[1]);
-                        kc_dump('值[' . $value . ']的类型为:' . gettype($value));
+                        // kc_dump('值[' . $value . ']的类型为:' . gettype($value));
                         if (preg_match('/^[\x{4e00}-\x{9fa5}\x{3400}-\x{4dbf}\x{20000}-\x{2a6df}]+$/u', $value)) {
                             //匹配汉字
                             return [$mainModelAlias . '.' . $key, 'like', '%' . $value . '%'];
@@ -539,7 +536,7 @@ trait CrudTrait
                 }, $queryArr);
             }
             $where = array_merge($where, $otherFieldArr);
-            kc_dump('where', $where);
+            // kc_dump('where', $where);
         } catch (Throwable $t) {
             $this->throw($t->getMessage());
         }

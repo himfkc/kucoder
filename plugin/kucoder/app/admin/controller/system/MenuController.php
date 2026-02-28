@@ -68,6 +68,12 @@ class MenuController extends AdminBase
         return $this->ok('删除成功');
     }
 
+    public function clearMenuCache(): Response
+    {
+        $this->delete_menu_cache();
+        return $this->ok('菜单缓存清除成功');
+    }
+
     protected function save_before(&$param): void
     {
         kc_dump('save_before', $param);
@@ -137,6 +143,7 @@ class MenuController extends AdminBase
 
     private function delete_menu_cache(): void
     {
+        kc_dump('执行删除菜单缓存');
         Event::dispatch('adminMenu.deleteCache', [
             'key' => ["{$this->app}:menu:all", "{$this->app}:menu:delete", "{$this->app}:menu:allRoutes"]
         ]);

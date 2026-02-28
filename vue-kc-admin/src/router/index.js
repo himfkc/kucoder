@@ -166,7 +166,7 @@ NProgress.configure({ showSpinner: false })
 const isWhiteList = (name) => whiteList.includes(name)
 let dynamicRoutesAdd = false
 router.beforeEach(async (to, from) => {
-  console.log('路由变化1:', from, to)
+  // console.log('路由变化1:', from, to)
   const userStore = useUserStore()
   NProgress.start()
   if (userStore.token) {
@@ -186,7 +186,7 @@ router.beforeEach(async (to, from) => {
                 router.addRoute(route) // 动态添加可访问路由表
               }
             })
-            console.log('路由变化2:', from, to)
+            // console.log('路由变化2:', from, to)
             dynamicRoutesAdd = true
             // return { ...to, replace: true }  // 这种方式会导致刷新后 路由不生效
             router.replace({ ...to, replace: true })

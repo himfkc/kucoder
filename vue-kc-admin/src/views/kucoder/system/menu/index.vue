@@ -45,7 +45,7 @@
 
       <el-table :border="true" v-loading="loading" element-loading-text="数据加载中，请稍候..." :data="menuList" row-key="id"
          :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" style="width:100%"
-         @selection-change="handleSelectionChange"  >
+         @selection-change="handleSelectionChange">
          <el-table-column type="selection" width="45" align="center" />
          <el-table-column prop="title" label="菜单名称" :show-overflow-tooltip="true" width="150"></el-table-column>
          <el-table-column prop="icon" label="图标" align="center" width="65">
@@ -88,10 +88,10 @@
             </template>
          </el-table-column>
          <!-- <el-table-column label="创建时间" align="center" width="160" prop="create_time"></el-table-column> -->
-         <el-table-column label="操作" align="center" class-name="" width="200">
+         <el-table-column label="操作" align="center" class-name="">
             <template #default="scope">
                <!-- 未删除 -->
-               <div v-if="!scope.row.delete_time" class="x">
+               <div v-if="!scope.row.delete_time" class="x c">
                   <el-button link size="small" type="primary" @click="handleAdd(scope.row)" v-auth:add>
                      <icon-ep-plus class="icon" />新增
                   </el-button>
@@ -103,7 +103,7 @@
                   </el-button>
                </div>
                <!-- 回收站 -->
-               <div class="x" v-else>
+               <div class="x c" v-else>
                   <el-button link size="small" type="info" @click="handleRestore(scope.row)" v-auth:trueDel>
                      <icon-ep-refreshLeft class="icon" />恢复
                   </el-button>
@@ -336,10 +336,7 @@ defineOptions({
 });
 
 const { proxy } = getCurrentInstance();
-// const { sys_show_hide, sys_normal_disable } = proxy.useDict("sys_show_hide", "sys_normal_disable")
-// const userStore = useUserStore()
 const permissionStore = usePermissionStore();
-// const loadingInstance = ElLoading.service({})
 
 const menuList = ref([]);
 const open = ref(false);
@@ -394,21 +391,24 @@ function exportMenu() {
 function getList() {
    loading.value = true;
    // const loadingInstance = ElLoading.service({});
-   listMenu(queryParams.value)
-      .then(({ data, msg, code }) => {
-         console.log("菜单数据列表", data);
-         menuList.value = proxy.handleTree(data.menus, "id", "pid");
-         enumFieldData.value = handleEnumField(data.enumFieldData);
-         console.log("enumFieldData.value", enumFieldData.value);
-         nextTick(() => {
-            loading.value = false
-            // loadingInstance.close();
-         })
-      })
-      .catch(err => {
-         console.warn(err)
+   let minLoadTime = 50; // 最小加载时间 300ms
+
+   Promise.all([
+      listMenu(queryParams.value),
+      new Promise(resolve => setTimeout(resolve, minLoadTime))
+   ]).then(([{ data, msg, code }]) => {
+      console.log("菜单数据列表", data);
+      menuList.value = proxy.handleTree(data.menus, "id", "pid");
+      enumFieldData.value = handleEnumField(data.enumFieldData);
+      console.log("enumFieldData.value", enumFieldData.value);
+      nextTick(() => {
          loading.value = false
+         // loadingInstance.close();
       })
+   }).catch(err => {
+      console.warn(err)
+      loading.value = false
+   })
 }
 
 function handleChangeMenuType(val) {

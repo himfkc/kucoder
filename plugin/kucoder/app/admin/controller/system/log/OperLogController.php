@@ -23,29 +23,11 @@ use support\Response;
  */
 class OperLogController extends AdminBase
 {
-    protected string $modelClass = "\\plugin\\kucoder\\app\\kucoder\\model\\Log";
+    protected string $modelClass = Log::class;
     protected array $allowAccessActions = ['index', 'delete'];
 
     // 默认排序：按创建时间倒序
     protected array $orderBy = ['create_time' => 'desc'];
-
-    /**
-     * 操作日志列表
-     * @return Response
-     */
-    public function index(): Response
-    {
-        return parent::index();
-    }
-
-    /**
-     * 删除操作日志
-     * @return Response
-     */
-    public function delete(): Response
-    {
-        return parent::delete();
-    }
 
     /**
      * 清空操作日志

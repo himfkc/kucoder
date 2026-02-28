@@ -141,6 +141,7 @@ class LoginController extends AdminBase
         $userId = $this->auth->getId();
         $menus = $this->auth->getUserMenus($userId);
         $btns = $this->auth->getUserBtns($userId);
+        kc_dump('获取菜单:' , $menus);
         $roleMenus = array_map(function ($item) {
             return [
                 'id' => $item['id'],

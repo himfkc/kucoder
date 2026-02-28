@@ -64,13 +64,13 @@
             <el-table-column label="操作方法" align="center" prop="action" width="80" />
             <el-table-column label="用户ID" align="center" prop="uid" width="80" />
             <el-table-column label="操作IP" align="center" prop="ip" width="130" :show-overflow-tooltip="true" />
-            <el-table-column label="状态" align="center" prop="status" width="80">
+            <el-table-column label="状态" align="center" prop="status" width="100">
                 <template #default="scope">
                     <el-tag v-if="scope.row.status === 1" type="success">操作完成</el-tag>
                     <el-tag v-else-if="scope.row.status === 0" type="danger">操作未完成</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column label="操作时间" align="center" prop="create_time" width="180">
+            <el-table-column label="操作时间" align="center" prop="create_time">
                 <template #default="scope">
                     <span>{{ parseTime(scope.row.create_time) }}</span>
                 </template>

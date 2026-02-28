@@ -1,6 +1,15 @@
 <template>
   <div class="header-search">
-    <svg-icon class-name="search-icon" icon-class="search" @click.stop="click" />
+    <!-- <div>
+      <svg-icon class-name="search-icon" icon-class="search" @click.stop="click" />
+      <el-button type="primary" size="small" @click.stop="click">
+        <svg-icon class="w-3 h-3" icon-class="search" />菜单搜索
+      </el-button>
+    </div> -->
+    <el-button type="primary" size="small" @click.stop="click">
+      <svg-icon class="w-3 h-3" icon-class="search" />菜单搜索
+    </el-button>
+
     <el-dialog v-model="show" width="600" @close="close" :show-close="false" append-to-body>
       <el-input v-model="search" ref="headerSearchSelectRef" size="large" @input="querySearch" prefix-icon="Search"
         placeholder="菜单搜索，支持标题、URL模糊查询" clearable @keyup.enter="selectActiveResult"
@@ -12,7 +21,8 @@
           <div class="search-item" tabindex="1" v-for="(item, index) in options" :key="item.path"
             :style="activeStyle(index)" @mouseenter="activeIndex = index" @mouseleave="activeIndex = -1">
             <div class="left">
-              <svg-icon class="menu-icon" :icon-class="item.icon" />
+              <!-- <svg-icon class="menu-icon" :icon-class="item.icon" /> -->
+              <kc-icon :icon="item.icon"></kc-icon>
             </div>
             <div class="search-info" @click="change(item)">
               <div class="menu-title">
@@ -46,7 +56,7 @@ const fuse = ref(undefined)
 const headerSearchSelectRef = ref(null)
 const router = useRouter()
 const theme = computed(() => useSettingsStore().theme)
-const routes = computed(() => usePermissionStore().defaultRoutes)
+const routes = computed(() => usePermissionStore().sidebarRouters)
 
 function click() {
   show.value = !show.value
@@ -202,8 +212,10 @@ watch(searchPool, (list) => {
     padding-right: 10px;
 
     .left {
+      display: flex;
+      justify-content: center;
       width: 60px;
-      text-align: center;
+      // text-align: center;
 
       .menu-icon {
         width: 18px;

@@ -74,11 +74,9 @@ const useUserStore = defineStore(
         // 清空permission
         const permissionStore = usePermissionStore()
         permissionStore.routes = []
-        permissionStore.addRoutes = []
-        permissionStore.defaultRoutes = []
+        permissionStore.source_routes = []
         permissionStore.topbarRouters = []
         permissionStore.sidebarRouters = []
-        permissionStore.source_routes = []
         permissionStore.btns = []
         permissionStore.roleMenus = []
         // 清空tagView

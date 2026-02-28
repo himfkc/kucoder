@@ -103,6 +103,40 @@ class RBAC
     ];
 
     /**
+     * array:20 [
+     * "id" => 1009
+     * "title" => "角色修改"
+     * "pid" => 101
+     * "icon" => "#"
+     * "plugin" => "kucoder"
+     * "type" => "button"
+     * "path" => "system/role/edit"
+     * "component" => ""
+     * "name" => ""
+     * "query" => ""
+     * "link_url" => ""
+     * "keepalive" => 0
+     * "sort" => 3
+     * "show" => 0
+     * "create_uid" => 0
+     * "update_uid" => 1
+     * "remark" => ""
+     * "create_time" => "2025-05-20 09:26:54"
+     * "update_time" => "2026-02-11 10:42:38"
+     * "delete_time" => null
+     * ]
+     */
+
+    /**
+     * 菜单表路由查询字段
+     */
+    protected array $menuRouteFields = [
+        'id', 'title', 'pid', 'icon','plugin', 'type',
+        'path', 'component', 'name',  'query','link_url',
+        'keepalive', 'sort', 'show', 'delete_time',
+    ];
+
+    /**
      * 数据表名
      */
     protected array $table = [
@@ -251,6 +285,7 @@ class RBAC
             ->remember($key, function () use ($where) {
                 return Db::name($this->table['menu'])
                     ->where($where)
+                    ->field($this->menuRouteFields)
                     ->order('sort asc,id asc')
                     ->select()
                     ->toArray();

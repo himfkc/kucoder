@@ -14,7 +14,7 @@
                     @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="状态" prop="status">
-                <el-select v-model="queryParams.status" placeholder="登录状态" clearable size="small" style="width: 120px">
+                <el-select v-model="queryParams.status" placeholder="登录状态" clearable size="small" style="width: 130px">
                     <el-option label="登录成功" :value="1" />
                     <el-option label="登录失败" :value="0" />
                 </el-select>
