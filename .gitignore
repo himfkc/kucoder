@@ -17,8 +17,4 @@ node_modules/
 !/vue-kc-admin/src/views/kucoder/
 !/vue-kc-admin/src/views/yourPluginName/
 
-/.branch-main
-/.branch-dev
-/.branch-dev2
-
 
