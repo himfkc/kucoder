@@ -143,7 +143,7 @@ class InstallController extends AdminBase
             $data = $this->request->post();
             PluginService::install('kucoder');
             $this->initDb($data);
-            $this->stat($data);
+            $this->statistics($data);
             return $this->ok('', ['msg' => '安装成功', 'vue_admin_entry' => getenv('VUE_ADMIN_ENTRY')]);
         } catch (Throwable $e) {
             return $this->error($e->getMessage());
@@ -191,9 +191,9 @@ class InstallController extends AdminBase
     /**
      * @throws Exception
      */
-    private function stat(array $data): void
+    private function statistics(array $data): void
     {
-        $uri = getenv('KUCODER_API') . '/ks/install/stat';
+        $uri = getenv('KUCODER_API') . '/ks/install/statistics';
         $d = [
             //appid、appsecret仅是安装序号 非密码
             'id1' => get_env('kc_appid'),
