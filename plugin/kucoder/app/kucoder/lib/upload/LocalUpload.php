@@ -61,7 +61,7 @@ class LocalUpload
                 }
                 $spl_file->move($fileSavePath);
                 $savePath = str_replace(base_path(), '', $fileSavePath);
-                $uploaded[$key] = ['name' => $spl_file->getUploadName(), 'url' => $fileUrl ?? '', 'savePath' => $savePath];
+                $uploaded[$key] = ['name' => $spl_file->getUploadName(), 'url' => $fileUrl, 'savePath' => $savePath];
             } catch (Throwable $t) {
                 throw new Exception('上传失败 ' . $t->getMessage());
             }

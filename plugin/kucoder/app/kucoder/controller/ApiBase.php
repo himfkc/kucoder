@@ -104,8 +104,8 @@ class ApiBase extends Base
     {
         try {
             $apiAuthConfig= KcConst::API_AUTH_CONFIG;
-            if(KcHelper::isLocal()){
-                $apiAuthConfig['table']['user'] = 'p_member';
+            if (KcHelper::isLocal()) {
+                $apiAuthConfig = array_merge(KcConst::API_AUTH_CONFIG, KcConst::LOCAL_API_AUTH_CONFIG);
             }
             $this->auth = ApiAuth::getInstance($apiAuthConfig);
             $this->checkLoginAndRight();

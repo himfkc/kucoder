@@ -45,8 +45,6 @@ class KcHelper
     public static function isLocal(): bool
     {
         $host = request()->host(true);
-        kc_dump('请求host', $host);
-        kc_dump('sys_host', parse_url(getenv('KUCODER_API'), PHP_URL_HOST));
         if ('localhost' === $host) $host = '127.0.0.1';
         return $host === parse_url(getenv('KUCODER_API'), PHP_URL_HOST);
     }

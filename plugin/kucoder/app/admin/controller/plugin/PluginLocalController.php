@@ -71,7 +71,7 @@ class PluginLocalController extends AdminBase
         $uri = $this->httpUrl . 'market/version';
         $pluginIds['cookie'] = KcIdentity::getCookie($uri, $this->auth->getId());
         $res = $this->http_post($uri, $pluginIds);
-        kc_dump('远程插件版本数据: ', $res);
+        // kc_dump('远程插件版本数据: ', $res);
         foreach ($data as &$plugin) {
             if ($plugin['source'] === 1 && isset($res['data'][$plugin['id']])) {
                 $versions = $res['data'][$plugin['id']];

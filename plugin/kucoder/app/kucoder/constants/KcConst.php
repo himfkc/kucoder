@@ -59,6 +59,17 @@ class KcConst
         ],
     ];
 
+    const LOCAL_API_AUTH_CONFIG = [
+        'table' => [
+            //会员表
+            'user' => 'P_member',
+            //会员角色表
+            'role' => 'P_member_role',
+            //会员菜单表
+            'menu' => 'P_member_menu',
+        ],
+    ];
+
     const KC_COMMAND = 'KuCoder > ';
     const ALLOWED_COMMANDS = ['php', 'composer', 'pnpm', 'npm', 'yarn', 'git'];
     const INVALID_COMMAND = '无效的命令';
