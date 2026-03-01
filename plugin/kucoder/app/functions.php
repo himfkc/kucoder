@@ -343,9 +343,14 @@ if (!function_exists('get_env')) {
      */
     function get_env(?string $envKey = null, bool $strLower = true): string|int|bool|array
     {
-        if($envKey){
+        if ($envKey) {
             $value = getenv(strtoupper($envKey));
-            return is_numeric($value) ? (int)$value : $value;
+            return match (true) {
+                is_numeric($value) => (int)$value,
+                $value === 'true' => true,
+                $value === 'false' => false,
+                default => $value
+            };
         }
         //读取.env文件
         $envFile = base_path('.env');
