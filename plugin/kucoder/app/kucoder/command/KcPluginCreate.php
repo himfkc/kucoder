@@ -397,7 +397,7 @@ EOF;
 <?php
 return [
     'files' => [
-        get_base_path() . '/plugin/$name/app/functions.php',
+        base_path() . '/plugin/$name/app/functions.php',
     ]
 ];
 EOF;
@@ -533,7 +533,7 @@ return [
     // Fallback language
     'fallback_locale' => ['zh_CN', 'en'],
     // Folder where language files are stored
-    'path' => get_base_path() . "/plugin/$name/resource/translations",
+    'path' => base_path() . "/plugin/$name/resource/translations",
 ];
 
 EOF;
