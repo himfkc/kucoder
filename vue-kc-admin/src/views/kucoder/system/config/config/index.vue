@@ -187,6 +187,9 @@
             <el-form-item label="提示说明">
                <el-input v-model="addForm.tip" placeholder="配置项的说明文字" />
             </el-form-item>
+            <el-form-item label="占位符">
+               <el-input v-model="addForm.placeholder" placeholder="输入框的占位符文字" />
+            </el-form-item>
             <el-form-item label="敏感字段">
                <el-switch v-model="addForm.is_secret" :active-value="1" :inactive-value="0" />
                <span style="margin-left: 10px; color: #909399;">勾选后将以密码形式显示</span>
@@ -262,6 +265,7 @@ const addForm = ref({
    title: '',
    type: 'string',
    tip: '',
+   placeholder: '',
    value: '',
    config_data: null,
    dataText: '',
@@ -479,6 +483,7 @@ function handleAddConfig() {
       title: '',
       type: 'input',
       tip: '',
+      placeholder: '',
       value: '',
       config_data: null,
       dataText: '',

@@ -95,7 +95,7 @@ export async function getLoginPath() {
     return loginUrl
 }
 
-export function imgUrl(img, domain = '', type = 'img') {
+export function imgUrl(img, domain = '', type = '') {
     const userStore = useUserStore()
     const file_domain = userStore.site_set.oss_domain || import.meta.env.VITE_APP_BASE_API
     if (type === 'avatar') {
@@ -114,6 +114,10 @@ export function imgUrl(img, domain = '', type = 'img') {
     }
 
     return img
+}
+
+export function fileUrl(file, domain = '', type = '') {
+    return imgUrl(file,domain,type);
 }
 
 export function numberToChinese(num) {

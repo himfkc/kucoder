@@ -90,7 +90,7 @@ class KcIdentity
                 kc_dump('首次 $opensslKey:', $opensslKey);
                 $opensslKey = KcOpenSSL::generateKey();
                 kc_dump('重新生成 $opensslKey', base64_encode($opensslKey));
-                KcConfig::set(base_path('plugin/kucoder/config/secret-key.php'), 'openssl.secret_key', base64_encode($opensslKey));
+                KcConfig::set(get_base_path('plugin/kucoder/config/secret-key.php'), 'openssl.secret_key', base64_encode($opensslKey));
             } else {
                 throw new Exception('openssl_secret_key配置错误');
             }

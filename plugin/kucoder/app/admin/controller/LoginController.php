@@ -63,7 +63,7 @@ class LoginController extends AdminBase
         if (!$request->isPost()) {
             return $this->error('请求方式错误');
         }
-        if (!file_exists(base_path('plugin/kucoder/api/install/installed.lock'))) {
+        if (!file_exists(get_base_path('plugin/kucoder/api/install/installed.lock'))) {
             return $this->error('你还未安装kucoder,请先安装kucoder');
         }
         //验证器
@@ -139,7 +139,7 @@ class LoginController extends AdminBase
      */
     public function getRouters(): Response
     {
-        kc_dump('是否为超级管理员：' , $this->auth->getUserInfo()['is_super_admin']);
+        // kc_dump('是否为超级管理员：' , $this->auth->getUserInfo()['is_super_admin']);
         $userId = $this->auth->getId();
         $menus = $this->auth->getUserMenus($userId);
         $btns = $this->auth->getUserBtns($userId);

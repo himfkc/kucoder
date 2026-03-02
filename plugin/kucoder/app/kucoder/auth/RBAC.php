@@ -131,8 +131,8 @@ class RBAC
      * 菜单表路由查询字段
      */
     protected array $menuRouteFields = [
-        'id', 'title', 'pid', 'icon','plugin', 'type',
-        'path', 'component', 'name',  'query','link_url',
+        'id', 'title', 'pid', 'icon', 'plugin', 'type',
+        'path', 'component', 'name', 'query', 'link_url',
         'keepalive', 'sort', 'show', 'delete_time',
     ];
 
@@ -269,7 +269,6 @@ class RBAC
      */
     public function getAllMenus(array $where = []): array
     {
-        // kc_dump("getAllMenus where", $where);
         if (!isset($where['recycle'])) {
             //全部菜单
             $where = array_merge($this->where, $where);
@@ -367,22 +366,16 @@ class RBAC
      */
     public function siteRight(&$siteRight = []): void
     {
-        kc_dump('host: ' . request()->host(true));
-        kc_dump('getLocalIp: ' . request()->getLocalIp());
-        kc_dump('getRemoteIp: ' . request()->getRemoteIp());
-        kc_dump('getRealIp: ' . request()->getRealIp());
         $url = getenv('KUCODER_API') . '/kapi/site/right';
         $result = $this->http_post($url, [
             'site_host' => request()->host(true),
             'box_public_key' => get_env('sodium_box_public_key'),
         ], needLogin: false);
         if (isset($result['data']['res']) && $res = $result['data']['res']) {
-            kc_dump('site right result:', $res);
             $my_box_private_key = base64_decode(get_env('sodium_box_private_key'));
             $kc_box_public_key = base64_decode(get_env('kc_box_public_key'));
             $kcBox = new KcBox($my_box_private_key);
             $decrypted = $kcBox->decrypt($res, $kc_box_public_key);
-            kc_dump('解密后的decrypted : ' . $decrypted);
             $siteRight['data'] = $decrypted;
             $siteRight['msg'] = $result['data']['msg'];
         }
@@ -441,7 +434,6 @@ class RBAC
         $ip = request()->getRealIp();
         //访问设备信息
         $ua = $this->getUa();
-        // kc_dump('ua result:', $ua);
         //生成token
         $token = KcJWT::encode([
             'uid' => $user->{$this->userField['id']},
@@ -459,15 +451,12 @@ class RBAC
         // 检查是否需要重新哈希
         kc_dump('isset($user->post_password)', isset($user->post_password));
         if (isset($user->post_password) && password_needs_rehash($user->password, PASSWORD_DEFAULT)) {
-            kc_dump('需要重新哈希密码');
             $user->password = password_hash($user->post_password, PASSWORD_DEFAULT);
-            kc_dump('重新哈希后的密码: ' . $user->password);
         }
         $user->save();
         //登录日志
         LoginLogService::add($app_type, 1, '', $user->{$this->userField['id']});
 
-        kc_dump('RBAC登录的authType: ' . $this->getAuthType());
         if ($this->getAuthType() === 'cookie') {
             // session
             $session = request()->session();
@@ -504,7 +493,6 @@ class RBAC
         if ($this->getAuthType() === 'cookie') {
             //清除session
             $session = request()->session();
-            // $session->forget([$this->userField['id'], static::TOKEN]);
             $session->flush();
         } else {
             // 清除token
@@ -526,7 +514,6 @@ class RBAC
     public function checkLogin(?string $requestIp = null): void
     {
         $sd = $this->getAuthData();
-        // kc_dump('checkLogin-' . static::$config['app'], $sd);
         if (!isset($sd[static::TOKEN]) || !$sd[static::TOKEN]) {
             $this->throw('请先登录');
         }
@@ -548,11 +535,8 @@ class RBAC
     {
         if ($this->getAuthType() === 'cookie') {
             //使用redis session + cookie + jwtToken方式
-            // kc_dump('当前请求path:' . request()->path());
-            // kc_dump('当前请求cookie:', request()->cookie());
             $session = request()->session();
             $sd = $session->all();
-            // kc_dump(static::$config['app'].'-sd:', $sd);
             $sd['uid'] = isset($sd[$this->userField['id']]) ? $sd[$this->userField['id']] : null;
         } else {
             //使用jwtToken方式
@@ -569,7 +553,6 @@ class RBAC
 
     private function checkTokenValid(array $data = [], ?string $requestIp = null): void
     {
-        // kc_dump('token decode:', $data);
         if (!$data || !isset($data['uid'])) {
             $this->throw('请先登录');
         }
@@ -579,13 +562,11 @@ class RBAC
         if (!$requestIp) {
             $requestIp = request()->getRealIp();
         }
-        // kc_dump('请求ip: ' . $requestIp . ' token中ip: ' . $data['ip']);
         if ($requestIp !== $data['ip']) {
             $this->throw('请求异常', KcError::UnMatchedIp[0]);
         }
         //校验user-agent
         $ua = $this->getUA();
-        // kc_dump('请求ua:', $ua);
         if (!is_dev_env()) {
             if ((!isset($data['os_name']) || $ua['os_name'] !== $data['os_name'])
                 || (!isset($data['os_version']) || $ua['os_version'] !== $data['os_version'])
@@ -607,7 +588,6 @@ class RBAC
     public function getId(): int|null
     {
         $sd = $this->getAuthData();
-        // kc_dump('getId sd:', $sd);
         return (isset($sd['uid']) && $sd['uid']) ? (int)$sd['uid'] : null;
     }
 
@@ -625,7 +605,6 @@ class RBAC
     private function getAuthType(): string
     {
         $authType = request()->header('x-auth-type');
-        kc_dump('RBAC getAuthType: ' . $authType);
         if (!$authType) {
             throw new Exception('验证类型未定义');
         }

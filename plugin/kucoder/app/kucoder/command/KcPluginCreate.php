@@ -54,7 +54,7 @@ class KcPluginCreate extends Command
         }
 
         // Create dir config/plugin/$name
-        if (is_dir($plugin_config_path = base_path() . "/plugin/$name")) {
+        if (is_dir($plugin_config_path = get_base_path() . "/plugin/$name")) {
             $output->writeln("<error>Dir $plugin_config_path already exists</error>");
             return self::FAILURE;
         }
@@ -70,7 +70,7 @@ class KcPluginCreate extends Command
      */
     protected function createAll($name): void
     {
-        $base_path = base_path();
+        $base_path = get_base_path();
         $this->mkdir("$base_path/plugin/$name/app/controller", 0777, true);
         $this->mkdir("$base_path/plugin/$name/app/model", 0777, true);
         $this->mkdir("$base_path/plugin/$name/app/middleware", 0777, true);
@@ -397,7 +397,7 @@ EOF;
 <?php
 return [
     'files' => [
-        base_path() . '/plugin/$name/app/functions.php',
+        get_base_path() . '/plugin/$name/app/functions.php',
     ]
 ];
 EOF;
@@ -533,7 +533,7 @@ return [
     // Fallback language
     'fallback_locale' => ['zh_CN', 'en'],
     // Folder where language files are stored
-    'path' => base_path() . "/plugin/$name/resource/translations",
+    'path' => get_base_path() . "/plugin/$name/resource/translations",
 ];
 
 EOF;

@@ -19,6 +19,21 @@ use support\Log;
 /**
  * Here is your custom functions.
  */
+
+if (!function_exists('kc_dir_sep')) {
+    function kc_dir_sep(string $path): string
+    {
+        return str_replace("\\", '/', $path);
+    }
+}
+
+if (!function_exists('get_base_path')) {
+    function get_base_path(?string $path=''): string
+    {
+        return kc_dir_sep(base_path($path));
+    }
+}
+
 if (!function_exists('in_action')) {
     function in_action(string|array $noNeed): bool
     {
@@ -353,7 +368,7 @@ if (!function_exists('get_env')) {
             };
         }
         //读取.env文件
-        $envFile = base_path('.env');
+        $envFile = get_base_path('.env');
         $env = [];
         if (!is_file($envFile)) {
             throw new Exception('.env不存在');
@@ -452,11 +467,11 @@ if (!function_exists('get_plugin_info')) {
     function get_plugin_info(string $pluginName = ''): array
     {
         $pluginName = $pluginName ?: get_pluginName();
-        $pluginPath = base_path("plugin/{$pluginName}");
+        $pluginPath = get_base_path("plugin/{$pluginName}");
         if (!is_dir($pluginPath)) {
             throw new Exception("Plugin {$pluginName} not exists");
         }
-        return include base_path("plugin/{$pluginName}/zinfo/info.php");
+        return include get_base_path("plugin/{$pluginName}/zinfo/info.php");
     }
 }
 

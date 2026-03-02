@@ -92,7 +92,7 @@ class KcInstall
             // 删除vue文件
             static::uninstallView($plugin);
             //删除kucoder文件
-            if (is_dir($pluginPath = base_path("plugin/{$plugin}"))) {
+            if (is_dir($pluginPath = get_base_path("plugin/{$plugin}"))) {
                 kc_dump(KcConst::KC_COMMAND . '开始删除kucoder文件');
                 KcFile::delDirWithFile($pluginPath);
             }
@@ -139,7 +139,7 @@ class KcInstall
      */
     protected static function updateMenuHandler(string $plugin): void
     {
-        $old_menu_file = base_path() . "\\plugin\\{$plugin}\\config\\menu_bak.php";
+        $old_menu_file = kc_dir_sep(base_path() . "\\plugin\\{$plugin}\\config\\menu_bak.php");
         MenuService::export_plugin_menu($plugin, $old_menu_file);
         $old_menu = include $old_menu_file;
         $new_menu = static::getMenus($plugin);
@@ -159,9 +159,9 @@ class KcInstall
      */
     protected static function updateDependencies(string $plugin): void
     {
-        $old_rely_file = base_path() . "\\plugin\\{$plugin}\\zinfo\\rely.json.bak";
+        $old_rely_file = kc_dir_sep(base_path() . "\\plugin\\{$plugin}\\zinfo\\rely.json.bak");
         $old_rely = json_decode(file_get_contents($old_rely_file), true);
-        $new_rely_file = base_path() . "\\plugin\\{$plugin}\\zinfo\\rely.json";
+        $new_rely_file = kc_dir_sep(base_path() . "\\plugin\\{$plugin}\\zinfo\\rely.json");
         $new_rely = json_decode(file_get_contents($new_rely_file), true);
         if ($old_rely !== $new_rely) {
             static::handleDependencies($plugin, 'update');
@@ -178,7 +178,7 @@ class KcInstall
      */
     protected static function getMenus(string $pluginName = ''): array
     {
-        $menu_file = base_path() . "\\plugin\\{$pluginName}\\config\\menu.php";
+        $menu_file = kc_dir_sep(base_path() . "\\plugin\\{$pluginName}\\config\\menu.php");
         if (!is_file($menu_file)) return [];
         $menus = include $menu_file;
         return $menus ?: [];
@@ -193,12 +193,12 @@ class KcInstall
      */
     protected static function installView(string $pluginName): void
     {
-        $vue_src = base_path() . "\\plugin\\{$pluginName}\\vue\\src";
+        $vue_src = kc_dir_sep(base_path() . "\\plugin\\{$pluginName}\\vue\\src");
         $vue_api = $vue_src . "\\api\\$pluginName";
         $vue_views = $vue_src . "\\views\\$pluginName";
         if (KcFile::dirHasFiles($vue_api) || KcFile::dirHasFiles($vue_views)) {
             kc_dump(KcConst::KC_COMMAND . '开始安装kucodervue文件');
-            $dest_dir = base_path() . KcConst::VUE_KC_ADMIN_SRC;
+            $dest_dir = get_base_path() . KcConst::VUE_KC_ADMIN_SRC;
             KcFile::copyDirWithFile($vue_src, $dest_dir);
         } else {
             kc_dump(KcConst::KC_COMMAND . 'kucodervue文件不存在,无需安装');
@@ -207,7 +207,7 @@ class KcInstall
 
     protected static function uninstallView(string $plugin): void
     {
-        $dest_dir = base_path() . KcConst::VUE_KC_ADMIN_SRC;
+        $dest_dir = get_base_path() . KcConst::VUE_KC_ADMIN_SRC;
         if ($od = opendir($dest_dir)) {
             kc_dump(KcConst::KC_COMMAND . '开始卸载kucodervue文件');
             while (false !== ($file = readdir($od))) {
@@ -226,8 +226,8 @@ class KcInstall
      */
     protected static function handleDependencies(string $pluginName, string $type): void
     {
-        $composer = json_decode(file_get_contents(base_path('composer.json')), true);
-        $packagePath = kc_path(base_path(), KcConst::VUE_KC_ADMIN, '/package.json');
+        $composer = json_decode(file_get_contents(get_base_path('composer.json')), true);
+        $packagePath = kc_path(get_base_path(), KcConst::VUE_KC_ADMIN, '/package.json');
         $package = json_decode(file_get_contents($packagePath), true);
         $rely = [
             'require' => $composer['require'],
@@ -237,8 +237,8 @@ class KcInstall
         ];
         $rely = json_encode($rely, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         $uri = getenv('KUCODER_API') . '/kapi/pins/' . (in_array($type, ['install', 'update']) ? 'installRely' : 'uninstallRely');
-        $vuePath = kc_path(base_path(), KcConst::VUE_KC_ADMIN);
-        $data = ['rely' => $rely, 'basePath' => base_path(), 'vuePath' => $vuePath];
+        $vuePath = kc_path(get_base_path(), KcConst::VUE_KC_ADMIN);
+        $data = ['rely' => $rely, 'basePath' => get_base_path(), 'vuePath' => $vuePath];
         if ($type === 'update') {
             $cookie = KcIdentity::getCookie($uri, AdminAuth::getInstance()->getId(), 'admin');
             $data['cookie'] = $cookie;
@@ -284,7 +284,7 @@ class KcInstall
      */
     protected static function installSql(string $pluginName): void
     {
-        $sqlFile = base_path() . "\\plugin\\{$pluginName}\\api\\install\\install.sql";
+        $sqlFile = kc_dir_sep(base_path() . "\\plugin\\{$pluginName}\\api\\install\\install.sql");
         if (!is_file($sqlFile)) {
             throw new Exception("kucoder安装文件不存在：{$sqlFile}");
         }
@@ -304,14 +304,14 @@ class KcInstall
     protected static function uninstallSql(string $pluginName): void
     {
         // 如果卸载数据库文件存在责直接使用
-        $uninstallSqlFile = base_path() . "\\plugin\\{$pluginName}\\api\\install\\uninstall.sql";
+        $uninstallSqlFile = kc_dir_sep(base_path() . "\\plugin\\{$pluginName}\\api\\install\\uninstall.sql");
         // kc_dump('检查卸载数据库文件大小:', is_file($uninstallSqlFile) ? filesize($uninstallSqlFile) : ' 文件不存在');
         if (is_file($uninstallSqlFile) && filesize($uninstallSqlFile) > 0) {
             static::executeSql($uninstallSqlFile);
             return;
         }
         // 否则根据install.sql生成卸载数据库文件uninstall.sql
-        $installSqlFile = base_path() . "\\plugin\\{$pluginName}\\api\\install\\install.sql";
+        $installSqlFile = kc_dir_sep(base_path() . "\\plugin\\{$pluginName}\\api\\install\\install.sql");
         if (!is_file($installSqlFile)) {
             return;
         }
@@ -332,7 +332,7 @@ class KcInstall
      */
     protected static function updateSql(string $plugin): void
     {
-        $sqlFile = base_path() . "\\plugin\\{$plugin}\\api\\install\\update.sql";
+        $sqlFile = kc_dir_sep(base_path() . "\\plugin\\{$plugin}\\api\\install\\update.sql");
         if (is_file($sqlFile) && filesize($sqlFile) > 0) {
             kc_dump(KcConst::KC_COMMAND . '开始升级kucoder数据库');
             static::executeSql($sqlFile);

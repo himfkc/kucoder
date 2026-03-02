@@ -71,7 +71,7 @@ class PluginLocalController extends AdminBase
         $uri = $this->httpUrl . 'market/version';
         $pluginIds['cookie'] = KcIdentity::getCookie($uri, $this->auth->getId());
         $res = $this->http_post($uri, $pluginIds);
-        // kc_dump('远程插件版本数据: ', $res);
+        kc_dump('远程插件版本数据: ', $res);
         foreach ($data as &$plugin) {
             if ($plugin['source'] === 1 && isset($res['data'][$plugin['id']])) {
                 $versions = $res['data'][$plugin['id']];
@@ -162,8 +162,8 @@ class PluginLocalController extends AdminBase
      */
     private function download(array $plugin): void
     {
-        $pluginPath = base_path("plugin/{$plugin['name']}");
-        $saveDir = base_path("plugin/kucoder/app/kucoder/zip/{$plugin['name']}");
+        $pluginPath = get_base_path("plugin/{$plugin['name']}");
+        $saveDir = get_base_path("plugin/kucoder/app/kucoder/zip/{$plugin['name']}");
         if (!is_dir($saveDir)) {
             mkdir($saveDir, 0755, true);
         }
@@ -195,10 +195,10 @@ class PluginLocalController extends AdminBase
         Db::startTrans();
         try {
             $post = $this->request->post();
-            $zipPath = isset($post['savePath']) ? base_path($post['savePath']) : '';
+            $zipPath = isset($post['savePath']) ? get_base_path($post['savePath']) : '';
             $pluginName = str_contains($post['name'], '_') ? explode('_', $post['name'])[0] : '';
             if (!$pluginName) return $this->error('插件名不存在');
-            $pluginPath = base_path("plugin/{$pluginName}");
+            $pluginPath = get_base_path("plugin/{$pluginName}");
             KcFile::extractZip($zipPath, $pluginPath);
             //写入更新数据库
             $plugin = $this->model->where('name', $pluginName)->find();

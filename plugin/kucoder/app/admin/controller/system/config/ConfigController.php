@@ -23,6 +23,7 @@ use kucoder\lib\KcHelper;
 use Psr\SimpleCache\InvalidArgumentException;
 use support\Response;
 use support\think\Cache;
+use Throwable;
 
 /**
  * 系统配置控制器
@@ -40,14 +41,14 @@ class ConfigController extends AdminBase
     {
         $model = $this->model;
         //所有参数配置项
-        $configs = Cache::remember(KcConst::ADMIN_APP .':config:configs', function () use ($model) {
+        $configs = Cache::remember(KcConst::ADMIN_APP . ':config:configs', function () use ($model) {
             return $model->select()->toArray();
         }, get_env('cache_expire_time'));
         //配置参数所属的所有插件
         $plugins = array_values(array_unique(array_column($configs, 'plugin')));
         $systemPlugins = $this->getSystemPlugins();
         $plugins = array_map(function ($plugin) use ($systemPlugins) {
-            if($plugin === 'kucoder'){
+            if ($plugin === 'kucoder') {
                 $systemPlugins['kucoder'] = [
                     'name' => 'kucoder',
                     'title' => '主系统',
@@ -60,7 +61,7 @@ class ConfigController extends AdminBase
         }, $plugins);
         //所有配置分组
         $configGroupClass = ConfigGroup::class;
-        $groups = Cache::remember(KcConst::ADMIN_APP.':config:groups', function () use ($configGroupClass) {
+        $groups = Cache::remember(KcConst::ADMIN_APP . ':config:groups', function () use ($configGroupClass) {
             return (new $configGroupClass)->select()->toArray();
         }, get_env('cache_expire_time'));
         $data = compact('configs', 'plugins', 'groups');
@@ -73,7 +74,7 @@ class ConfigController extends AdminBase
     private function getSystemPlugins(): array
     {
         $plugins = [];
-        $pluginDir = base_path('plugin');
+        $pluginDir = get_base_path('plugin');
         if (!is_dir($pluginDir)) {
             return $plugins;
         }
@@ -106,46 +107,31 @@ class ConfigController extends AdminBase
     }
 
 
-
     /**
      * 添加配置项
      */
     public function add(): Response
     {
-        $request = $this->request;
-        $data = $request->post();
-
-        if (empty($data['name'])) {
-            return $this->error('配置名称不能为空');
+        try {
+            $request = $this->request;
+            $data = $request->post();
+            if (empty($data['name'])) {
+                return $this->error('配置名称不能为空');
+            }
+            if (empty($data['title'])) {
+                return $this->error('配置标题不能为空');
+            }
+            if (empty($data['type'])) {
+                return $this->error('配置类型不能为空');
+            }
+            Config::create($data);
+            // 清除配置和分组的缓存
+            Cache::delete(KcConst::ADMIN_APP . ':config:configs');
+            Cache::delete(KcConst::ADMIN_APP . ':config:groups');
+            return $this->success();
+        } catch (Throwable $e) {
+            return $this->error('添加失败: ' . $e->getMessage());
         }
-
-        if (empty($data['title'])) {
-            return $this->error('配置标题不能为空');
-        }
-
-        if (empty($data['type'])) {
-            return $this->error('配置类型不能为空');
-        }
-
-        $config = new Config();
-        $config->group_id = isset($data['group_id']) ? $data['group_id'] : null;
-        $config->plugin = $data['plugin'] ?? 'kucoder';
-        $config->name = $data['name'];
-        $config->title = $data['title'];
-        $config->type = $data['type'];
-        $config->value = $data['value'] ?? '';
-        $config->config_data = $data['config_data'] ?? null;
-        $config->is_secret = $data['is_secret'] ?? 0;
-        $config->validate = $data['validate'] ?? '';
-        $config->extend = $data['extend'] ?? '';
-        $config->allow_del = $data['allow_del'] ?? 1;
-        $config->weigh = $data['weigh'] ?? 0;
-        $config->save();
-
-        // 清除配置和分组的缓存
-        Cache::delete(KcConst::ADMIN_APP . ':config:configs');
-        Cache::delete(KcConst::ADMIN_APP . ':config:groups');
-        return $this->success();
     }
 
     /**

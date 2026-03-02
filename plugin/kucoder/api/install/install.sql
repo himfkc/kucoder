@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS `__prefix__ku_config` (
     `name` varchar(30)  NOT NULL DEFAULT '' COMMENT '配置名',
     `title` varchar(100)  NOT NULL DEFAULT '' COMMENT '配置标题',
     `tip` varchar(255)  NOT NULL DEFAULT '' COMMENT '配置标题tip',
+    `placeholder` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '输入占位符placeholder',
     `type` enum('input','input-number','switch','textarea','select','radio','checkbox','rich','upload_img','upload_file')  DEFAULT NULL COMMENT '输入类型',
     `value` text  COMMENT '值',
     `config_data` json DEFAULT NULL COMMENT '选项数据',
@@ -23,19 +24,19 @@ CREATE TABLE IF NOT EXISTS `__prefix__ku_config` (
     PRIMARY KEY (`id`) USING BTREE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='系统参数配置表';
 
-INSERT INTO `__prefix__ku_config` (`group_id`, `plugin`, `name`, `title`, `tip`, `type`, `value`, `config_data`, `is_secret`, `validate`, `extend`, `allow_del`, `hide`, `weigh`, `delete_time`) VALUES
-( 1, 'kucoder', 'site_name', '系统名称', '', 'input', 'kucoder系统后台', NULL, 0, 'required', '', 0, 0, 99, NULL),
-( 1, 'kucoder', 'record_number', '域名备案号', '', 'input', '', NULL, 0, '', '', 0, 0, 0, NULL),
-( 2, 'kucoder', 'smtp_server', 'smtp服务器', '', 'input', 'smtp.qq.com', NULL, 0, '', '', 0, 0, 9, NULL),
-( 2, 'kucoder', 'smtp_port', 'smtp端口', '', 'input', '465', NULL, 0, '', '', 0, 0, 8, NULL),
-( 2, 'kucoder', 'smtp_user', 'smtp用户', '', 'input', NULL, NULL, 0, '', '', 0, 0, 7, NULL),
-( 2, 'kucoder', 'smtp_pass', 'smtp密码', '', 'input', NULL, NULL, 0, '', '', 0, 0, 6, NULL),
-( 2, 'kucoder', 'smtp_verification', 'smtp加密方式', '', 'input', 'SSL', '{"SSL": "SSL", "TLS": "TLS"}', 0, '', '', 0, 0, 5, NULL),
-( 2, 'kucoder', 'smtp_sender_mail', 'smtp发送者邮箱', '', 'input', NULL, NULL, 0, 'email', '', 0, 0, 4, NULL),
-( 3, 'kucoder', 'upload_mode', '上传模式', '', 'radio', 'local', '{"oss": "OSS存储", "local": "本地存储"}', 0, 'required', '', 0, 0, 99, NULL),
-( 1, 'kucoder', 'site_logo', '系统logo', '', 'upload_img', '', NULL, 0, '', '', 0, 1, 0, NULL),
-( 3, 'kucoder', 'oss_type', 'oss类型', '', 'radio', '', '{"hwoss": "华为云oss", "qnoss": "七牛云oss", "txoss": "腾讯云oss", "alioss": "阿里云oss"}', 0, '', '', 0, 0, 0, NULL),
-( 3, 'kucoder', 'oss_back_local', 'oss本地备份', '', 'radio', '1', '{"1": "本地不备份", "2": "本地备份"}', 0, '', '', 0, 1, 0, NULL);
+INSERT INTO `__prefix__ku_config` (`placeholder`,`group_id`, `plugin`, `name`, `title`, `tip`, `type`, `value`, `config_data`, `is_secret`, `validate`, `extend`, `allow_del`, `hide`, `weigh`, `delete_time`) VALUES
+( '', 1, 'kucoder', 'site_name', '系统名称', '', 'input', 'kucoder系统后台', NULL, 0, 'required', '', 0, 0, 99, NULL),
+( '',1, 'kucoder', 'record_number', '域名备案号', '', 'input', '', NULL, 0, '', '', 0, 0, 0, NULL),
+( '',2, 'kucoder', 'smtp_server', 'smtp服务器', '', 'input', 'smtp.qq.com', NULL, 0, '', '', 0, 0, 9, NULL),
+( '',2, 'kucoder', 'smtp_port', 'smtp端口', '', 'input', '465', NULL, 0, '', '', 0, 0, 8, NULL),
+( '',2, 'kucoder', 'smtp_user', 'smtp用户', '', 'input', NULL, NULL, 0, '', '', 0, 0, 7, NULL),
+( '',2, 'kucoder', 'smtp_pass', 'smtp密码', '', 'input', NULL, NULL, 0, '', '', 0, 0, 6, NULL),
+( '',2, 'kucoder', 'smtp_verification', 'smtp加密方式', '', 'input', 'SSL', '{"SSL": "SSL", "TLS": "TLS"}', 0, '', '', 0, 0, 5, NULL),
+( '',2, 'kucoder', 'smtp_sender_mail', 'smtp发送者邮箱', '', 'input', NULL, NULL, 0, 'email', '', 0, 0, 4, NULL),
+( '',3, 'kucoder', 'upload_mode', '上传模式', '', 'radio', 'local', '{"oss": "OSS存储", "local": "本地存储"}', 0, 'required', '', 0, 0, 99, NULL),
+( '',1, 'kucoder', 'site_logo', '系统logo', '', 'upload_img', '', NULL, 0, '', '', 0, 1, 0, NULL),
+( '',3, 'kucoder', 'oss_type', 'oss类型', '', 'radio', '', '{"hwoss": "华为云oss", "qnoss": "七牛云oss", "txoss": "腾讯云oss", "alioss": "阿里云oss"}', 0, '', '', 0, 0, 0, NULL),
+( '',3, 'kucoder', 'oss_back_local', 'oss本地备份', '', 'radio', '1', '{"1": "本地不备份", "2": "本地备份"}', 0, '', '', 0, 1, 0, NULL);
 
 -- 表__prefix__ku_config_group 结构
 DROP TABLE IF EXISTS `__prefix__ku_config_group`;
@@ -253,3 +254,33 @@ CREATE TABLE IF NOT EXISTS `__prefix__ku_user` (
     UNIQUE KEY `email` (`email`) USING BTREE,
     UNIQUE KEY `mobile` (`mobile`) USING BTREE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='后台用户表';
+  
+
+DROP TABLE IF EXISTS `__prefix__ku_upload`;
+CREATE TABLE IF NOT EXISTS `__prefix__ku_upload` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `storage` varchar(20) NOT NULL DEFAULT 'local' COMMENT '存储引擎: local-本地, alioss-阿里云OSS, txcos-腾讯云COS, qnoss-七牛云Kodo, hwobs-华为云OBS, aws_s3-AWS S3',
+    `app` varchar(20) NOT NULL DEFAULT 'admin' COMMENT '应用名称: admin-后台, api-前台, app_mini-APP或小程序',
+    `object_name` varchar(500) NOT NULL DEFAULT '' COMMENT '对象名称/存储路径',
+    `file_name` varchar(255) NOT NULL DEFAULT '' COMMENT '原始文件名',
+    `file_size` bigint(20) unsigned NOT NULL DEFAULT 0 COMMENT '文件大小(字节)',
+    `file_hash` varchar(64) NOT NULL DEFAULT '' COMMENT '文件SHA1哈希值',
+    `mine_type` varchar(100) NOT NULL DEFAULT '' COMMENT '文件MIME类型',
+    `file_extension` varchar(50) NOT NULL DEFAULT '' COMMENT '文件扩展名',
+    `url` varchar(500) NOT NULL DEFAULT '' COMMENT '访问URL',
+    `bucket` varchar(100) NOT NULL DEFAULT '' COMMENT '存储桶名称',
+    `domain` varchar(255) NOT NULL DEFAULT '' COMMENT '自定义域名',
+    `user_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '上传用户ID',
+    `ip` varchar(50) NOT NULL DEFAULT '' COMMENT '上传IP',
+    `uploaded` tinyint(1) unsigned NOT NULL DEFAULT 1 COMMENT '是否已上传成功: 0-否, 1-是',
+    `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态: 0-删除, 1-正常',
+    `create_time` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '创建时间',
+    `update_time` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '更新时间',
+    `delete_time` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
+    PRIMARY KEY (`id`),
+    KEY `idx_file_hash` (`file_hash`),
+    KEY `idx_storage` (`storage`),
+    KEY `idx_file_size_ext` (`file_size`, `file_extension`),
+    KEY `idx_user_id` (`user_id`),
+    KEY `idx_create_time` (`create_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='统一上传记录表';

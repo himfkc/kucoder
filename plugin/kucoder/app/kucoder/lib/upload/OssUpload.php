@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace kucoder\lib\upload;
 
 use Exception;
+use kucoder\model\Upload;
 use Throwable;
 
 /**
@@ -66,53 +67,110 @@ class OssUpload
 
     /**
      * 上传文件
+     * @param int $uid 后台用户id或前台会员id
+     * @param string $app 后台或前台
      * @return array
-     * @throws Exception
+     * @throws Throwable
      */
-    public function upload(): array
+    public function upload(int $uid = 0, string $app = 'admin'): array
     {
         $request = request();
         if (!$request->isPost()) {
             throw new Exception('非法请求');
         }
         // 获取上传的文件
-        $file = $request->file();
-        if (!$file) {
+        $files = $request->file();
+        if (!$files) {
             throw new Exception('请上传文件');
         }
         $uploaded = [];
-        foreach ($file as $key => $spl_file) {
-            if (!$spl_file->isValid()) {
-                throw new Exception('上传的文件无效');
-            }
-            // 检查文件扩展名
-            if (!in_array($spl_file->getUploadExtension(), config('plugin.kucoder.app.allow_upload_extensions'))) {
-                throw new Exception('不允许上传此类文件');
-            }
-            // 检查文件大小
-            if ($spl_file->getSize() > config('plugin.kucoder.app.allow_upload_size')) {
-                throw new Exception('上传的文件过大');
+        foreach ($files as $key => $spl_file) {
+            //检查文件是否符合上传要求
+            KcUpload::checkFile($spl_file);
+
+            // 检查文件是否已存在
+            $fileInfo = KcUpload::checkFileExist($spl_file);
+            if ($fileInfo) {
+                $uploaded[$key] = [
+                    'name' => $fileInfo['name'],
+                    'url' => $fileInfo['url'],
+                ];
+                continue;
             }
             // 获取远程对象名称
-            $remoteObject = $spl_file->getUploadName();
+            $fileName = $spl_file->getUploadName();
             // 获取插件名作为路径前缀
             $plugin = $request->post('plugin', $request->plugin);
             $saveDir = $request->post('saveDir', '');
             // 添加路径前缀
             if ($saveDir) {
-                $remoteObject = 'app/' . $plugin . '/upload/' . trim($saveDir, '/') . '/' . $remoteObject;
+                $remoteObject = 'app/' . $plugin . '/upload/' . trim($saveDir, '/') . '/' . $fileName;
             } else {
-                $remoteObject = 'app/' . $plugin . '/upload/' . date('Ymd') . '/' . $remoteObject;
+                $remoteObject = 'app/' . $plugin . '/upload/' . date('Ymd') . '/' . $fileName;
             }
             // 使用本地临时文件路径上传
             $localFile = $spl_file->getRealPath();
+
+            // 获取文件信息
+            $fileSize = $spl_file->getSize();
+            $fileExtension = strtolower($spl_file->getUploadExtension());
+            $mineType = 'application/octet-stream';
+            if (file_exists($localFile)) {
+                $mineType = mime_content_type($localFile) ?? 'application/octet-stream';
+            }
+
             // 调用底层驱动上传
-            $result = ($this->driver)::upload($localFile, $remoteObject, []);
-            // 获取实际访问 URL
-            $url = ($this->driver)::getUrl($remoteObject, 0);
+            ($this->driver)::upload($localFile, $remoteObject, []);
+
+            // 获取当前存储引擎类型
+            $kc_config = config_in_db('kucoder');
+            $storageMap = [
+                'alioss' => 'alioss',
+                'txoss' => 'txcos',
+                'qnoss' => 'qnoss',
+                'hwoss' => 'hwobs',
+            ];
+            $storage = $storageMap[$kc_config['oss_type']] ?? 'local';
+
+            // 获取存储桶和域名信息(通过配置获取)
+            $bucket = '';
+            $domain = '';
+            try {
+                $ossPluginConfig = config_in_db($kc_config['oss_type']);
+                if (is_array($ossPluginConfig)) {
+                    $bucket = $ossPluginConfig['bucket'] ?? '';
+                    $domain = $ossPluginConfig['domain'] ?? '';
+                }
+            } catch (\Throwable) {
+                // 获取配置失败不影响上传流程
+            }
+
+            // 获取当前用户ID和IP
+            $ip = $request->getRealIp();
+
+            // 保存上传记录到统一上传表
+            Upload::create([
+                'storage' => $storage,
+                'object_name' => $remoteObject,
+                'file_name' => $fileName,
+                'file_size' => $fileSize,
+                'mine_type' => $mineType,
+                'file_extension' => $fileExtension,
+                'url' => $remoteObject,
+                'bucket' => $bucket,
+                'domain' => $domain,
+                'user_id' => $uid,
+                'app' => $app,
+                'ip' => $ip,
+                'uploaded' => 1,
+                'status' => 1,
+                'create_time' => time(),
+                'update_time' => time(),
+            ]);
+
             // 结果
             $uploaded[$key] = [
-                'name' => $spl_file->getUploadName(),
+                'name' => $fileName,
                 // 'url' => $url['data']['url'] ?? $remoteObject,
                 'url' => $remoteObject,
             ];

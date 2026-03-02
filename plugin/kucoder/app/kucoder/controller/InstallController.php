@@ -46,7 +46,7 @@ class InstallController extends AdminBase
     public function envCheck(): Response
     {
         // 已安装kucoder
-        if (file_exists(base_path('plugin/kucoder/api/install/installed.lock'))) {
+        if (file_exists(get_base_path('plugin/kucoder/api/install/installed.lock'))) {
             return $this->error('你已安装kucoder系统，勿重复安装');
         }
 
@@ -56,10 +56,10 @@ class InstallController extends AdminBase
 
         // 检查env是否存在
         $kucoder_api = getenv('KUCODER_API');
-        if (!file_exists(base_path('.env'))) {
-            // copy(base_path('.env.example'), base_path('.env'));
-            $fp = fopen(base_path('.env'), 'w');
-            fwrite($fp, file_get_contents(base_path('.env.example')));
+        if (!file_exists(get_base_path('.env'))) {
+            // copy(get_base_path('.env.example'), get_base_path('.env'));
+            $fp = fopen(get_base_path('.env'), 'w');
+            fwrite($fp, file_get_contents(get_base_path('.env.example')));
             fflush($fp);
             fclose($fp);
             $kucoder_api = getenv('KUCODER_API');
@@ -93,7 +93,7 @@ class InstallController extends AdminBase
             $newData = array_merge(get_env(),$data);
             $uri = getenv('KUCODER_API') . '/ks/install/envSet';
             $params = [
-                'env_file' => base_path('.env'),
+                'env_file' => get_base_path('.env'),
                 'newData' => json_encode($newData, JSON_UNESCAPED_UNICODE),
                 'strict' => true,
                 'method' => 'POST'

@@ -60,8 +60,7 @@
     "ext-sodium": "*",
     "ext-zip": "*",
     "ext-pdo": "*",
-    "ext-curl": "*",
-    "aliyuncs/oss-sdk-php": "^2.6"
+    "ext-curl": "*"
   },
   "suggest": {
     "ext-event": "For better performance. "
