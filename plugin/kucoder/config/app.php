@@ -6,10 +6,6 @@ return [
     'controller_suffix' => 'Controller',
     //控制器复用 禁止开启
     'controller_reuse' => false,
-    //允许跨域域名
-    'allow_cors_domain' => 'localhost,127.0.0.1',
-    //调试环境下允许所有跨域访问
-    'allow_cors_dev' => false,
     //成功响应状态码
     'success_code' => 1,
     //失败响应状态码

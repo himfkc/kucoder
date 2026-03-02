@@ -24,7 +24,7 @@ class PluginService
     public static function install(string $pluginName, string $version = ''): void
     {
         $pluginInstallClass = self::getPluginInstallClass($pluginName);
-        $installedLock = base_path("plugin/{$pluginName}/api/install/installed.lock");
+        $installedLock = get_base_path("plugin/{$pluginName}/api/install/installed.lock");
         if (file_exists($installedLock)) {
             throw new Exception("插件已安装");
         }
@@ -44,7 +44,7 @@ class PluginService
         $pluginInstallClass = self::getPluginInstallClass($pluginName);
         try {
             $pluginInstallClass::uninstall($version);
-            $installedLock = base_path("plugin/{$pluginName}/api/install/installed.lock");
+            $installedLock = get_base_path("plugin/{$pluginName}/api/install/installed.lock");
             if (file_exists($installedLock)) {
                 unlink($installedLock);
             }

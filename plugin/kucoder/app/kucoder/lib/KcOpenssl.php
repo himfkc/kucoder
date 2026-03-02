@@ -73,7 +73,7 @@ class KcOpenssl
             $opensslKey = base64_decode($openssl_secret_key);
             if (!$opensslKey || strlen($opensslKey) !== 32) {
                 $opensslKey = self::generateKey($cipher);
-                KcConfig::set(base_path('plugin/kucoder/config/secret-key.php'), 'openssl.secret_key', base64_encode($opensslKey));
+                KcConfig::set(get_base_path('plugin/kucoder/config/secret-key.php'), 'openssl.secret_key', base64_encode($opensslKey));
             }
             $this->key = $opensslKey;
         }

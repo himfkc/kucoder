@@ -43,7 +43,7 @@ class KcSecretBox
             $key = get_env('sodium_secretbox_key');
             if (empty($key)) {
                 $key = self::generateKey();
-                // KcConfig::set(base_path('plugin/kucoder/config/app.php'), 'sodium.secretbox_key', $key);
+                // KcConfig::set(get_base_path('plugin/kucoder/config/app.php'), 'sodium.secretbox_key', $key);
             }
         }
         try {

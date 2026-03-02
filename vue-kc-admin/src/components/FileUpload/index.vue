@@ -18,7 +18,7 @@
     <transition-group ref="uploadFileList" class="upload-file-list el-upload-list el-upload-list--text"
       name="el-fade-in-linear" tag="ul">
       <li :key="file.uid" class="el-upload-list__item ele-upload-list__item-content" v-for="(file, index) in fileList">
-        <el-link :href="`${baseApi}${file.url}`" :underline="false" target="_blank">
+        <el-link :href="fileUrl(file.url)" :underline="false" target="_blank">
           <span class="el-icon-document"> {{ getFileName(file.name) }} </span>
         </el-link>
         <div class="ele-upload-list__item-content-action">
@@ -33,6 +33,7 @@
 import { getToken } from "@/utils/auth"
 import Sortable from 'sortablejs'
 import { SUCCESS_RES_CODE, ERROR_RES_CODE } from "@/utils/constant"
+import { fileUrl, kcMsg } from "@/utils/kucoder"
 
 const props = defineProps({
   modelValue: [String, Object, Array],
@@ -190,6 +191,7 @@ function uploadedSuccessfully(res) {
     emit("update:modelValue", listToString(fileList.value))
     emit("uploadAfter", res)
     proxy.$modal.closeLoading()
+    kcMsg('上传成功', 'success')
   }
 }
 

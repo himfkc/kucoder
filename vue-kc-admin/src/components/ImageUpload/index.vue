@@ -29,6 +29,7 @@
 <script setup>
 import { getToken } from "@/utils/auth"
 import { isExternal } from "@/utils/validate"
+import { imgUrl, kcMsg } from "@/utils/kucoder"
 import Sortable from 'sortablejs'
 import { SUCCESS_RES_CODE, ERROR_RES_CODE } from "@/utils/constant"
 
@@ -81,8 +82,8 @@ const number = ref(0)
 const uploadList = ref([])
 const dialogImageUrl = ref("")
 const dialogVisible = ref(false)
-const baseUrl = import.meta.env.DEV ? import.meta.env.VITE_DEV_PROXY : import.meta.env.VITE_APP_BASE_API
-const url = ref(baseUrl + props.action)
+const baseApi = import.meta.env.DEV ? import.meta.env.VITE_DEV_PROXY : import.meta.env.VITE_APP_BASE_API
+const url = ref(baseApi + props.action)
 const headers = ref({ Authorization: "Bearer " + getToken() })
 const fileList = ref([])
 const showTip = computed(
@@ -96,11 +97,7 @@ watch(() => props.modelValue, val => {
     // 然后将数组转为对象数组
     fileList.value = list.map(item => {
       if (typeof item === "string") {
-        if (item.indexOf(baseUrl) === -1 && !isExternal(item)) {
-          item = { name: baseUrl + item, url: baseUrl + item }
-        } else {
-          item = { name: item, url: item }
-        }
+        item = { name: item, url: imgUrl(item) }
       }
       return item
     })
@@ -184,6 +181,7 @@ function uploadedSuccessfully() {
     number.value = 0
     emit("update:modelValue", listToString(fileList.value))
     proxy.$modal.closeLoading()
+    kcMsg('上传成功', 'success')
   }
 }
 
@@ -205,7 +203,9 @@ function listToString(list, separator) {
   separator = separator || ","
   for (let i in list) {
     if (undefined !== list[i].url && list[i].url.indexOf("blob:") !== 0) {
-      strs += list[i].url.replace(baseUrl, "") + separator
+      // 直接保存原始URL，不替换baseUrl，因为imgUrl已经处理了OSS域名
+      // 如果是完整URL，保存完整URL；如果是相对路径，也保存相对路径
+      strs += list[i].url + separator
     }
   }
   return strs != "" ? strs.substr(0, strs.length - 1) : ""

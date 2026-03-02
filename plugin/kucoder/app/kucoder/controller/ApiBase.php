@@ -53,7 +53,7 @@ class ApiBase extends Base
     // 开启路由后 若路由中未指定插件名则需要子类控制器指定插件名 否则鉴权失败  未开启路由则自动获取插件名
     protected ?string $pluginName = null;
     //允许访问的方法列表
-    protected array $allowAccessActions = ['index', 'add', 'edit', 'delete', 'trueDel','info'];
+    protected array $allowAccessActions = ['index', 'add', 'edit', 'delete', 'trueDel', 'info'];
     //是否验证
     protected bool $needValidate = true;
     //验证类::class
@@ -103,9 +103,9 @@ class ApiBase extends Base
     private function _init(): void
     {
         try {
-            $apiAuthConfig= KcConst::API_AUTH_CONFIG;
-            if(KcHelper::isLocal()){
-                $apiAuthConfig['table']['user'] = 'p_member';
+            $apiAuthConfig = KcConst::API_AUTH_CONFIG;
+            if (KcHelper::isLocal()) {
+                $apiAuthConfig = array_merge(KcConst::API_AUTH_CONFIG, KcConst::LOCAL_API_AUTH_CONFIG);
             }
             $this->auth = ApiAuth::getInstance($apiAuthConfig);
             $this->checkLoginAndRight();

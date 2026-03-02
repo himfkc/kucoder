@@ -47,7 +47,7 @@ class Base
     public function __construct()
     {
         $this->request = App::request();
-        kc_dump('请求路径:' . $this->request->path() . '  ' . $this->request->uri());
+        kc_dump('请求uri: ' . $this->request->uri());
         $header_auth_type = $this->request->header('x-auth-type', '');
         $this->request->setHeader('x-auth-type', $header_auth_type ?: $this->authType ?: 'cookie');
         $this->oLog = Container::instance('kucoder')->get('oLog');

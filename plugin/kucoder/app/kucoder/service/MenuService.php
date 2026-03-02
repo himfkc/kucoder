@@ -80,7 +80,7 @@ class MenuService
     public static function export_plugin_menu(string $pluginName = '', string $filePath = ''): bool
     {
         $pluginName = $pluginName ?: request()->plugin;
-        $menuFile = $filePath ?: base_path() . '/plugin/' . $pluginName . '/config/menu.php';
+        $menuFile = $filePath ?: get_base_path() . '/plugin/' . $pluginName . '/config/menu.php';
         $menuPids = MenuModel::where(['plugin' => $pluginName, 'pid' => 0])->column('id');
         $allMenus = AdminAuth::getInstance()->getAllMenus();
         $pluginMenus = array_filter($allMenus, fn($menu) => $menu['plugin'] == $pluginName);

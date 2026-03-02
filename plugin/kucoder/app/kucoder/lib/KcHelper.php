@@ -45,8 +45,6 @@ class KcHelper
     public static function isLocal(): bool
     {
         $host = request()->host(true);
-        kc_dump('请求host', $host);
-        kc_dump('sys_host', parse_url(getenv('KUCODER_API'), PHP_URL_HOST));
         if ('localhost' === $host) $host = '127.0.0.1';
         return $host === parse_url(getenv('KUCODER_API'), PHP_URL_HOST);
     }
@@ -471,7 +469,7 @@ EOF;
 
     public static function setEnv(array $newEnv): void
     {
-        $env_file = base_path() . '/.env';
+        $env_file = get_base_path() . '/.env';
         $env_arr = file($env_file, FILE_IGNORE_NEW_LINES);
         $new_lines = [];
         foreach ($env_arr as $line) {
@@ -508,7 +506,7 @@ EOF;
             throw new InvalidArgumentException(KcConst::INVALID_COMMAND . "：{$command[0]}");
         }
         if (!$workDir) {
-            $workDir = base_path();
+            $workDir = get_base_path();
         }
         if (!is_dir($workDir)) {
             throw new InvalidArgumentException(KcConst::INVALID_WORK_DIR . "：{$workDir}");
@@ -541,8 +539,8 @@ EOF;
 
     public static function generateRelyBackup(string $plugin, string $dependencies_file, string $dependencies_file_bak = ''): void
     {
-        $composer = json_decode(file_get_contents(base_path('composer.json')), true);
-        $packagePath = kc_path(base_path(), KcConst::VUE_KC_ADMIN, '/package.json');
+        $composer = json_decode(file_get_contents(get_base_path('composer.json')), true);
+        $packagePath = kc_path(get_base_path(), KcConst::VUE_KC_ADMIN, '/package.json');
         $package = json_decode(file_get_contents($packagePath), true);
         $backup = [
             'require' => $composer['require'],
@@ -551,13 +549,13 @@ EOF;
             'devDependencies' => $package['devDependencies'],
         ];
         $backup = json_encode($backup, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-        file_put_contents(base_path("/plugin/{$plugin}/zinfo/rely_kucoder.json"), $backup);
+        file_put_contents(get_base_path("/plugin/{$plugin}/zinfo/rely_kucoder.json"), $backup);
         copy($dependencies_file, $dependencies_file_bak ?: $dependencies_file . '.bak');
     }
 
     public static function checkRelyBackup(string $plugin, string $c): bool
     {
-        $backup = json_decode(file_get_contents(base_path("/plugin/{$plugin}/zinfo/rely_kucoder.json")), true);
+        $backup = json_decode(file_get_contents(get_base_path("/plugin/{$plugin}/zinfo/rely_kucoder.json")), true);
         $rely = explode(' ', $c)[2];
         if (str_starts_with($c, 'composer') && (isset($backup['require'][$rely]) || isset($backup['require-dev'][$rely]))) {
             return false;

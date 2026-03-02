@@ -59,10 +59,12 @@ class LoginController extends AdminBase
      */
     public function login(Request $request): Response
     {
-        // kc_dump('login 请求方式' , $request->isPost());
         //判断是否是post请求
         if (!$request->isPost()) {
             return $this->error('请求方式错误');
+        }
+        if (!file_exists(get_base_path('plugin/kucoder/api/install/installed.lock'))) {
+            return $this->error('你还未安装kucoder,请先安装kucoder');
         }
         //验证器
         $this->validate();
@@ -137,11 +139,10 @@ class LoginController extends AdminBase
      */
     public function getRouters(): Response
     {
-        kc_dump('是否为超级管理员：' , $this->auth->getUserInfo()['is_super_admin']);
+        // kc_dump('是否为超级管理员：' , $this->auth->getUserInfo()['is_super_admin']);
         $userId = $this->auth->getId();
         $menus = $this->auth->getUserMenus($userId);
         $btns = $this->auth->getUserBtns($userId);
-        kc_dump('获取菜单:' , $menus);
         $roleMenus = array_map(function ($item) {
             return [
                 'id' => $item['id'],
@@ -151,7 +152,6 @@ class LoginController extends AdminBase
         }, $menus);
         $roleMenus = get_recursion_data($roleMenus);
         if($this->auth->getUserInfo()['is_super_admin']){
-            kc_dump('获取所有菜单routes');
             $routes = MenuService::allMenusToRoutes($menus);
         }else{
             $routes = MenuService::menusToRoutes($menus);

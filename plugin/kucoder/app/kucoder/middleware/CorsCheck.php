@@ -27,7 +27,7 @@ use Webman\MiddlewareInterface;
 class CorsCheck implements MiddlewareInterface
 {
     //允许的跨域domain
-    private static array $allowCorsDomain = [];
+    private static array $allowCorsHost = [];
 
     /**
      * 404请求默认不会触发任何中间件 所以404不会执行这里的process流程
@@ -36,7 +36,6 @@ class CorsCheck implements MiddlewareInterface
      */
     public function process(Request $request, callable $handler): Response
     {
-        // kc_dump('插件kucoder的中间件执行了');
         $origin = $request->header('origin');
         // kc_dump('Cors origin: ' . $origin);
         if (empty($origin)) {
@@ -47,10 +46,14 @@ class CorsCheck implements MiddlewareInterface
         }
         $host = parse_url($origin, PHP_URL_HOST);
         // kc_dump('Cors host: ' . $host);
-        if (empty(self::$allowCorsDomain)) {
-            self::$allowCorsDomain = explode(',', config('plugin.kucoder.app.allow_cors_domain'));
+        if (empty(self::$allowCorsHost)) {
+            $allowCorsHost = get_env('allow_cors_host');
+            if(str_contains($allowCorsHost,'，')){
+                $allowCorsHost = str_replace('，',',',$allowCorsHost);
+            }
+            self::$allowCorsHost = explode(',', $allowCorsHost);
         }
-        if (in_array($host, self::$allowCorsDomain) || in_array('*', self::$allowCorsDomain)) {
+        if (in_array($host, self::$allowCorsHost) || in_array('*', self::$allowCorsHost)) {
             if ($request->method() === 'OPTIONS') {
                 // kc_dump('允许跨域 预检请求');
                 $response = response('', 204);
@@ -73,7 +76,7 @@ class CorsCheck implements MiddlewareInterface
                 }
                 return response('生产环境跨域错误', 403);
             }
-            if(config('plugin.kucoder.app.allow_cors_dev')){
+            if(get_env('allow_cors_in_dev')){
                 kc_dump('调试环境下允许所有跨域请求');
                 //调试环境下允许所有跨域请求
                 $response = $handler($request);

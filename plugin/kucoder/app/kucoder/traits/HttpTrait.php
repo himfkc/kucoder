@@ -289,7 +289,7 @@ trait HttpTrait
     private function httpsVerify(): void
     {
         //验证服务器的https证书
-        $this->options['verify'] = $this->options['verify'] ? base_path('plugin/kucoder/app/kucoder/lib/http/cacert.pem') : false;
+        $this->options['verify'] = $this->options['verify'] ? get_base_path('plugin/kucoder/app/kucoder/lib/http/cacert.pem') : false;
     }
 
     protected function http(): ?Client
