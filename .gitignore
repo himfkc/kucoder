@@ -7,7 +7,6 @@
 *.log
 /.env
 installed.lock
-CODEBUDDY.md
 node_modules/
 /vue-kc-admin/dist/
 /vue-kc-admin/src/api/*/
