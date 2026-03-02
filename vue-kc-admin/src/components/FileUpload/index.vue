@@ -32,7 +32,7 @@
 <script setup>
 import { getToken } from "@/utils/auth"
 import Sortable from 'sortablejs'
-import { SUCCESS_RES_CODE, ERROR_RES_CODE } from "@/utils/constant"
+import { SUCCESS_CODE, ERROR_CODE } from "@/utils/constant"
 import { fileUrl, kcMsg } from "@/utils/kucoder"
 
 const props = defineProps({
@@ -164,7 +164,7 @@ function handleUploadError(err) {
 function handleUploadSuccess(res, file) {
   console.log('上传文件成功 res', res)
   console.log('上传文件成功 file', file)
-  if (res.code === SUCCESS_RES_CODE) {
+  if (res.code === SUCCESS_CODE) {
     uploadList.value.push({ name: res.data.file.name, url: res.data.file.url })
     uploadedSuccessfully(res)
   } else {

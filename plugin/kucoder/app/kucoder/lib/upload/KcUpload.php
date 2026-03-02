@@ -73,11 +73,11 @@ class KcUpload
             throw new Exception('上传的临时文件不存在');
         }
         // 检查文件扩展名
-        if (!in_array($spl_file->getUploadExtension(), config('plugin.kucoder.app.allow_upload_extensions'))) {
+        if (!in_array($spl_file->getUploadExtension(), get_env('allow_upload_extensions'))) {
             throw new Exception('不允许上传此类文件');
         }
         // 检查文件大小
-        if ($spl_file->getSize() > config('plugin.kucoder.app.allow_upload_size')) {
+        if ($spl_file->getSize() > get_env('allow_upload_size')) {
             throw new Exception('上传的文件过大');
         }
     }

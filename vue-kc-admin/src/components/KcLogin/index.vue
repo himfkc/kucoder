@@ -70,7 +70,7 @@
 import { loginKc, logoutKc, getCodeImg, registerKc } from "@/api/kucoder/plugin/kcLogin"
 import useUserStore from '@/store/modules/user'
 import { validEmail } from '@/utils/validate'
-import { AUTH_E_CODE, KC_CODE_PREFIX } from '@/utils/constant'
+import { AUTH_ERR_CODE, KC_CODE_PREFIX } from '@/utils/constant'
 import { kcMsg, kcAlert, kcLoading, kcConfirm } from "@/utils/kucoder"
 import UserAgreement from '@/views/kucoder/system/user/UserAgreement.vue'
 
@@ -198,7 +198,7 @@ function loginErrHandle(err) {
     console.log('err2', code.startsWith(KC_CODE_PREFIX))
     if (code.startsWith(KC_CODE_PREFIX)) {
         const kcCode = code.substring(3)
-        if (AUTH_E_CODE.includes(Number(kcCode))) {
+        if (AUTH_ERR_CODE.includes(Number(kcCode))) {
             kcLoginDialogVisible.value = false
             kcConfirm(err.msg, '系统提示', {
                 type: 'warning',
