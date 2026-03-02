@@ -12,18 +12,6 @@ return [
     'error_code' => 0,
 
     /**
-     * 上传选项
-     */
-    //上传需要登录
-    'upload_need_login' => true,
-    //允许上传的文件类型
-    'allow_upload_extensions' => ['jpg', 'jpeg', 'png', 'gif', 'zip',
-        'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf', 'txt', 'mp3', 'mp4', 'avi', 'wmv', 'mkv', 'flv'],
-    //允许上传的文件大小 50M
-    'allow_upload_size' => 50 * 1024 * 1024,
-
-
-    /**
      * 以下是插件开发配置项 参考
      */
     //插件标识 全网唯一

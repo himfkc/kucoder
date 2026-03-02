@@ -34,7 +34,7 @@ class UploadController extends Base
         // 上传登录校验
         $uid = 0;
         $app = $this->request->post('app') ?: 'admin';
-        if (config_app('kucoder', 'upload_need_login')) {
+        if (get_env('upload_need_login')) {
             $auth = match ($app) {
                 KcConst::API_APP => ApiAuth::getInstance(),
                 KcConst::APP_MINI_APP => AppMiniAuth::getInstance(),

@@ -31,7 +31,7 @@ import { getToken } from "@/utils/auth"
 import { isExternal } from "@/utils/validate"
 import { imgUrl, kcMsg } from "@/utils/kucoder"
 import Sortable from 'sortablejs'
-import { SUCCESS_RES_CODE, ERROR_RES_CODE } from "@/utils/constant"
+import { SUCCESS_CODE, ERROR_CODE } from "@/utils/constant"
 
 const props = defineProps({
   modelValue: [String, Object, Array],
@@ -151,7 +151,7 @@ function handleExceed() {
 function handleUploadSuccess(res, file) {
   console.log('上传图片成功 res', res)
   console.log('上传图片成功 file', file)
-  if (res.code === SUCCESS_RES_CODE) {
+  if (res.code === SUCCESS_CODE) {
     uploadList.value.push({ name: res.data.file.name, url: res.data.file.url })
     uploadedSuccessfully()
   } else {

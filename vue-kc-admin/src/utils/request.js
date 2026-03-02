@@ -5,7 +5,7 @@ import { tansParams, blobValidate } from '@/utils/ruoyi'
 import { saveAs } from 'file-saver'
 import useUserStore from '@/store/modules/user'
 import { adminBasePath } from '@/api/adminRouteBasePath'
-import { LOGIN_E_CODE, KC_CODE_PREFIX,SUCCESS_RES_CODE,ERROR_RES_CODE } from './constant'
+import { LOGIN_ERR_CODE, KC_CODE_PREFIX,SUCCESS_CODE,ERROR_CODE } from './constant'
 
 let downloadLoadingInstance
 console.log('环境变量', import.meta.env)
@@ -82,11 +82,11 @@ service.interceptors.response.use(res => {
     return res.data
   }
   const { data, msg, code } = res.data
-  if (code === SUCCESS_RES_CODE) {
+  if (code === SUCCESS_CODE) {
     return Promise.resolve({ data, msg, code, res: data })
   }
   // 未登录或登录过期或登录异常
-  if (LOGIN_E_CODE.includes(code)) {
+  if (LOGIN_ERR_CODE.includes(code)) {
     ElMessageBox.alert(msg, '系统提示', { confirmButtonText: '重新登录', type: 'warning' })
       .then(() => {
         useUserStore().kc.user = {}
@@ -107,7 +107,7 @@ service.interceptors.response.use(res => {
   } else if (code.toString().startsWith(KC_CODE_PREFIX)) {
     // kucoder异常
     const kcCode = code.toString().substring(3)
-    if (LOGIN_E_CODE.includes(Number(kcCode))) {
+    if (LOGIN_ERR_CODE.includes(Number(kcCode))) {
       useUserStore().kc.user = {}
       useUserStore().kc.site_set = {}
     }
