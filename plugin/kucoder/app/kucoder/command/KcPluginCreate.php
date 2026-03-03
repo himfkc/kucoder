@@ -286,7 +286,7 @@ use kucoder\install\PluginInstall;
 class Install extends PluginInstall
 {
     //插件默认使用主项目数据库配置
-    protected static string ?\$connection = '';
+    protected static string \$connection = '';
     
     /**
      * 安装插件
@@ -325,7 +325,7 @@ class Install extends PluginInstall
      * @return void
      * @throws Throwable
      * @throws ReflectionException
-     * @throws \think\Exception
+     * @throws Exception
      */
     public static function update(string \$to_version='', \$context = null): void
     {
